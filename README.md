@@ -1,4 +1,4 @@
-# Rikiki Counter and Group builer React Application
+# Rikiki Counter and Group builder React Application
 
 This react app is used to create game rooms and sync the state between them.
 You can create room or join to an alredy created room.
@@ -13,6 +13,6 @@ then:
 npm start
 ```
 
-To start the server use [this](https://github.com/csgreg/state_sync_websocket) repository!
+To run the server use [this](https://github.com/csgreg/state_sync_websocket) repository!
 
 
