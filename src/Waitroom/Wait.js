@@ -1,64 +1,93 @@
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Footer } from "../Footer";
 import { useHistory } from "react-router";
+import { Redirect } from "react-router-dom";
 import { useState } from "react";
-import 'bulma/css/bulma.min.css';
-import { BrowserRouter, Route, Switch } from "react-router-dom";
 import React from "react";
+import { clearSession } from "../api/session";
 
+export function Wait({ socket, roomId, players, game }) {
+  const history = useHistory();
+  const [isCopied, setIsCopied] = useState(false);
 
-export function Wait({socket, setRoomId, roomId, players, setPlayers, game, setGame}){
+  const onCopyText = () => {
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 1000);
+  };
 
-    const history = useHistory();
-    const [isCopied, setIsCopied] = useState(false);
-  
-    const onCopyText = () => {
-      setIsCopied(true);
-      setTimeout(() => {
-        setIsCopied(false);
-      }, 1000);
-    };
+  if (!roomId) {
+    return <Redirect to="/" />;
+  }
 
-    if(game.gameStarted && !game.game){
-      console.log("omw");
-      game.game = true;
-      history.push("/game");
-    }
+  if (game.gameStarted && !game.game) {
+    game.game = true;
+    history.push("/game");
+  }
 
+  function leave() {
+    clearSession();
+    history.push("/");
+  }
 
-    function handleBossStarts(){
-      game.gameStarted=true;
-      socket.emit("sync-state", roomId,
-          `{"game": ${JSON.stringify(game)}, "players": ${JSON.stringify(players)} }`, false,
-          (response) => {
-            console.log("synced");
-          }
-      );
-    }
+  const me = players.find((p) => p.socketid === socket.id);
+  const isBoss = me && me.boss;
 
+  function handleBossStarts() {
+    game.gameStarted = true;
+    socket.emit(
+      "sync-state",
+      roomId,
+      `{"game": ${JSON.stringify(game)}, "players": ${JSON.stringify(
+        players
+      )} }`,
+      false,
+      () => {}
+    );
+  }
 
-    return( <div className="wait">
-    <h1 id="waittitle" className="title is-1">Várakozás a többi játékosra</h1>
-      <div className="joinedplayers">
-        <p id="waitcode">
-          A szoba kódja: {roomId}
-          <CopyToClipboard text={roomId} onCopy={onCopyText}>
-            <div className="copy-area">
-            <i className="fas fa-copy"></i>
-            </div>
-          </CopyToClipboard>
-        </p>
-        <p id="waitedplayer">Játékosok:</p>
-        <ul>
-          {players.map((p) =>
-              <li key={p.id} className="waitinglayerlist">{p.name}</li>
-          )}
-        </ul>
-        <br/>
-        {players.map((p) =>
-              p.boss === true && p.socketid === socket.id ? <button key={p.id} onClick={() => handleBossStarts()} className="button is-warning is-rounded" id="startbutton">Indítás</button> : ""
+  return (
+    <>
+      <div className="page">
+        <header>
+          <h1 className="brand">Várakozó</h1>
+          <p className="tagline">Várakozás a többi játékosra…</p>
+        </header>
+
+        <div className="card">
+          <p className="label">Szoba kódja</p>
+          <div className="room-code">
+            <span className="code">{roomId}</span>
+            <CopyToClipboard text={roomId} onCopy={onCopyText}>
+              <button className="copy-btn">
+                {isCopied ? "Másolva!" : "Másolás"}
+              </button>
+            </CopyToClipboard>
+          </div>
+
+          <p className="label">Játékosok ({players.length})</p>
+          <ul className="player-list">
+            {players.map((p) => (
+              <li key={p.id}>
+                <span>{p.name}</span>
+                {p.boss ? <span className="tag">host</span> : null}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {isBoss ? (
+          <button className="btn" onClick={handleBossStarts}>
+            Indítás
+          </button>
+        ) : (
+          <p className="hint">A host indítja el a játékot.</p>
         )}
+
+        <button className="btn btn-ghost" onClick={leave}>
+          Kilépés
+        </button>
       </div>
       <Footer />
-    </div>);
+    </>
+  );
 }
