@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import React from "react";
 import { Wait } from "./Waitroom/Wait";
 import { Game } from "./Game/Game";
+import { ConnectingOverlay } from "./ConnectingOverlay";
 
 function App() {
   const [roomId, setRoomId] = useState("");
@@ -16,6 +17,24 @@ function App() {
   const [currentPlayerNum, setCurrentPlayerNum] = useState(-1);
   // True while we try to rejoin a saved room after a refresh.
   const [restoring, setRestoring] = useState(() => !!loadSession());
+  // Tracks the live socket connection (false during cold starts / drops).
+  const [connected, setConnected] = useState(socket.connected);
+
+  useEffect(() => {
+    function onConnect() {
+      setConnected(true);
+    }
+    function onDisconnect() {
+      setConnected(false);
+    }
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+    setConnected(socket.connected);
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+    };
+  }, []);
 
   // Keep the room state in sync with the server.
   useEffect(() => {
@@ -96,16 +115,21 @@ function App() {
 
   if (restoring) {
     return (
-      <div className="App">
-        <div className="page">
-          <h1 className="brand">Rikiki</h1>
-          <p className="hint">Visszacsatlakozás a szobához…</p>
+      <>
+        {!connected && <ConnectingOverlay />}
+        <div className="App">
+          <div className="page">
+            <h1 className="brand">Rikiki</h1>
+            <p className="hint">Visszacsatlakozás a szobához…</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
+    <>
+    {!connected && <ConnectingOverlay />}
     <BrowserRouter>
       <div className="App">
         <Switch>
@@ -168,6 +192,7 @@ function App() {
         </Switch>
       </div>
     </BrowserRouter>
+    </>
   );
 }
 
