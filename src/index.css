@@ -61,8 +61,8 @@ body {
     padding: 18px;
   }
 
-  .adu {
-    font-size: 1.7rem;
+  .adu-suit {
+    font-size: 1.5rem;
   }
 }
 
@@ -235,19 +235,22 @@ body {
 
 /* ---------- Game ---------- */
 .game-header {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  text-align: left;
 }
 
-.adu {
-  font-size: 2rem;
-  font-weight: 800;
+.game-line {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
   margin: 0;
 }
 
-.adu span {
+.adu-suit {
+  font-size: 1.8rem;
+  font-weight: 800;
   color: var(--accent);
+  line-height: 1.1;
 }
 
 .game-meta {

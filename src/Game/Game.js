@@ -138,11 +138,11 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
       ) : null}
       <div className="page">
         <header className="game-header">
-          <h1 className="adu">
-            Adu: <span>{possibilities[game.laps % 5]}</span>
-          </h1>
-          <p className="game-meta">
-            {game.laps + 1}. kör · {cardsThisRound} lap / játékos
+          <p className="game-line">
+            <span className="adu-suit">{possibilities[game.laps % 5]}</span>
+            <span className="game-meta">
+              {game.laps + 1}. kör · {cardsThisRound} lap / játékos
+            </span>
           </p>
         </header>
 

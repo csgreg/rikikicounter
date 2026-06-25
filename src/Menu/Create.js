@@ -11,7 +11,7 @@ export function Create({ socket, setRoomId, players, setPlayers, setGame }) {
       return;
     }
 
-    socket.emit("create-room", 5, (response) => {
+    socket.emit("create-room", 6, (response) => {
       const roomId = response.roomId;
       setRoomId(roomId);
       saveSession(roomId);
