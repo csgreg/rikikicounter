@@ -308,6 +308,66 @@ body {
   margin: 0;
 }
 
+/* ---------- Presence / kick ---------- */
+.pname {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.row-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.dot.on {
+  background: #06d6a0;
+  box-shadow: 0 0 6px rgba(6, 214, 160, 0.7);
+}
+
+.dot.off {
+  background: var(--muted);
+  box-shadow: none;
+}
+
+.score-row.offline,
+.player-list li.offline {
+  opacity: 0.55;
+}
+
+.kick-btn {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.kick-btn:hover {
+  background: rgba(255, 107, 107, 0.16);
+  color: var(--danger);
+}
+
+/* the game scoreboard name holds inline tags + kick button */
+.score-row .name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 /* ---------- Animations / feedback ---------- */
 .card {
   animation: card-in 0.32s ease both;

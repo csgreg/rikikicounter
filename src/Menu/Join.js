@@ -23,20 +23,30 @@ export function Join({ socket, setRoomId, setPlayers, setGame }) {
 
       socket.emit("get-state", joinCode, (stateResponse) => {
         const obj = JSON.parse(JSON.parse(stateResponse.state));
+        const pid = getPid();
 
-        obj.players.push({
-          id: obj.players.length + 1,
-          pid: getPid(),
-          name: joinName,
-          socketid: socket.id,
-          point: 0,
-          tip: 0,
-          tipLocked: false,
-          hit: 0,
-          hitLocked: false,
-          boss: false,
-        });
-        obj.game.players += 1;
+        // Rejoining the same room (same browser): update in place, don't dupe.
+        const existing = obj.players.find((p) => p.pid === pid);
+        if (existing) {
+          existing.socketid = socket.id;
+          existing.online = true;
+          existing.name = joinName;
+        } else {
+          obj.players.push({
+            id: obj.players.length + 1,
+            pid,
+            name: joinName,
+            socketid: socket.id,
+            point: 0,
+            tip: 0,
+            tipLocked: false,
+            hit: 0,
+            hitLocked: false,
+            boss: false,
+            online: true,
+          });
+          obj.game.players += 1;
+        }
 
         setPlayers(obj.players);
         setGame(obj.game);

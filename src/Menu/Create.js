@@ -28,6 +28,7 @@ export function Create({ socket, setRoomId, players, setPlayers, setGame }) {
           hit: 0,
           hitLocked: false,
           boss: true,
+          online: true,
         },
       ];
       const newGame = {

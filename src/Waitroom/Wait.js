@@ -4,7 +4,7 @@ import { useHistory } from "react-router";
 import { Redirect } from "react-router-dom";
 import { useState } from "react";
 import React from "react";
-import { clearSession } from "../api/session";
+import { clearSession, getPid } from "../api/session";
 
 export function Wait({ socket, roomId, players, game }) {
   const history = useHistory();
@@ -24,13 +24,37 @@ export function Wait({ socket, roomId, players, game }) {
     history.push("/game");
   }
 
+  const me = players.find((p) => p.pid === getPid());
+  const isBoss = me && me.boss;
+
+  function syncPlayers(list) {
+    socket.emit(
+      "sync-state",
+      roomId,
+      `{"game": ${JSON.stringify(game)}, "players": ${JSON.stringify(list)} }`,
+      false,
+      () => {}
+    );
+  }
+
   function leave() {
+    if (!window.confirm("Biztosan kilépsz a szobából?")) return;
+    const pid = getPid();
+    const remaining = players.filter((p) => p.pid !== pid);
+    // Hand over the host role if we were the host.
+    if (me && me.boss && remaining.length > 0 && !remaining.some((p) => p.boss)) {
+      const heir = remaining.find((p) => p.online !== false) || remaining[0];
+      heir.boss = true;
+    }
+    syncPlayers(remaining);
     clearSession();
     history.push("/");
   }
 
-  const me = players.find((p) => p.socketid === socket.id);
-  const isBoss = me && me.boss;
+  function kick(targetPid, name) {
+    if (!window.confirm(`Kirúgod a szobából: ${name}?`)) return;
+    syncPlayers(players.filter((p) => p.pid !== targetPid));
+  }
 
   function handleBossStarts() {
     game.gameStarted = true;
@@ -67,9 +91,31 @@ export function Wait({ socket, roomId, players, game }) {
           <p className="label">Játékosok ({players.length})</p>
           <ul className="player-list">
             {players.map((p) => (
-              <li key={p.id}>
-                <span>{p.name}</span>
-                {p.boss ? <span className="tag">host</span> : null}
+              <li
+                key={p.pid || p.id}
+                className={p.online === false ? "offline" : ""}
+              >
+                <span className="pname">
+                  <span
+                    className={`dot ${p.online === false ? "off" : "on"}`}
+                  />
+                  {p.name}
+                </span>
+                <span className="row-tags">
+                  {p.boss ? <span className="tag">host</span> : null}
+                  {p.online === false ? (
+                    <span className="tag">offline</span>
+                  ) : null}
+                  {isBoss && p.pid !== me.pid ? (
+                    <button
+                      className="kick-btn"
+                      title="Kirúgás"
+                      onClick={() => kick(p.pid, p.name)}
+                    >
+                      ✕
+                    </button>
+                  ) : null}
+                </span>
               </li>
             ))}
           </ul>

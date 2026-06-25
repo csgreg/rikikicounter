@@ -2,7 +2,7 @@ import { useState } from "react";
 import React from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { Footer } from "../Footer";
-import { clearSession } from "../api/session";
+import { clearSession, getPid } from "../api/session";
 import { burstConfetti } from "../confetti";
 
 export function Game({ socket, roomId, players, game, currentPlayerNum }) {
@@ -24,13 +24,36 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
     return <Redirect to="/" />;
   }
 
+  const me = currentPlayerNum >= 0 ? players[currentPlayerNum] : null;
+  const isBoss = me && me.boss;
+
+  function syncPlayers(list) {
+    socket.emit(
+      "sync-state",
+      roomId,
+      `{"game": ${JSON.stringify(game)}, "players": ${JSON.stringify(list)} }`,
+      false,
+      () => {}
+    );
+  }
+
   function leave() {
+    if (!window.confirm("Biztosan kilépsz a játékból?")) return;
+    const pid = getPid();
+    const remaining = players.filter((p) => p.pid !== pid);
+    if (me && me.boss && remaining.length > 0 && !remaining.some((p) => p.boss)) {
+      const heir = remaining.find((p) => p.online !== false) || remaining[0];
+      heir.boss = true;
+    }
+    syncPlayers(remaining);
     clearSession();
     history.push("/");
   }
 
-  const me = currentPlayerNum >= 0 ? players[currentPlayerNum] : null;
-  const isBoss = me && me.boss;
+  function kick(targetPid, name) {
+    if (!window.confirm(`Kirúgod a játékból: ${name}?`)) return;
+    syncPlayers(players.filter((p) => p.pid !== targetPid));
+  }
 
   const allTipped = players.length > 0 && players.every((p) => p.tipLocked);
   const allHit = players.length > 0 && players.every((p) => p.hitLocked);
@@ -119,14 +142,32 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
                 : "flash-loss"
               : "";
             return (
-              <div className={`score-row ${flashClass}`} key={p.id}>
+              <div
+                className={`score-row ${flashClass} ${
+                  p.online === false ? "offline" : ""
+                }`}
+                key={p.id}
+              >
                 <span className="name">
+                  <span
+                    className={`dot ${p.online === false ? "off" : "on"}`}
+                  />
                   {p.name}
+                  {p.boss ? <span className="tag">host</span> : null}
                   {!allTipped && p.tipLocked ? (
                     <span className="tag done">kész</span>
                   ) : null}
                   {allTipped && !allHit && p.hitLocked ? (
                     <span className="tag done">kész</span>
+                  ) : null}
+                  {isBoss && me && p.pid !== me.pid ? (
+                    <button
+                      className="kick-btn"
+                      title="Kirúgás"
+                      onClick={() => kick(p.pid, p.name)}
+                    >
+                      ✕
+                    </button>
                   ) : null}
                 </span>
                 <span className="points">

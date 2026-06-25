@@ -19,6 +19,8 @@ function App() {
   const [restoring, setRestoring] = useState(() => !!loadSession());
   // Tracks the live socket connection (false during cold starts / drops).
   const [connected, setConnected] = useState(socket.connected);
+  // Set when the host removes us from the room.
+  const [kicked, setKicked] = useState(false);
 
   useEffect(() => {
     function onConnect() {
@@ -41,15 +43,20 @@ function App() {
     function onStateChanged(args) {
       if (args.roomId === roomId) {
         let state = JSON.parse(args.state);
+        const pid = getPid();
+        const myIdx = state.players.findIndex((p) => p.pid === pid);
+
+        // We had a seat but it's gone now -> the host kicked us.
+        if (myIdx === -1 && loadSession()) {
+          clearSession();
+          setKicked(true);
+          return;
+        }
+
         setGame(state.game);
         setPlayers(state.players);
-        setCurrentPlayerNum((prev) => {
-          if (prev !== -1) return prev;
-          const pid = getPid();
-          const byPid = state.players.findIndex((p) => p.pid === pid);
-          if (byPid !== -1) return byPid;
-          return state.players.findIndex((p) => p.socketid === socket.id);
-        });
+        // Always recompute by pid: indices shift when players are removed.
+        setCurrentPlayerNum(myIdx);
       }
     }
 
@@ -81,11 +88,17 @@ function App() {
           try {
             const obj = JSON.parse(JSON.parse(stateRes.state));
             const idx = obj.players.findIndex((p) => p.pid === pid);
-            if (idx !== -1) {
-              // Our socket.id changed on reconnect — update it everywhere.
-              obj.players[idx].socketid = socket.id;
-              setCurrentPlayerNum(idx);
+            if (idx === -1) {
+              // Our seat is gone (kicked while we were away).
+              clearSession();
+              setKicked(true);
+              setRestoring(false);
+              return;
             }
+            // Our socket.id changed on reconnect — update it + mark online.
+            obj.players[idx].socketid = socket.id;
+            obj.players[idx].online = true;
+            setCurrentPlayerNum(idx);
             setGame(obj.game);
             setPlayers(obj.players);
             socket.emit(
@@ -112,6 +125,28 @@ function App() {
     }
     return () => socket.off("connect", restore);
   }, []);
+
+  if (kicked) {
+    return (
+      <div className="App">
+        <div className="page">
+          <h1 className="brand">Kirúgtak a szobából</h1>
+          <p className="hint">A host eltávolított a szobából.</p>
+          <button
+            className="btn"
+            onClick={() => {
+              setKicked(false);
+              setRoomId("");
+              setCurrentPlayerNum(-1);
+              window.location.href = "/";
+            }}
+          >
+            Vissza a főoldalra
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (restoring) {
     return (
