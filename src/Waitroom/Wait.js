@@ -5,10 +5,12 @@ import { Redirect } from "react-router-dom";
 import { useState } from "react";
 import React from "react";
 import { clearSession, getPid } from "../api/session";
+import { useConfirm } from "../ConfirmModal";
 
 export function Wait({ socket, roomId, players, game }) {
   const history = useHistory();
   const [isCopied, setIsCopied] = useState(false);
+  const { confirm, modal } = useConfirm();
 
   const onCopyText = () => {
     setIsCopied(true);
@@ -37,8 +39,14 @@ export function Wait({ socket, roomId, players, game }) {
     );
   }
 
-  function leave() {
-    if (!window.confirm("Biztosan kilépsz a szobából?")) return;
+  async function leave() {
+    const ok = await confirm({
+      title: "Kilépés",
+      message: "Biztosan kilépsz a szobából?",
+      confirmText: "Kilépés",
+      danger: true,
+    });
+    if (!ok) return;
     const pid = getPid();
     const remaining = players.filter((p) => p.pid !== pid);
     // Hand over the host role if we were the host.
@@ -51,8 +59,14 @@ export function Wait({ socket, roomId, players, game }) {
     history.push("/");
   }
 
-  function kick(targetPid, name) {
-    if (!window.confirm(`Kirúgod a szobából: ${name}?`)) return;
+  async function kick(targetPid, name) {
+    const ok = await confirm({
+      title: "Kirúgás",
+      message: `Kirúgod a szobából: ${name}?`,
+      confirmText: "Kirúgás",
+      danger: true,
+    });
+    if (!ok) return;
     syncPlayers(players.filter((p) => p.pid !== targetPid));
   }
 
@@ -134,6 +148,7 @@ export function Wait({ socket, roomId, players, game }) {
         </button>
       </div>
       <Footer />
+      {modal}
     </>
   );
 }

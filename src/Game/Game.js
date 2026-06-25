@@ -4,6 +4,7 @@ import { Redirect, useHistory } from "react-router-dom";
 import { Footer } from "../Footer";
 import { clearSession, getPid } from "../api/session";
 import { burstConfetti } from "../confetti";
+import { useConfirm } from "../ConfirmModal";
 
 export function Game({ socket, roomId, players, game, currentPlayerNum }) {
   const history = useHistory();
@@ -12,6 +13,7 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
   const [toast, setToast] = useState(null);
   // { delta } for the floating score change on the current player's row
   const [scoreFx, setScoreFx] = useState(null);
+  const { confirm, modal } = useConfirm();
 
   function showToast(text) {
     setToast({ text, id: (toast ? toast.id : 0) + 1 });
@@ -37,8 +39,14 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
     );
   }
 
-  function leave() {
-    if (!window.confirm("Biztosan kilépsz a játékból?")) return;
+  async function leave() {
+    const ok = await confirm({
+      title: "Kilépés",
+      message: "Biztosan kilépsz a játékból?",
+      confirmText: "Kilépés",
+      danger: true,
+    });
+    if (!ok) return;
     const pid = getPid();
     const remaining = players.filter((p) => p.pid !== pid);
     if (me && me.boss && remaining.length > 0 && !remaining.some((p) => p.boss)) {
@@ -50,8 +58,14 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
     history.push("/");
   }
 
-  function kick(targetPid, name) {
-    if (!window.confirm(`Kirúgod a játékból: ${name}?`)) return;
+  async function kick(targetPid, name) {
+    const ok = await confirm({
+      title: "Kirúgás",
+      message: `Kirúgod a játékból: ${name}?`,
+      confirmText: "Kirúgás",
+      danger: true,
+    });
+    if (!ok) return;
     syncPlayers(players.filter((p) => p.pid !== targetPid));
   }
 
@@ -268,6 +282,7 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
         </button>
       </div>
       <Footer />
+      {modal}
     </>
   );
 }
