@@ -3,11 +3,20 @@ import React from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { Footer } from "../Footer";
 import { clearSession } from "../api/session";
+import { burstConfetti } from "../confetti";
 
 export function Game({ socket, roomId, players, game, currentPlayerNum }) {
   const history = useHistory();
   const [tip, setTip] = useState(0);
   const [hit, setHit] = useState(0);
+  const [toast, setToast] = useState(null);
+  // { delta } for the floating score change on the current player's row
+  const [scoreFx, setScoreFx] = useState(null);
+
+  function showToast(text) {
+    setToast({ text, id: (toast ? toast.id : 0) + 1 });
+    setTimeout(() => setToast(null), 1500);
+  }
 
   const possibilities = ["♠︎", "♥", "♣", "♦", "Nincs adu!"];
 
@@ -43,17 +52,28 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
   function confirmTip() {
     me.tip = tip;
     me.tipLocked = true;
+    showToast("Tipp rögzítve ✓");
     sync();
   }
 
   function confirmHit() {
+    const before = me.point;
+    const exact = me.tip === hit;
     me.hit = hit;
-    if (me.tip === hit) {
+    if (exact) {
       me.point += 10 + 2 * hit;
     } else {
       me.point -= 4 * Math.abs(me.tip - hit);
     }
     me.hitLocked = true;
+
+    const delta = me.point - before;
+    setScoreFx({ delta, id: Date.now() });
+    setTimeout(() => setScoreFx(null), 1800);
+    showToast(exact ? "Telitalálat! 🎯" : "Eredmény rögzítve ✓");
+    if (exact) {
+      burstConfetti();
+    }
     sync();
   }
 
@@ -74,6 +94,11 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
 
   return (
     <>
+      {toast ? (
+        <div className="toast" key={toast.id}>
+          {toast.text}
+        </div>
+      ) : null}
       <div className="page">
         <header className="game-header">
           <h1 className="adu">
@@ -86,20 +111,40 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
 
         {/* Scoreboard */}
         <div className="scoreboard">
-          {players.map((p) => (
-            <div className="score-row" key={p.id}>
-              <span className="name">
-                {p.name}
-                {!allTipped && p.tipLocked ? (
-                  <span className="tag done">kész</span>
-                ) : null}
-                {allTipped && !allHit && p.hitLocked ? (
-                  <span className="tag done">kész</span>
-                ) : null}
-              </span>
-              <span className="points">{p.point}</span>
-            </div>
-          ))}
+          {players.map((p, i) => {
+            const mine = i === currentPlayerNum && scoreFx;
+            const flashClass = mine
+              ? scoreFx.delta >= 0
+                ? "flash-gain"
+                : "flash-loss"
+              : "";
+            return (
+              <div className={`score-row ${flashClass}`} key={p.id}>
+                <span className="name">
+                  {p.name}
+                  {!allTipped && p.tipLocked ? (
+                    <span className="tag done">kész</span>
+                  ) : null}
+                  {allTipped && !allHit && p.hitLocked ? (
+                    <span className="tag done">kész</span>
+                  ) : null}
+                </span>
+                <span className="points">
+                  {mine ? (
+                    <span
+                      key={scoreFx.id}
+                      className={`delta-float ${
+                        scoreFx.delta >= 0 ? "gain" : "loss"
+                      }`}
+                    >
+                      {scoreFx.delta >= 0 ? `+${scoreFx.delta}` : scoreFx.delta}
+                    </span>
+                  ) : null}
+                  {p.point}
+                </span>
+              </div>
+            );
+          })}
         </div>
 
         {/* Phase 1: tipping — tips hidden until everyone locked in */}

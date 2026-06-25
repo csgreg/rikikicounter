@@ -308,6 +308,176 @@ body {
   margin: 0;
 }
 
+/* ---------- Animations / feedback ---------- */
+.card {
+  animation: card-in 0.32s ease both;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.tag.done {
+  animation: pop 0.32s cubic-bezier(0.18, 1.4, 0.4, 1) both;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* toast pill */
+.toast {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  z-index: 1500;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  animation: toast-in 1.5s ease forwards;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+@keyframes toast-in {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20px) scale(0.9);
+  }
+  12%,
+  78% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -16px) scale(0.96);
+  }
+}
+
+/* score row flash on point change */
+.score-row.flash-gain {
+  animation: flash-gain 1.4s ease;
+}
+
+.score-row.flash-loss {
+  animation: flash-loss 1.4s ease;
+}
+
+@keyframes flash-gain {
+  0%,
+  100% {
+    background: var(--surface-2);
+    border-color: var(--border);
+  }
+  20% {
+    background: rgba(6, 214, 160, 0.22);
+    border-color: #06d6a0;
+  }
+}
+
+@keyframes flash-loss {
+  0%,
+  100% {
+    background: var(--surface-2);
+    border-color: var(--border);
+  }
+  20% {
+    background: rgba(255, 107, 107, 0.22);
+    border-color: var(--danger);
+  }
+}
+
+/* floating +/- delta over the points */
+.points {
+  position: relative;
+}
+
+.delta-float {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  font-size: 0.95rem;
+  font-weight: 800;
+  pointer-events: none;
+  animation: delta-rise 1.6s ease forwards;
+}
+
+.delta-float.gain {
+  color: #06d6a0;
+}
+
+.delta-float.loss {
+  color: var(--danger);
+}
+
+@keyframes delta-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-22px) scale(1);
+  }
+}
+
+/* confetti (spawned from src/confetti.js) */
+.confetti-piece {
+  position: fixed;
+  top: -16px;
+  width: 9px;
+  height: 14px;
+  z-index: 2000;
+  pointer-events: none;
+  animation-name: confetti-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) translateX(0) rotate(0);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translateY(105vh) translateX(var(--drift)) rotate(var(--spin));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .tag.done,
+  .toast,
+  .score-row.flash-gain,
+  .score-row.flash-loss,
+  .delta-float,
+  .confetti-piece {
+    animation: none;
+  }
+}
+
 /* ---------- Connecting overlay ---------- */
 .overlay {
   position: fixed;
