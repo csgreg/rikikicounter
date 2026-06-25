@@ -5,8 +5,12 @@
 const PID_KEY = "rikiki_pid";
 const SESSION_KEY = "rikiki_session";
 
+export interface Session {
+  roomId: string;
+}
+
 // A stable per-browser player id that survives reconnects and refreshes.
-export function getPid() {
+export function getPid(): string {
   let pid = localStorage.getItem(PID_KEY);
   if (!pid) {
     pid = "p_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -15,18 +19,18 @@ export function getPid() {
   return pid;
 }
 
-export function saveSession(roomId) {
+export function saveSession(roomId: string): void {
   localStorage.setItem(SESSION_KEY, JSON.stringify({ roomId }));
 }
 
-export function loadSession() {
+export function loadSession(): Session | null {
   try {
-    return JSON.parse(localStorage.getItem(SESSION_KEY)) || null;
+    return (JSON.parse(localStorage.getItem(SESSION_KEY) || "null") as Session) || null;
   } catch {
     return null;
   }
 }
 
-export function clearSession() {
+export function clearSession(): void {
   localStorage.removeItem(SESSION_KEY);
 }

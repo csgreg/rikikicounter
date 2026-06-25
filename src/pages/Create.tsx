@@ -1,22 +1,26 @@
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { getPid, saveSession } from "../api/session";
+import { syncState } from "../api/state";
+import { useGame } from "../context/GameContext";
+import type { GameMeta, Player } from "../types";
 
-export function Create({ socket, setRoomId, players, setPlayers, setGame }) {
+const MAX_PLAYERS = 6;
+
+export function Create() {
+  const { socket, setRoomId, setPlayers, setGame } = useGame();
   const [playerName, setPlayerName] = useState("");
   const history = useHistory();
 
   function handleCreateRoom() {
-    if (!playerName.trim()) {
-      return;
-    }
+    if (!playerName.trim()) return;
 
-    socket.emit("create-room", 6, (response) => {
+    socket.emit("create-room", MAX_PLAYERS, (response) => {
       const roomId = response.roomId;
       setRoomId(roomId);
       saveSession(roomId);
 
-      const newPlayers = [
+      const newPlayers: Player[] = [
         {
           id: 1,
           pid: getPid(),
@@ -31,7 +35,7 @@ export function Create({ socket, setRoomId, players, setPlayers, setGame }) {
           online: true,
         },
       ];
-      const newGame = {
+      const newGame: GameMeta = {
         laps: 0,
         players: 1,
         gameStarted: false,
@@ -40,15 +44,7 @@ export function Create({ socket, setRoomId, players, setPlayers, setGame }) {
       setPlayers(newPlayers);
       setGame(newGame);
 
-      socket.emit(
-        "sync-state",
-        roomId,
-        `{"game": ${JSON.stringify(newGame)}, "players": ${JSON.stringify(
-          newPlayers
-        )} }`,
-        false,
-        () => {}
-      );
+      syncState(socket, roomId, newGame, newPlayers);
       history.push("/wait");
     });
   }

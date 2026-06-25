@@ -1,13 +1,15 @@
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { Footer } from "../Footer";
+import { useState } from "react";
 import { useHistory } from "react-router";
 import { Redirect } from "react-router-dom";
-import { useState } from "react";
-import React from "react";
+import { Footer } from "../components/Footer";
 import { clearSession, getPid } from "../api/session";
-import { useConfirm } from "../ConfirmModal";
+import { syncState } from "../api/state";
+import { useConfirm } from "../hooks/useConfirm";
+import { useGame } from "../context/GameContext";
 
-export function Wait({ socket, roomId, players, game }) {
+export function Wait() {
+  const { socket, roomId, players, game, me, isBoss } = useGame();
   const history = useHistory();
   const [isCopied, setIsCopied] = useState(false);
   const { confirm, modal } = useConfirm();
@@ -26,19 +28,6 @@ export function Wait({ socket, roomId, players, game }) {
     history.push("/game");
   }
 
-  const me = players.find((p) => p.pid === getPid());
-  const isBoss = me && me.boss;
-
-  function syncPlayers(list) {
-    socket.emit(
-      "sync-state",
-      roomId,
-      `{"game": ${JSON.stringify(game)}, "players": ${JSON.stringify(list)} }`,
-      false,
-      () => {}
-    );
-  }
-
   async function leave() {
     const ok = await confirm({
       title: "Kilépés",
@@ -54,12 +43,12 @@ export function Wait({ socket, roomId, players, game }) {
       const heir = remaining.find((p) => p.online !== false) || remaining[0];
       heir.boss = true;
     }
-    syncPlayers(remaining);
+    syncState(socket, roomId, game, remaining);
     clearSession();
     history.push("/");
   }
 
-  async function kick(targetPid, name) {
+  async function kick(targetPid: string, name: string) {
     const ok = await confirm({
       title: "Kirúgás",
       message: `Kirúgod a szobából: ${name}?`,
@@ -67,20 +56,16 @@ export function Wait({ socket, roomId, players, game }) {
       danger: true,
     });
     if (!ok) return;
-    syncPlayers(players.filter((p) => p.pid !== targetPid));
+    syncState(
+      socket,
+      roomId,
+      game,
+      players.filter((p) => p.pid !== targetPid)
+    );
   }
 
   function handleBossStarts() {
-    game.gameStarted = true;
-    socket.emit(
-      "sync-state",
-      roomId,
-      `{"game": ${JSON.stringify(game)}, "players": ${JSON.stringify(
-        players
-      )} }`,
-      false,
-      () => {}
-    );
+    syncState(socket, roomId, { ...game, gameStarted: true }, players);
   }
 
   return (
@@ -110,9 +95,7 @@ export function Wait({ socket, roomId, players, game }) {
                 className={p.online === false ? "offline" : ""}
               >
                 <span className="pname">
-                  <span
-                    className={`dot ${p.online === false ? "off" : "on"}`}
-                  />
+                  <span className={`dot ${p.online === false ? "off" : "on"}`} />
                   {p.name}
                 </span>
                 <span className="row-tags">
@@ -120,7 +103,7 @@ export function Wait({ socket, roomId, players, game }) {
                   {p.online === false ? (
                     <span className="tag">offline</span>
                   ) : null}
-                  {isBoss && p.pid !== me.pid ? (
+                  {isBoss && me && p.pid !== me.pid ? (
                     <button
                       className="kick-btn"
                       title="Kirúgás"

@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import React from "react";
+import { useEffect, useState } from "react";
 
 // Full-screen overlay shown whenever the socket is not connected.
 // On a free backend the first connection can take ~50s (cold start), so after
@@ -19,7 +18,7 @@ export function ConnectingOverlay() {
         <p className="overlay-title">Csatlakozás a szerverhez…</p>
         {slow && (
           <p className="overlay-sub">
-            Az ingyenes szerver épp felébred, ez akár ~50 másodpercig is
+            A szerver épp felébred, ez akár ~50 másodpercig is
             tarthat. Köszönjük a türelmet! ☕
           </p>
         )}

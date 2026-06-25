@@ -1,6 +1,6 @@
 // Tiny dependency-free confetti burst. Spawns DOM pieces, lets CSS animate
 // them, then cleans up. Used when a player nails their tip exactly.
-export function burstConfetti() {
+export function burstConfetti(): void {
   if (typeof document === "undefined") return;
 
   const colors = ["#ffd166", "#ff6b6b", "#06d6a0", "#4cc9f0", "#f72585"];

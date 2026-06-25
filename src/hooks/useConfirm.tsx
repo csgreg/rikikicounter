@@ -1,20 +1,37 @@
-import { useState, useCallback, useEffect } from "react";
-import React from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+
+interface ConfirmOptions {
+  title?: string;
+  message: string;
+  confirmText?: string;
+  cancelText?: string;
+  danger?: boolean;
+}
+
+interface ConfirmState extends ConfirmOptions {
+  resolve: (result: boolean) => void;
+}
+
+interface UseConfirmResult {
+  confirm: (opts: ConfirmOptions | string) => Promise<boolean>;
+  modal: ReactNode;
+}
 
 // Promise-based confirm dialog styled to match the app.
 // Usage:
 //   const { confirm, modal } = useConfirm();
 //   if (!(await confirm({ message, confirmText, danger }))) return;
 //   ...render {modal} somewhere in your JSX.
-export function useConfirm() {
-  const [state, setState] = useState(null);
+export function useConfirm(): UseConfirmResult {
+  const [state, setState] = useState<ConfirmState | null>(null);
 
-  const confirm = useCallback((opts) => {
-    const o = typeof opts === "string" ? { message: opts } : opts || {};
-    return new Promise((resolve) => setState({ ...o, resolve }));
+  const confirm = useCallback((opts: ConfirmOptions | string) => {
+    const o: ConfirmOptions =
+      typeof opts === "string" ? { message: opts } : opts;
+    return new Promise<boolean>((resolve) => setState({ ...o, resolve }));
   }, []);
 
-  const close = (result) => {
+  const close = (result: boolean) => {
     setState((s) => {
       if (s) s.resolve(result);
       return null;
@@ -23,7 +40,7 @@ export function useConfirm() {
 
   useEffect(() => {
     if (!state) return;
-    const onKey = (e) => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close(false);
       if (e.key === "Enter") close(true);
     };
@@ -31,7 +48,7 @@ export function useConfirm() {
     return () => window.removeEventListener("keydown", onKey);
   }, [state]);
 
-  const modal = state ? (
+  const modal: ReactNode = state ? (
     <div className="modal-backdrop" onClick={() => close(false)}>
       <div
         className="modal"

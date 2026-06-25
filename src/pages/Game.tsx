@@ -1,42 +1,46 @@
 import { useState } from "react";
-import React from "react";
 import { Redirect, useHistory } from "react-router-dom";
-import { Footer } from "../Footer";
+import { Footer } from "../components/Footer";
 import { clearSession, getPid } from "../api/session";
-import { burstConfetti } from "../confetti";
-import { useConfirm } from "../ConfirmModal";
+import { syncState } from "../api/state";
+import { burstConfetti } from "../utils/confetti";
+import { useConfirm } from "../hooks/useConfirm";
+import { useGame } from "../context/GameContext";
+import type { Player } from "../types";
 
-export function Game({ socket, roomId, players, game, currentPlayerNum }) {
+const SUITS = ["♠︎", "♥", "♣", "♦", "Nincs adu!"];
+
+interface Toast {
+  text: string;
+  id: number;
+}
+
+interface ScoreFx {
+  delta: number;
+  id: number;
+}
+
+export function Game() {
+  const { socket, roomId, players, game, currentPlayerNum, me, isBoss } =
+    useGame();
   const history = useHistory();
   const [tip, setTip] = useState(0);
   const [hit, setHit] = useState(0);
-  const [toast, setToast] = useState(null);
-  // { delta } for the floating score change on the current player's row
-  const [scoreFx, setScoreFx] = useState(null);
+  const [toast, setToast] = useState<Toast | null>(null);
+  const [scoreFx, setScoreFx] = useState<ScoreFx | null>(null);
   const { confirm, modal } = useConfirm();
 
-  function showToast(text) {
-    setToast({ text, id: (toast ? toast.id : 0) + 1 });
+  function showToast(text: string) {
+    setToast({ text, id: Date.now() });
     setTimeout(() => setToast(null), 1500);
   }
-
-  const possibilities = ["♠︎", "♥", "♣", "♦", "Nincs adu!"];
 
   if (!roomId) {
     return <Redirect to="/" />;
   }
 
-  const me = currentPlayerNum >= 0 ? players[currentPlayerNum] : null;
-  const isBoss = me && me.boss;
-
-  function syncPlayers(list) {
-    socket.emit(
-      "sync-state",
-      roomId,
-      `{"game": ${JSON.stringify(game)}, "players": ${JSON.stringify(list)} }`,
-      false,
-      () => {}
-    );
+  function pushPlayers(list: Player[]) {
+    syncState(socket, roomId, game, list);
   }
 
   async function leave() {
@@ -53,12 +57,12 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
       const heir = remaining.find((p) => p.online !== false) || remaining[0];
       heir.boss = true;
     }
-    syncPlayers(remaining);
+    pushPlayers(remaining);
     clearSession();
     history.push("/");
   }
 
-  async function kick(targetPid, name) {
+  async function kick(targetPid: string, name: string) {
     const ok = await confirm({
       title: "Kirúgás",
       message: `Kirúgod a játékból: ${name}?`,
@@ -66,34 +70,19 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
       danger: true,
     });
     if (!ok) return;
-    syncPlayers(players.filter((p) => p.pid !== targetPid));
-  }
-
-  const allTipped = players.length > 0 && players.every((p) => p.tipLocked);
-  const allHit = players.length > 0 && players.every((p) => p.hitLocked);
-  const tippedCount = players.filter((p) => p.tipLocked).length;
-  const hitCount = players.filter((p) => p.hitLocked).length;
-
-  function sync() {
-    socket.emit(
-      "sync-state",
-      roomId,
-      `{"game": ${JSON.stringify(game)}, "players": ${JSON.stringify(
-        players
-      )} }`,
-      false,
-      () => {}
-    );
+    pushPlayers(players.filter((p) => p.pid !== targetPid));
   }
 
   function confirmTip() {
+    if (!me) return;
     me.tip = tip;
     me.tipLocked = true;
     showToast("Tipp rögzítve ✓");
-    sync();
+    pushPlayers(players);
   }
 
   function confirmHit() {
+    if (!me) return;
     const before = me.point;
     const exact = me.tip === hit;
     me.hit = hit;
@@ -108,14 +97,12 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
     setScoreFx({ delta, id: Date.now() });
     setTimeout(() => setScoreFx(null), 1800);
     showToast(exact ? "Telitalálat! 🎯" : "Eredmény rögzítve ✓");
-    if (exact) {
-      burstConfetti();
-    }
-    sync();
+    if (exact) burstConfetti();
+    pushPlayers(players);
   }
 
   function nextRound() {
-    game.laps += 1;
+    const updatedGame = { ...game, laps: game.laps + 1 };
     players.forEach((p) => {
       p.tip = 0;
       p.tipLocked = false;
@@ -124,9 +111,13 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
     });
     setTip(0);
     setHit(0);
-    sync();
+    syncState(socket, roomId, updatedGame, players);
   }
 
+  const allTipped = players.length > 0 && players.every((p) => p.tipLocked);
+  const allHit = players.length > 0 && players.every((p) => p.hitLocked);
+  const tippedCount = players.filter((p) => p.tipLocked).length;
+  const hitCount = players.filter((p) => p.hitLocked).length;
   const cardsThisRound = Math.floor(52 / players.length) - game.laps;
 
   return (
@@ -139,7 +130,7 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
       <div className="page">
         <header className="game-header">
           <p className="game-line">
-            <span className="adu-suit">{possibilities[game.laps % 5]}</span>
+            <span className="adu-suit">{SUITS[game.laps % 5]}</span>
             <span className="game-meta">
               {game.laps + 1}. kör · {cardsThisRound} lap / játékos
             </span>
@@ -149,9 +140,9 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
         {/* Scoreboard */}
         <div className="scoreboard">
           {players.map((p, i) => {
-            const mine = i === currentPlayerNum && scoreFx;
-            const flashClass = mine
-              ? scoreFx.delta >= 0
+            const fx = i === currentPlayerNum ? scoreFx : null;
+            const flashClass = fx
+              ? fx.delta >= 0
                 ? "flash-gain"
                 : "flash-loss"
               : "";
@@ -185,14 +176,14 @@ export function Game({ socket, roomId, players, game, currentPlayerNum }) {
                   ) : null}
                 </span>
                 <span className="points">
-                  {mine ? (
+                  {fx ? (
                     <span
-                      key={scoreFx.id}
+                      key={fx.id}
                       className={`delta-float ${
-                        scoreFx.delta >= 0 ? "gain" : "loss"
+                        fx.delta >= 0 ? "gain" : "loss"
                       }`}
                     >
-                      {scoreFx.delta >= 0 ? `+${scoreFx.delta}` : scoreFx.delta}
+                      {fx.delta >= 0 ? `+${fx.delta}` : fx.delta}
                     </span>
                   ) : null}
                   {p.point}

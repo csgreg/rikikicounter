@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { getPid, saveSession } from "../api/session";
+import { parseFetchedState, syncState } from "../api/state";
+import { useGame } from "../context/GameContext";
 
-export function Join({ socket, setRoomId, setPlayers, setGame }) {
+export function Join() {
+  const { socket, setRoomId, setPlayers, setGame } = useGame();
   const [joinName, setJoinName] = useState("");
   const [joinCode, setJoinCode] = useState("");
   const history = useHistory();
 
   function handleJoin() {
-    if (!joinName.trim() || !joinCode.trim()) {
-      return;
-    }
+    if (!joinName.trim() || !joinCode.trim()) return;
 
     socket.emit("join-room", joinCode, (response) => {
       if (response.status !== "ok") {
@@ -22,7 +23,8 @@ export function Join({ socket, setRoomId, setPlayers, setGame }) {
       saveSession(joinCode);
 
       socket.emit("get-state", joinCode, (stateResponse) => {
-        const obj = JSON.parse(JSON.parse(stateResponse.state));
+        if (!stateResponse.state) return;
+        const obj = parseFetchedState(stateResponse.state);
         const pid = getPid();
 
         // Rejoining the same room (same browser): update in place, don't dupe.
@@ -51,15 +53,7 @@ export function Join({ socket, setRoomId, setPlayers, setGame }) {
         setPlayers(obj.players);
         setGame(obj.game);
 
-        socket.emit(
-          "sync-state",
-          joinCode,
-          `{"game": ${JSON.stringify(obj.game)}, "players": ${JSON.stringify(
-            obj.players
-          )} }`,
-          false,
-          () => {}
-        );
+        syncState(socket, joinCode, obj.game, obj.players);
         history.push("/wait");
       });
     });
