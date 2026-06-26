@@ -588,6 +588,45 @@ body {
   }
 }
 
+/* funny emoji rain (e.g. when you lose points) */
+.confetti-emoji {
+  position: fixed;
+  top: -28px;
+  z-index: 2000;
+  pointer-events: none;
+  line-height: 1;
+  animation-name: confetti-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+/* whole-page shake on a point loss */
+.shake {
+  animation: shake 0.52s ease;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+  15% {
+    transform: translateX(-8px) rotate(-1deg);
+  }
+  30% {
+    transform: translateX(8px) rotate(1deg);
+  }
+  45% {
+    transform: translateX(-6px) rotate(-0.6deg);
+  }
+  60% {
+    transform: translateX(6px) rotate(0.6deg);
+  }
+  78% {
+    transform: translateX(-3px);
+  }
+}
+
 /* ---------- Confirm modal ---------- */
 .modal-backdrop {
   position: fixed;
@@ -719,6 +758,8 @@ body {
   .score-row.flash-loss,
   .delta-float,
   .confetti-piece,
+  .confetti-emoji,
+  .shake,
   .modal-backdrop,
   .modal {
     animation: none;

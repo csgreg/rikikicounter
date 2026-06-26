@@ -20,3 +20,22 @@ export function burstConfetti(): void {
     setTimeout(() => piece.remove(), 3000);
   }
 }
+
+// Rain of (usually funny) emojis — e.g. when a player loses points.
+export function emojiRain(emojis: string[], count = 22): void {
+  if (typeof document === "undefined") return;
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement("div");
+    el.className = "confetti-emoji";
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)] || "💀";
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.setProperty("--drift", Math.random() * 200 - 100 + "px");
+    el.style.setProperty("--spin", Math.random() * 720 - 360 + "deg");
+    el.style.fontSize = 18 + Math.random() * 18 + "px";
+    el.style.animationDuration = 1.6 + Math.random() * 1.2 + "s";
+    el.style.animationDelay = Math.random() * 0.3 + "s";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3400);
+  }
+}

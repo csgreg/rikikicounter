@@ -2,12 +2,27 @@ import { useEffect, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { clearSession, getPid } from "../api/session";
 import { syncState } from "../api/state";
-import { burstConfetti } from "../utils/confetti";
+import { burstConfetti, emojiRain } from "../utils/confetti";
 import { useConfirm } from "../hooks/useConfirm";
 import { useGame } from "../context/GameContext";
 import type { Player } from "../types";
 
 const SUITS = ["♠︎", "♥", "♣", "♦", "Nincs adu!"];
+
+const TIP_MSG = ["Tipp leadva ✓", "Bevállaltad 😎", "Le van fixálva 🔒"];
+const PRAISE = ["Telitalálat! 🎯", "Zseni vagy! 🤩", "Ez az! 🔥", "Profi 💪"];
+const TAUNT = [
+  "Naaa neee 💀",
+  "Ezt benézted 🤡",
+  "Hát ez fájt 😬",
+  "RIP, mínusz 🪦",
+  "Ajjaj… 📉",
+];
+const LOSS_EMOJIS = ["💀", "🤡", "😭", "👎", "📉", "🥴"];
+
+function pick<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
 interface Toast {
   text: string;
@@ -27,6 +42,7 @@ export function Game() {
   const [hit, setHit] = useState(0);
   const [toast, setToast] = useState<Toast | null>(null);
   const [scoreFx, setScoreFx] = useState<ScoreFx | null>(null);
+  const [shake, setShake] = useState(false);
   const { confirm, modal } = useConfirm();
 
   function showToast(text: string) {
@@ -90,7 +106,7 @@ export function Game() {
     if (!me) return;
     me.tip = tip;
     me.tipLocked = true;
-    showToast("Tipp rögzítve ✓");
+    showToast(pick(TIP_MSG));
     pushPlayers(players);
   }
 
@@ -109,8 +125,16 @@ export function Game() {
     const delta = me.point - before;
     setScoreFx({ delta, id: Date.now() });
     setTimeout(() => setScoreFx(null), 1800);
-    showToast(exact ? "Telitalálat! 🎯" : "Eredmény rögzítve ✓");
-    if (exact) burstConfetti();
+
+    if (exact) {
+      showToast(pick(PRAISE));
+      burstConfetti();
+    } else {
+      showToast(pick(TAUNT));
+      emojiRain(LOSS_EMOJIS);
+      setShake(true);
+      setTimeout(() => setShake(false), 520);
+    }
     pushPlayers(players);
   }
 
@@ -161,7 +185,7 @@ export function Game() {
           {toast.text}
         </div>
       ) : null}
-      <div className="page">
+      <div className={shake ? "page shake" : "page"}>
         <header className="game-header">
           <p className="game-line">
             <span className="adu-suit">
@@ -236,17 +260,22 @@ export function Game() {
           <div className="card">
             <h2>Vége! 🏆</h2>
             <div className="scoreboard">
-              {standings.map((p, i) => (
-                <div
-                  className={`score-row ${i === 0 ? "winner" : ""}`}
-                  key={p.id}
-                >
-                  <span className="name">
-                    {i === 0 ? "🏆" : `${i + 1}.`} {p.name}
-                  </span>
-                  <span className="points">{p.point}</span>
-                </div>
-              ))}
+              {standings.map((p, i) => {
+                const isLast = standings.length > 1 && i === standings.length - 1;
+                return (
+                  <div
+                    className={`score-row ${i === 0 ? "winner" : ""}`}
+                    key={p.id}
+                  >
+                    <span className="name">
+                      {i + 1}. {p.name}
+                      {i === 0 ? " 🏆" : ""}
+                      {isLast ? " 🥄" : ""}
+                    </span>
+                    <span className="points">{p.point}</span>
+                  </div>
+                );
+              })}
             </div>
             <button
               className="btn"
