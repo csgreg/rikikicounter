@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { Footer } from "../components/Footer";
 import { clearSession, getPid } from "../api/session";
@@ -34,6 +34,20 @@ export function Game() {
     setToast({ text, id: Date.now() });
     setTimeout(() => setToast(null), 1500);
   }
+
+  // Card count goes max -> 1 -> max, then the game ends.
+  const maxCards = players.length ? Math.floor(52 / players.length) : 1;
+  const totalRounds = 2 * maxCards - 1;
+  const cardsThisRound =
+    game.laps < maxCards
+      ? maxCards - game.laps // descending: max .. 1
+      : Math.min(game.laps - maxCards + 2, maxCards); // ascending: 2 .. max
+  const gameOver = !!game.finished || game.laps >= totalRounds;
+
+  // Celebrate when the game finishes.
+  useEffect(() => {
+    if (gameOver) burstConfetti();
+  }, [gameOver]);
 
   if (!roomId) {
     return <Redirect to="/" />;
@@ -102,7 +116,12 @@ export function Game() {
   }
 
   function nextRound() {
-    const updatedGame = { ...game, laps: game.laps + 1 };
+    const nextLap = game.laps + 1;
+    const updatedGame = {
+      ...game,
+      laps: nextLap,
+      finished: nextLap >= totalRounds,
+    };
     players.forEach((p) => {
       p.tip = 0;
       p.tipLocked = false;
@@ -114,11 +133,27 @@ export function Game() {
     syncState(socket, roomId, updatedGame, players);
   }
 
+  async function finishGame() {
+    const ok = await confirm({
+      title: "Játék befejezése",
+      message: "Biztosan befejezed a játékot mindenkinek?",
+      confirmText: "Befejezés",
+      danger: true,
+    });
+    if (!ok) return;
+    syncState(socket, roomId, { ...game, finished: true }, players);
+  }
+
+  function goHome() {
+    clearSession();
+    history.push("/");
+  }
+
   const allTipped = players.length > 0 && players.every((p) => p.tipLocked);
   const allHit = players.length > 0 && players.every((p) => p.hitLocked);
   const tippedCount = players.filter((p) => p.tipLocked).length;
   const hitCount = players.filter((p) => p.hitLocked).length;
-  const cardsThisRound = Math.floor(52 / players.length) - game.laps;
+  const standings = [...players].sort((a, b) => b.point - a.point);
 
   return (
     <>
@@ -130,9 +165,13 @@ export function Game() {
       <div className="page">
         <header className="game-header">
           <p className="game-line">
-            <span className="adu-suit">{SUITS[game.laps % 5]}</span>
+            <span className="adu-suit">
+              {gameOver ? "🏁" : SUITS[game.laps % 5]}
+            </span>
             <span className="game-meta">
-              {game.laps + 1}. kör · {cardsThisRound} lap / játékos
+              {gameOver
+                ? "Játék vége"
+                : `${game.laps + 1}/${totalRounds}. kör · ${cardsThisRound} lap / játékos`}
             </span>
           </p>
         </header>
@@ -193,8 +232,35 @@ export function Game() {
           })}
         </div>
 
+        {/* Final standings */}
+        {gameOver && (
+          <div className="card">
+            <h2>Vége! 🏆</h2>
+            <div className="scoreboard">
+              {standings.map((p, i) => (
+                <div
+                  className={`score-row ${i === 0 ? "winner" : ""}`}
+                  key={p.id}
+                >
+                  <span className="name">
+                    {i === 0 ? "🏆" : `${i + 1}.`} {p.name}
+                  </span>
+                  <span className="points">{p.point}</span>
+                </div>
+              ))}
+            </div>
+            <button
+              className="btn"
+              style={{ marginTop: "16px" }}
+              onClick={goHome}
+            >
+              Vissza a főoldalra
+            </button>
+          </div>
+        )}
+
         {/* Phase 1: tipping — tips hidden until everyone locked in */}
-        {!allTipped && (
+        {!gameOver && !allTipped && (
           <div className="card">
             <h2>Tippelés</h2>
             {me && !me.tipLocked ? (
@@ -220,7 +286,7 @@ export function Game() {
         )}
 
         {/* Phase 2: results — tips revealed, enter how many you actually won */}
-        {allTipped && !allHit && (
+        {!gameOver && allTipped && !allHit && (
           <div className="card">
             <h2>Tippek</h2>
             <div className="scoreboard" style={{ marginBottom: "16px" }}>
@@ -255,12 +321,12 @@ export function Game() {
         )}
 
         {/* Phase 3: round done */}
-        {allHit && (
+        {!gameOver && allHit && (
           <div className="card">
             <h2>Kör vége</h2>
             {isBoss ? (
               <button className="btn" onClick={nextRound}>
-                Következő kör
+                {game.laps + 1 >= totalRounds ? "Eredmények" : "Következő kör"}
               </button>
             ) : (
               <p className="hint">A host indítja a következő kört.</p>
@@ -268,9 +334,17 @@ export function Game() {
           </div>
         )}
 
-        <button className="btn btn-ghost" onClick={leave}>
-          Kilépés
-        </button>
+        {!gameOver && isBoss && (
+          <button className="btn btn-ghost" onClick={finishGame}>
+            Játék befejezése
+          </button>
+        )}
+
+        {!gameOver && (
+          <button className="btn btn-ghost" onClick={leave}>
+            Kilépés
+          </button>
+        )}
       </div>
       <Footer />
       {modal}

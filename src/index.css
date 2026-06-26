@@ -383,6 +383,16 @@ body {
   }
 }
 
+/* ---------- Final standings ---------- */
+.score-row.winner {
+  border-color: var(--accent);
+  background: rgba(255, 209, 102, 0.12);
+}
+
+.score-row.winner .points {
+  color: var(--accent);
+}
+
 /* ---------- Presence / kick ---------- */
 .pname {
   display: flex;

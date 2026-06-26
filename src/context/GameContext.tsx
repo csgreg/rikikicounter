@@ -32,6 +32,7 @@ const EMPTY_GAME: GameMeta = {
   players: 0,
   gameStarted: false,
   game: false,
+  finished: false,
 };
 
 const GameContext = createContext<GameContextValue | null>(null);

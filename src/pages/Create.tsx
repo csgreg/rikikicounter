@@ -40,6 +40,7 @@ export function Create() {
         players: 1,
         gameStarted: false,
         game: false,
+        finished: false,
       };
       setPlayers(newPlayers);
       setGame(newGame);

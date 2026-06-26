@@ -19,6 +19,7 @@ export interface GameMeta {
   players: number;
   gameStarted: boolean;
   game: boolean;
+  finished?: boolean;
 }
 
 export interface RoomState {
