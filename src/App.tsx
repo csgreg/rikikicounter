@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { GameProvider, useGame } from "./context/GameContext";
 import { ConnectingOverlay } from "./components/ConnectingOverlay";
-import { Footer } from "./components/Footer";
 import { Create } from "./pages/Create";
 import { Join } from "./pages/Join";
 import { Wait } from "./pages/Wait";
@@ -23,22 +22,19 @@ function KickedScreen() {
 
 function Home() {
   return (
-    <>
-      <div className="page">
-        <header>
-          <h1 className="brand">
-            Rikiki <span>Counter</span>
-          </h1>
-          <p className="tagline">
-            Hozz létre szobát vagy csatlakozz, és a pontokat mi számoljuk.
-          </p>
-        </header>
-        <Create />
-        <div className="divider">vagy</div>
-        <Join />
-      </div>
-      <Footer />
-    </>
+    <div className="page">
+      <header>
+        <h1 className="brand">
+          Rikiki <span>Counter</span>
+        </h1>
+        <p className="tagline">
+          Hozz létre szobát vagy csatlakozz, és a pontokat mi számoljuk.
+        </p>
+      </header>
+      <Create />
+      <div className="divider">vagy</div>
+      <Join />
+    </div>
   );
 }
 

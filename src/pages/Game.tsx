@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
-import { Footer } from "../components/Footer";
 import { clearSession, getPid } from "../api/session";
 import { syncState } from "../api/state";
 import { burstConfetti } from "../utils/confetti";
@@ -346,7 +345,6 @@ export function Game() {
           </button>
         )}
       </div>
-      <Footer />
       {modal}
     </>
   );
