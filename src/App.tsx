@@ -6,6 +6,7 @@ import { Join } from "./pages/Join";
 import { Wait } from "./pages/Wait";
 import { Game } from "./pages/Game";
 import { Rules } from "./pages/Rules";
+import { WaveApp } from "./wave/WaveApp";
 import { getPid } from "./api/session";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
@@ -68,6 +69,9 @@ function Home() {
       <Link to="/rules" className="btn btn-ghost">
         📖 Hogyan kell rikikizni?
       </Link>
+      <Link to="/wave" className="btn btn-ghost">
+        🎚️ Hullámhossz parti játék
+      </Link>
     </div>
   );
 }
@@ -100,32 +104,45 @@ function AppShell() {
   return (
     <>
       {!connected && <ConnectingOverlay />}
-      <BrowserRouter>
-        <div className="App">
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/wait">
-              <Wait />
-            </Route>
-            <Route path="/game">
-              <Game />
-            </Route>
-            <Route path="/rules">
-              <Rules />
-            </Route>
-          </Switch>
-        </div>
-      </BrowserRouter>
+      <div className="App">
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route path="/wait">
+            <Wait />
+          </Route>
+          <Route path="/game">
+            <Game />
+          </Route>
+          <Route path="/rules">
+            <Rules />
+          </Route>
+        </Switch>
+      </div>
     </>
+  );
+}
+
+function RikikiRoot() {
+  return (
+    <GameProvider>
+      <AppShell />
+    </GameProvider>
   );
 }
 
 export default function App() {
   return (
-    <GameProvider>
-      <AppShell />
-    </GameProvider>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/wave">
+          <WaveApp />
+        </Route>
+        <Route path="/">
+          <RikikiRoot />
+        </Route>
+      </Switch>
+    </BrowserRouter>
   );
 }

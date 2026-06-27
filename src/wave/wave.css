@@ -1,0 +1,89 @@
+/* Wavelength-specific bits; reuses the base neobrutalist theme from index.css */
+.wave-wrap {
+  margin: 6px 0 4px;
+}
+
+.wave-ends {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.wave-bar {
+  position: relative;
+  height: 46px;
+  border: var(--bw) solid var(--ink);
+  border-radius: 10px;
+  background: linear-gradient(90deg, #5b8def, #ffd23f 50%, #ff6f61);
+  box-shadow: 3px 3px 0 var(--ink);
+  overflow: hidden;
+}
+
+.wave-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: rgba(33, 28, 21, 0.18);
+  border-left: 2px dashed var(--ink);
+  border-right: 2px dashed var(--ink);
+}
+
+.wave-needle {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 4px;
+  background: var(--ink);
+  transform: translateX(-2px);
+  border-radius: 2px;
+}
+
+.wave-needle.preview {
+  background: #fff;
+  box-shadow: 0 0 0 2px var(--ink);
+}
+
+.wave-marker {
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  transform: translateX(-7px);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 11px solid var(--ink);
+}
+
+.wave-marker-name {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.62rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1.5px solid var(--ink);
+  border-radius: 5px;
+  padding: 0 4px;
+}
+
+.wave-slider {
+  width: 100%;
+  margin: 16px 0;
+  accent-color: var(--accent);
+  height: 28px;
+}
+
+.wave-clue {
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-align: center;
+  margin: 4px 0 12px;
+}
