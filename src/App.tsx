@@ -6,7 +6,7 @@ import { Join } from "./pages/Join";
 import { Wait } from "./pages/Wait";
 import { Game } from "./pages/Game";
 import { Rules } from "./pages/Rules";
-import { DeckCounter } from "./components/DeckCounter";
+import { CounterChip } from "./components/CounterChip";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
 function KickedScreen() {
@@ -31,8 +31,7 @@ function Home() {
     <div className="page">
       <header>
         <h1 className="brand">
-          Rikiki <span className="sr-only">Counter</span>
-          <DeckCounter />
+          Rikiki <CounterChip />
         </h1>
         <p className="tagline">
           Hozz létre szobát vagy csatlakozz, és a pontokat mi számoljuk.

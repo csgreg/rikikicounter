@@ -486,29 +486,31 @@ body {
   border: 0;
 }
 
-/* ---------- Deck counter (flip cards, sits in the title) ---------- */
-.deck-counter {
-  display: inline-flex;
+/* ---------- "Counter" chip in the title (word <-> deck count) ---------- */
+.counter-chip {
+  position: relative;
+  display: inline-block;
   vertical-align: middle;
-  gap: 6px;
-  margin-left: 10px;
-  perspective: 320px;
-}
-
-.flip-card {
-  width: 34px;
-  height: 46px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   background: var(--coral);
   color: var(--panel);
-  border: 2.5px solid var(--ink);
-  border-radius: 8px;
+  border: var(--bw) solid var(--ink);
+  border-radius: 10px;
+  padding: 0 10px;
+  transform: rotate(-2deg);
   box-shadow: 3px 3px 0 var(--coral-dk);
-  font-size: 1.55rem;
-  font-weight: 700;
-  overflow: hidden;
+  perspective: 260px;
+}
+
+.cc-label.hidden {
+  visibility: hidden;
+}
+
+.cc-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .flip-num {
