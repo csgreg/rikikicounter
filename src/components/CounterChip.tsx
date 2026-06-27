@@ -1,57 +1,47 @@
 import { useEffect, useState } from "react";
 
-// The coral "Counter" chip in the title. Shows the word for ~10s, then rips
-// through a deck (1 → 52) with an ease-out, holds briefly, and repeats.
-// The chip keeps the width of the word, so the numbers sit centered inside it.
+// The coral "Counter" chip in the title. The WHOLE chip flips like a card:
+// it shows the word for ~10s, then flips through a deck (1 → 52) over ~5.5s
+// with an ease-out, holds on 52, and repeats. Only one thing is ever inside.
 export function CounterChip() {
-  const [mode, setMode] = useState<"text" | "count">("text");
-  const [n, setN] = useState(1);
+  const [content, setContent] = useState("Counter");
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     let cancelled = false;
 
-    const startText = () => {
-      setMode("text");
-      timer = setTimeout(startCount, 10000);
+    const showText = () => {
+      setContent("Counter");
+      timer = setTimeout(count, 10000);
     };
 
-    const startCount = () => {
-      setMode("count");
+    const count = () => {
       let val = 1;
       const step = () => {
         if (cancelled) return;
-        setN(val);
+        setContent(String(val).padStart(2, "0"));
         if (val >= 52) {
-          timer = setTimeout(startText, 700); // hold on 52, then back to text
+          timer = setTimeout(showText, 800); // hold on 52, then back to text
           return;
         }
         const p = val / 52;
         val += 1;
-        timer = setTimeout(step, 14 + p * p * 62); // fast start, settles near 52
+        timer = setTimeout(step, 60 + p * p * 150); // ~5.5s total, slowing down
       };
       step();
     };
 
-    startText();
+    showText();
     return () => {
       cancelled = true;
       clearTimeout(timer);
     };
   }, []);
 
+  // key={content} re-mounts the chip on every change, replaying the flip
   return (
-    <span className="counter-chip" aria-label="Counter">
-      <span className={mode === "count" ? "cc-label hidden" : "cc-label"}>
-        Counter
-      </span>
-      {mode === "count" && (
-        <span className="cc-num" aria-hidden="true">
-          <span key={n} className="flip-num">
-            {String(n).padStart(2, "0")}
-          </span>
-        </span>
-      )}
+    <span className="counter-chip" key={content} aria-label="Counter">
+      {content}
     </span>
   );
 }

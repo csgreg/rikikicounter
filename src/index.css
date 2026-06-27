@@ -69,6 +69,7 @@ body {
   letter-spacing: -0.03em;
   margin: 0;
   line-height: 1.05;
+  perspective: 500px;
 }
 
 .brand span {
@@ -486,49 +487,34 @@ body {
   border: 0;
 }
 
-/* ---------- "Counter" chip in the title (word <-> deck count) ---------- */
+/* ---------- "Counter" chip in the title (the whole chip flips) ---------- */
 .counter-chip {
-  position: relative;
   display: inline-block;
   vertical-align: middle;
+  min-width: 4.5em;
+  text-align: center;
   background: var(--coral);
   color: var(--panel);
   border: var(--bw) solid var(--ink);
   border-radius: 10px;
   padding: 0 10px;
   transform: rotate(-2deg);
-  box-shadow: 3px 3px 0 var(--coral-dk);
-  perspective: 260px;
-}
-
-.cc-label.hidden {
-  visibility: hidden;
-}
-
-.cc-num {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.flip-num {
-  display: inline-block;
   transform-origin: top center;
-  animation: flip-down 0.2s ease-out;
+  box-shadow: 3px 3px 0 var(--coral-dk);
+  animation: chip-flip 0.22s ease-out;
 }
 
-@keyframes flip-down {
+/* the whole coral chip flips over (keeps the -2deg resting tilt) */
+@keyframes chip-flip {
   0% {
-    transform: rotateX(-90deg);
-    opacity: 0.15;
+    transform: rotate(-2deg) rotateX(-88deg);
+    opacity: 0.25;
   }
   55% {
-    transform: rotateX(12deg);
+    transform: rotate(-2deg) rotateX(10deg);
   }
   100% {
-    transform: rotateX(0);
+    transform: rotate(-2deg) rotateX(0);
     opacity: 1;
   }
 }
@@ -961,7 +947,7 @@ body {
   .confetti-piece,
   .confetti-emoji,
   .shake,
-  .flip-num,
+  .counter-chip,
   .modal-backdrop,
   .modal {
     animation: none;
