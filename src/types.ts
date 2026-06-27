@@ -50,7 +50,6 @@ export interface SyncAck {
 
 export interface ServerToClientEvents {
   "state-changed": (args: StateChangedPayload) => void;
-  "action-sent": (args: { roomId: string; action: string }) => void;
   "player-joined": (args: { roomId: string; socketId: string }) => void;
   "player-left": (args: { roomId: string; socketId: string }) => void;
   "room-is-full": (args: {
@@ -67,12 +66,6 @@ export interface ClientToServerEvents {
   "sync-state": (
     uuid: string,
     state: string,
-    broadcast: boolean,
-    ack: (res: SyncAck) => void
-  ) => void;
-  "sync-action": (
-    uuid: string,
-    action: string,
     broadcast: boolean,
     ack: (res: SyncAck) => void
   ) => void;
