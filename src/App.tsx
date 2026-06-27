@@ -1,10 +1,11 @@
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import { GameProvider, useGame } from "./context/GameContext";
 import { ConnectingOverlay } from "./components/ConnectingOverlay";
 import { Create } from "./pages/Create";
 import { Join } from "./pages/Join";
 import { Wait } from "./pages/Wait";
 import { Game } from "./pages/Game";
+import { Rules } from "./pages/Rules";
 
 function KickedScreen() {
   return (
@@ -34,6 +35,9 @@ function Home() {
       <Create />
       <div className="divider">vagy</div>
       <Join />
+      <Link to="/rules" className="btn btn-ghost">
+        📖 Hogyan kell rikikizni?
+      </Link>
     </div>
   );
 }
@@ -73,6 +77,9 @@ function AppShell() {
             </Route>
             <Route path="/game">
               <Game />
+            </Route>
+            <Route path="/rules">
+              <Rules />
             </Route>
           </Switch>
         </div>

@@ -186,6 +186,11 @@ export function Game() {
         </div>
       ) : null}
       <div className={shake ? "page shake" : "page"}>
+        {!gameOver && (
+          <button className="close-x" onClick={leave} title="Kilépés">
+            ✕
+          </button>
+        )}
         <header className="game-header">
           <p className="game-line">
             <span className="adu-suit">
@@ -365,12 +370,6 @@ export function Game() {
         {!gameOver && isBoss && (
           <button className="btn btn-ghost" onClick={finishGame}>
             Játék befejezése
-          </button>
-        )}
-
-        {!gameOver && (
-          <button className="btn btn-ghost" onClick={leave}>
-            Kilépés
           </button>
         )}
       </div>

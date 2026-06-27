@@ -51,6 +51,7 @@ body {
 /* ---------- Layout ---------- */
 .page {
   flex: 1;
+  position: relative;
   width: 100%;
   max-width: 440px;
   margin: 0 auto;
@@ -142,6 +143,7 @@ body {
 
 /* ---------- Buttons (vivid + hard coloured shadow) ---------- */
 .btn {
+  display: block;
   width: 100%;
   padding: 12px 16px;
   border: var(--bw) solid var(--ink);
@@ -152,6 +154,8 @@ body {
   font-family: inherit;
   font-weight: 700;
   letter-spacing: -0.01em;
+  text-align: center;
+  text-decoration: none;
   cursor: pointer;
   box-shadow: 4px 4px 0 var(--yellow-dk);
   transition: transform 0.06s ease, box-shadow 0.06s ease;
@@ -281,6 +285,39 @@ body {
 /* ---------- Game ---------- */
 .game-header {
   text-align: left;
+  padding-right: 48px; /* leave room for the close X */
+}
+
+.close-x {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--bw) solid var(--ink);
+  border-radius: 10px;
+  background: var(--coral);
+  color: var(--panel);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--coral-dk);
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+
+.close-x:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--coral-dk);
+}
+
+.close-x:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--coral-dk);
 }
 
 .game-line {
@@ -434,6 +471,110 @@ body {
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+/* ---------- Rules page ---------- */
+.suits {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.suit-chip {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  font-weight: 700;
+  background: var(--panel);
+  border: var(--bw) solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.suit-chip.s-red {
+  color: var(--coral-dk);
+}
+
+.suit-chip.s-none {
+  color: var(--muted);
+}
+
+.rules-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rule-step,
+.score-rule {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.score-rule {
+  margin-bottom: 12px;
+}
+
+.step-ico,
+.score-ico {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  background: var(--panel-2);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+}
+
+.score-rule.good .score-ico {
+  background: var(--teal);
+}
+
+.score-rule.bad .score-ico {
+  background: var(--coral);
+}
+
+.step-body strong {
+  display: block;
+  font-size: 0.98rem;
+}
+
+.step-body p {
+  margin: 3px 0 0;
+  font-size: 0.88rem;
+  opacity: 0.78;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.rules-eg {
+  margin: 4px 0 0;
+  background: var(--panel-2);
+  border: 2px dashed var(--ink);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.eg-good {
+  color: var(--teal-dk);
+  font-weight: 700;
+}
+
+.eg-bad {
+  color: var(--coral-dk);
+  font-weight: 700;
 }
 
 /* ---------- Animations / feedback ---------- */
