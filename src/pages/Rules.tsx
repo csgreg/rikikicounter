@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const STEPS = [
   {
@@ -39,6 +40,7 @@ const STEPS = [
 ];
 
 export function Rules() {
+  useDocumentTitle("Hogyan kell rikikizni? – szabályok | Rikiki Counter");
   return (
     <div className="page">
       <header>

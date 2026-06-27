@@ -6,6 +6,7 @@ import { Join } from "./pages/Join";
 import { Wait } from "./pages/Wait";
 import { Game } from "./pages/Game";
 import { Rules } from "./pages/Rules";
+import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
 function KickedScreen() {
   return (
@@ -22,6 +23,9 @@ function KickedScreen() {
 }
 
 function Home() {
+  useDocumentTitle(
+    "Rikiki Counter – Online pontszámláló a Rikiki kártyajátékhoz"
+  );
   return (
     <div className="page">
       <header>

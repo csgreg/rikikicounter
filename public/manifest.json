@@ -1,0 +1,16 @@
+{
+  "short_name": "Rikiki",
+  "name": "Rikiki Counter",
+  "description": "Online pontszámláló a Rikiki kártyajátékhoz",
+  "lang": "hu",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f4e7c5",
+  "theme_color": "#f4e7c5",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "180x180" },
+    { "src": "/favicon-32.png", "type": "image/png", "sizes": "32x32" }
+  ]
+}
