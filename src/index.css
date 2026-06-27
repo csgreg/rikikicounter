@@ -69,7 +69,6 @@ body {
   letter-spacing: -0.03em;
   margin: 0;
   line-height: 1.05;
-  perspective: 500px;
 }
 
 .brand span {
@@ -485,53 +484,6 @@ body {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-/* ---------- "Counter" chip in the title (the whole chip flips) ---------- */
-.counter-chip {
-  display: inline-block;
-  vertical-align: middle;
-  min-width: 4.5em;
-  text-align: center;
-  background: var(--coral);
-  color: var(--panel);
-  border: var(--bw) solid var(--ink);
-  border-radius: 10px;
-  padding: 0 10px;
-  transform: rotate(-2deg);
-  transform-origin: top center;
-  backface-visibility: hidden;
-  box-shadow: 3px 3px 0 var(--coral-dk);
-}
-
-/* the whole coral chip flips over (keeps the -2deg resting tilt).
-   two identical animations let us restart the flip without re-mounting. */
-.counter-chip.flip-a {
-  animation: chip-flip 0.16s ease-out;
-}
-.counter-chip.flip-b {
-  animation: chip-flip-b 0.16s ease-out;
-}
-
-@keyframes chip-flip {
-  from {
-    transform: rotate(-2deg) rotateX(-62deg);
-    opacity: 0.7;
-  }
-  to {
-    transform: rotate(-2deg) rotateX(0);
-    opacity: 1;
-  }
-}
-@keyframes chip-flip-b {
-  from {
-    transform: rotate(-2deg) rotateX(-62deg);
-    opacity: 0.7;
-  }
-  to {
-    transform: rotate(-2deg) rotateX(0);
-    opacity: 1;
-  }
 }
 
 /* ---------- Rules page ---------- */
@@ -962,8 +914,6 @@ body {
   .confetti-piece,
   .confetti-emoji,
   .shake,
-  .counter-chip.flip-a,
-  .counter-chip.flip-b,
   .modal-backdrop,
   .modal {
     animation: none;
