@@ -31,8 +31,8 @@ interface MafiaContextValue {
   isHost: boolean;
   connected: boolean;
   restoring: boolean;
-  /** Push the given state to the server (and broadcast it). */
-  push: (game: MGame, players: MPlayer[]) => void;
+  /** Push state to the server. Pass an explicit room id to avoid stale closures. */
+  push: (game: MGame, players: MPlayer[], roomIdOverride?: string) => void;
   leave: () => void;
 }
 
@@ -77,13 +77,6 @@ export function MafiaProvider({ children }: { children: ReactNode }) {
     function onStateChanged(args: { roomId: string; state: string }) {
       if (args.roomId !== roomId) return;
       const state = JSON.parse(args.state) as MRoom;
-      const pid = getPid();
-      if (!state.players.some((p) => p.pid === pid)) {
-        // removed from the room
-        localStorage.removeItem(MAFIA_SESSION_KEY);
-        setRoomId("");
-        return;
-      }
       setGame(state.game);
       setPlayers(state.players);
     }
@@ -124,13 +117,7 @@ export function MafiaProvider({ children }: { children: ReactNode }) {
             obj.players[idx].online = true;
             setGame(obj.game);
             setPlayers(obj.players);
-            socket.emit(
-              "sync-state",
-              saved,
-              payload(obj.game, obj.players),
-              false,
-              () => {}
-            );
+            socket.emit("sync-state", saved, payload(obj.game, obj.players), false, () => {});
           } catch {
             localStorage.removeItem(MAFIA_SESSION_KEY);
           }
@@ -149,8 +136,10 @@ export function MafiaProvider({ children }: { children: ReactNode }) {
   const me = players.find((p) => p.pid === getPid()) ?? null;
   const isHost = !!(me && me.boss);
 
-  function push(g: MGame, p: MPlayer[]) {
-    socket.emit("sync-state", roomId, payload(g, p), false, () => {});
+  function push(g: MGame, p: MPlayer[], roomIdOverride?: string) {
+    const id = roomIdOverride || roomId;
+    if (!id) return;
+    socket.emit("sync-state", id, payload(g, p), false, () => {});
   }
 
   function leave() {

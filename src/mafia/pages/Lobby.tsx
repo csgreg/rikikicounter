@@ -7,7 +7,7 @@ import { useMafia, MAFIA_SESSION_KEY, EMPTY_GAME } from "../MafiaContext";
 import type { MPlayer, MRoom } from "../types";
 
 export function Lobby() {
-  const { setRoomId, setGame, setPlayers, push } = useMafia();
+  const { setRoomId, setGame, setPlayers } = useMafia();
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const history = useHistory();
@@ -57,6 +57,7 @@ export function Lobby() {
       }
       setRoomId(code);
       localStorage.setItem(MAFIA_SESSION_KEY, code);
+
       socket.emit("get-state", code, (stateRes) => {
         if (!stateRes.state) return;
         const obj = JSON.parse(JSON.parse(stateRes.state)) as MRoom;
@@ -71,7 +72,16 @@ export function Lobby() {
         }
         setGame(obj.game);
         setPlayers(obj.players);
-        push(obj.game, obj.players);
+        // sync with the explicit code (context roomId may still be stale here)
+        socket.emit(
+          "sync-state",
+          code,
+          `{"game": ${JSON.stringify(obj.game)}, "players": ${JSON.stringify(
+            obj.players
+          )} }`,
+          false,
+          () => {}
+        );
         history.push("/mafia/room");
       });
     });
