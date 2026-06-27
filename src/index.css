@@ -473,26 +473,40 @@ body {
   flex-wrap: wrap;
 }
 
-/* ---------- Deck counter (flip cards) ---------- */
+/* visually hidden but kept for SEO / screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Deck counter (flip cards, sits in the title) ---------- */
 .deck-counter {
-  display: flex;
-  gap: 7px;
-  justify-content: center;
-  margin-top: 16px;
+  display: inline-flex;
+  vertical-align: middle;
+  gap: 6px;
+  margin-left: 10px;
   perspective: 320px;
 }
 
 .flip-card {
-  width: 40px;
-  height: 56px;
+  width: 34px;
+  height: 46px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--panel);
-  border: var(--bw) solid var(--ink);
-  border-radius: 9px;
-  box-shadow: 3px 3px 0 var(--ink);
-  font-size: 1.7rem;
+  background: var(--coral);
+  color: var(--panel);
+  border: 2.5px solid var(--ink);
+  border-radius: 8px;
+  box-shadow: 3px 3px 0 var(--coral-dk);
+  font-size: 1.55rem;
   font-weight: 700;
   overflow: hidden;
 }
@@ -500,7 +514,7 @@ body {
 .flip-num {
   display: inline-block;
   transform-origin: top center;
-  animation: flip-down 0.55s cubic-bezier(0.3, 0.8, 0.4, 1.25);
+  animation: flip-down 0.2s ease-out;
 }
 
 @keyframes flip-down {

@@ -31,12 +31,12 @@ function Home() {
     <div className="page">
       <header>
         <h1 className="brand">
-          Rikiki <span>Counter</span>
+          Rikiki <span className="sr-only">Counter</span>
+          <DeckCounter />
         </h1>
         <p className="tagline">
           Hozz létre szobát vagy csatlakozz, és a pontokat mi számoljuk.
         </p>
-        <DeckCounter />
       </header>
       <Create />
       <div className="divider">vagy</div>
