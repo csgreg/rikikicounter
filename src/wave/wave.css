@@ -1,24 +1,32 @@
 /* A distinct palette for /wave — same neobrutalist language, fresh colors.
    Overriding the design tokens recolors every base component automatically. */
 .wave-app {
-  --bg: #ddf1ea; /* mint */
+  --bg: #ebe4ff; /* lilac */
   --panel: #ffffff;
-  --panel-2: #eafaf4;
-  --ink: #14201c;
-  --muted: #6b7d76;
+  --panel-2: #f4efff;
+  --ink: #221a30;
+  --muted: #7b7290;
 
-  --yellow: #5eead4; /* primary buttons (aqua) */
-  --yellow-dk: #0f9b8e;
-  --coral: #ff7a9c; /* accent / danger (pink) */
-  --coral-dk: #d23a64;
-  --teal: #34c759; /* tags / online dots (green) */
-  --teal-dk: #1e9b43;
+  --yellow: #7c5cff; /* primary buttons (violet) */
+  --yellow-dk: #4a2fc2;
+  --coral: #ff6b9d; /* accent / danger (pink) */
+  --coral-dk: #c83e72;
+  --teal: #2bbf8f; /* tags / online dots */
+  --teal-dk: #18906a;
   --blue: #5b8def;
   --blue-dk: #2f5bc0;
 
   background-color: var(--bg);
-  background-image: radial-gradient(rgba(20, 32, 28, 0.06) 1.4px, transparent 1.4px);
+  background-image: radial-gradient(rgba(34, 26, 48, 0.06) 1.4px, transparent 1.4px);
   background-size: 18px 18px;
+}
+
+/* violet primary needs light text; keep ghost buttons dark */
+.wave-app .btn {
+  color: #fff;
+}
+.wave-app .btn-ghost {
+  color: var(--ink);
 }
 
 /* Wavelength-specific bits; reuses the base neobrutalist theme from index.css */
