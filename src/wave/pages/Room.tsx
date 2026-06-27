@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router";
 import { useWave } from "../WaveContext";
@@ -10,22 +10,57 @@ function SpectrumBar({
   target,
   showTarget,
   guesses,
-  preview,
+  interactive,
+  value,
+  onChange,
 }: {
   left: string;
   right: string;
   target: number;
   showTarget: boolean;
   guesses?: WPlayer[];
-  preview?: number | null;
+  interactive?: boolean;
+  value?: number;
+  onChange?: (v: number) => void;
 }) {
+  const barRef = useRef<HTMLDivElement>(null);
+  const dragging = useRef(false);
+
+  function setFromX(clientX: number) {
+    const el = barRef.current;
+    if (!el || !onChange) return;
+    const rect = el.getBoundingClientRect();
+    const pct = ((clientX - rect.left) / rect.width) * 100;
+    onChange(Math.max(0, Math.min(100, Math.round(pct))));
+  }
+
+  const handlers = interactive
+    ? {
+        onPointerDown: (e: React.PointerEvent) => {
+          dragging.current = true;
+          e.currentTarget.setPointerCapture?.(e.pointerId);
+          setFromX(e.clientX);
+        },
+        onPointerMove: (e: React.PointerEvent) => {
+          if (dragging.current) setFromX(e.clientX);
+        },
+        onPointerUp: () => {
+          dragging.current = false;
+        },
+      }
+    : {};
+
   return (
     <div className="wave-wrap">
       <div className="wave-ends">
         <span>{left}</span>
         <span>{right}</span>
       </div>
-      <div className="wave-bar">
+      <div
+        className={`wave-bar ${interactive ? "interactive" : ""}`}
+        ref={barRef}
+        {...handlers}
+      >
         {showTarget ? (
           <>
             <div
@@ -35,8 +70,10 @@ function SpectrumBar({
             <div className="wave-needle" style={{ left: `${target}%` }} />
           </>
         ) : null}
-        {preview != null ? (
-          <div className="wave-needle preview" style={{ left: `${preview}%` }} />
+        {interactive && value != null ? (
+          <div className="wave-handle" style={{ left: `${value}%` }}>
+            <span className="wave-handle-val">{value}</span>
+          </div>
         ) : null}
         {(guesses || []).map((p) =>
           p.guess == null ? null : (
@@ -192,7 +229,9 @@ export function WaveRoom() {
             right={game.right}
             target={0}
             showTarget={false}
-            preview={amClueGiver || me?.guessed ? null : guessVal}
+            interactive={!amClueGiver && !me?.guessed}
+            value={guessVal}
+            onChange={setGuessVal}
           />
           {amClueGiver ? (
             <p className="hint">
@@ -204,14 +243,7 @@ export function WaveRoom() {
             </p>
           ) : (
             <>
-              <input
-                className="wave-slider"
-                type="range"
-                min={0}
-                max={100}
-                value={guessVal}
-                onChange={(e) => setGuessVal(Number(e.target.value))}
-              />
+              <p className="wave-help">Húzd a fogantyút a skálán a tippedhez.</p>
               <button className="btn" onClick={() => submitGuess(guessVal)}>
                 Tipp rögzítése
               </button>
