@@ -12,7 +12,7 @@ function WaveShell() {
 
   if (restoring) {
     return (
-      <div className="App">
+      <div className="App wave-app">
         {!connected && <ConnectingOverlay />}
         <div className="page">
           <h1 className="brand">Hullámhossz</h1>
@@ -23,7 +23,7 @@ function WaveShell() {
   }
 
   return (
-    <div className="App">
+    <div className="App wave-app">
       {!connected && <ConnectingOverlay />}
       <Switch>
         <Route exact path="/wave">

@@ -1,3 +1,26 @@
+/* A distinct palette for /wave — same neobrutalist language, fresh colors.
+   Overriding the design tokens recolors every base component automatically. */
+.wave-app {
+  --bg: #ddf1ea; /* mint */
+  --panel: #ffffff;
+  --panel-2: #eafaf4;
+  --ink: #14201c;
+  --muted: #6b7d76;
+
+  --yellow: #5eead4; /* primary buttons (aqua) */
+  --yellow-dk: #0f9b8e;
+  --coral: #ff7a9c; /* accent / danger (pink) */
+  --coral-dk: #d23a64;
+  --teal: #34c759; /* tags / online dots (green) */
+  --teal-dk: #1e9b43;
+  --blue: #5b8def;
+  --blue-dk: #2f5bc0;
+
+  background-color: var(--bg);
+  background-image: radial-gradient(rgba(20, 32, 28, 0.06) 1.4px, transparent 1.4px);
+  background-size: 18px 18px;
+}
+
 /* Wavelength-specific bits; reuses the base neobrutalist theme from index.css */
 .wave-wrap {
   margin: 6px 0 4px;
@@ -77,7 +100,7 @@
 .wave-slider {
   width: 100%;
   margin: 16px 0;
-  accent-color: var(--accent);
+  accent-color: var(--yellow-dk);
   height: 28px;
 }
 
