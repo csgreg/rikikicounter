@@ -473,6 +473,50 @@ body {
   flex-wrap: wrap;
 }
 
+/* ---------- Deck counter (flip cards) ---------- */
+.deck-counter {
+  display: flex;
+  gap: 7px;
+  justify-content: center;
+  margin-top: 16px;
+  perspective: 320px;
+}
+
+.flip-card {
+  width: 40px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel);
+  border: var(--bw) solid var(--ink);
+  border-radius: 9px;
+  box-shadow: 3px 3px 0 var(--ink);
+  font-size: 1.7rem;
+  font-weight: 700;
+  overflow: hidden;
+}
+
+.flip-num {
+  display: inline-block;
+  transform-origin: top center;
+  animation: flip-down 0.55s cubic-bezier(0.3, 0.8, 0.4, 1.25);
+}
+
+@keyframes flip-down {
+  0% {
+    transform: rotateX(-90deg);
+    opacity: 0.15;
+  }
+  55% {
+    transform: rotateX(12deg);
+  }
+  100% {
+    transform: rotateX(0);
+    opacity: 1;
+  }
+}
+
 /* ---------- Rules page ---------- */
 .suits {
   display: flex;
@@ -901,6 +945,7 @@ body {
   .confetti-piece,
   .confetti-emoji,
   .shake,
+  .flip-num,
   .modal-backdrop,
   .modal {
     animation: none;

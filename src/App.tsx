@@ -6,6 +6,7 @@ import { Join } from "./pages/Join";
 import { Wait } from "./pages/Wait";
 import { Game } from "./pages/Game";
 import { Rules } from "./pages/Rules";
+import { DeckCounter } from "./components/DeckCounter";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
 function KickedScreen() {
@@ -35,6 +36,7 @@ function Home() {
         <p className="tagline">
           Hozz létre szobát vagy csatlakozz, és a pontokat mi számoljuk.
         </p>
+        <DeckCounter />
       </header>
       <Create />
       <div className="divider">vagy</div>
