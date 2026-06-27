@@ -1,0 +1,477 @@
+/* Noir mafia theme — fully scoped under .mafia-app so it never touches Rikiki */
+.mafia-app {
+  --m-bg: #100d12;
+  --m-panel: #1b1620;
+  --m-panel-2: #241d2b;
+  --m-text: #ece5d8;
+  --m-muted: #9a8f86;
+  --m-blood: #c5172e;
+  --m-blood-dk: #7d0c1e;
+  --m-gold: #c9a227;
+  --m-line: #3a2f3f;
+
+  min-height: 100svh;
+  color: var(--m-text);
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+  background:
+    radial-gradient(120% 80% at 50% -10%, #2a1620 0%, transparent 55%),
+    radial-gradient(100% 70% at 50% 110%, #160d14 0%, transparent 60%),
+    var(--m-bg);
+  background-attachment: fixed;
+}
+
+.mafia-app * {
+  box-sizing: border-box;
+}
+
+.m-page {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 28px 18px 32px;
+  padding-left: max(18px, env(safe-area-inset-left));
+  padding-right: max(18px, env(safe-area-inset-right));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 100svh;
+  transition: background 0.5s ease;
+}
+
+/* night / day mood */
+.m-page.m-night {
+  background: radial-gradient(120% 60% at 50% 0%, rgba(40, 30, 70, 0.35), transparent 60%);
+}
+.m-page.m-day {
+  background: radial-gradient(120% 60% at 50% 0%, rgba(201, 162, 39, 0.16), transparent 60%);
+}
+
+/* ---------- header ---------- */
+.m-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.m-title {
+  font-family: "Special Elite", "Space Grotesk", serif;
+  font-size: 2.4rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  margin: 0;
+  color: var(--m-text);
+  text-shadow: 0 2px 0 #000, 0 0 22px rgba(197, 23, 46, 0.35);
+}
+
+.m-title-accent {
+  color: var(--m-blood);
+}
+
+.m-tagline {
+  color: var(--m-muted);
+  font-size: 0.95rem;
+  margin: 10px 0 0;
+  font-style: italic;
+  width: 100%;
+}
+
+/* ---------- cards ---------- */
+.m-card {
+  background: linear-gradient(180deg, var(--m-panel-2), var(--m-panel));
+  border: 1px solid var(--m-line);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+.m-card-title {
+  font-family: "Special Elite", serif;
+  margin: 0 0 14px;
+  font-size: 1.2rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.m-label {
+  color: var(--m-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+/* ---------- form controls ---------- */
+.m-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--m-line);
+  background: #0e0a10;
+  color: var(--m-text);
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  margin-bottom: 12px;
+}
+.m-input::placeholder {
+  color: #6f6760;
+}
+.m-input:focus {
+  border-color: var(--m-gold);
+}
+
+.m-btn {
+  display: block;
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px solid var(--m-blood-dk);
+  border-radius: 10px;
+  background: linear-gradient(180deg, var(--m-blood), var(--m-blood-dk));
+  color: #fff;
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(168, 16, 36, 0.35);
+  transition: transform 0.06s ease, filter 0.15s ease;
+}
+.m-btn:hover {
+  filter: brightness(1.08);
+}
+.m-btn:active {
+  transform: translateY(2px);
+}
+.m-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.m-ghost {
+  background: transparent;
+  color: var(--m-text);
+  border: 1px solid var(--m-line);
+  box-shadow: none;
+}
+.m-ghost:hover {
+  border-color: var(--m-gold);
+  color: var(--m-gold);
+}
+
+.m-small {
+  width: auto;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+}
+
+.m-or {
+  text-align: center;
+  color: var(--m-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+}
+
+.m-link {
+  text-align: center;
+  color: var(--m-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.m-link:hover {
+  color: var(--m-gold);
+}
+
+.m-code {
+  background: #0e0a10;
+  border: 1px dashed var(--m-gold);
+  color: var(--m-gold);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.m-hint {
+  color: var(--m-muted);
+  font-size: 0.9rem;
+  margin: 4px 0 0;
+  font-style: italic;
+}
+
+/* ---------- player list (lobby) ---------- */
+.m-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.m-list li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: #0e0a10;
+  border: 1px solid var(--m-line);
+  border-radius: 9px;
+  padding: 9px 12px;
+}
+.m-list li.m-off {
+  opacity: 0.5;
+}
+.m-list li .m-role-name {
+  margin-left: auto;
+  color: var(--m-muted);
+  font-size: 0.85rem;
+}
+.m-list li.m-dead {
+  opacity: 0.65;
+}
+
+.m-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.m-dot.on {
+  background: #46c46a;
+  box-shadow: 0 0 7px rgba(70, 196, 106, 0.7);
+}
+.m-dot.off {
+  background: var(--m-muted);
+}
+
+.m-tag {
+  margin-left: auto;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m-gold);
+  border: 1px solid var(--m-gold);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.m-tag.dead {
+  color: var(--m-blood);
+  border-color: var(--m-blood);
+  margin-left: 0;
+}
+
+/* ---------- config ---------- */
+.m-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.m-stepper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.m-stepper button {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--m-line);
+  background: #0e0a10;
+  color: var(--m-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.m-stepper b {
+  min-width: 18px;
+  text-align: center;
+  font-size: 1.2rem;
+}
+.m-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.m-check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--m-blood);
+}
+
+/* ---------- play: phase header ---------- */
+.m-phase {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.m-phase-ico {
+  font-size: 2rem;
+}
+.m-phase-name {
+  font-family: "Special Elite", serif;
+  font-size: 1.5rem;
+}
+.m-phase-sub {
+  color: var(--m-muted);
+  font-size: 0.85rem;
+}
+
+.m-banner {
+  background: linear-gradient(180deg, rgba(197, 23, 46, 0.2), rgba(125, 12, 30, 0.25));
+  border: 1px solid var(--m-blood-dk);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.m-role-btn {
+  background: transparent;
+  border: 1px solid var(--m-gold);
+  color: var(--m-gold);
+  box-shadow: none;
+}
+
+/* ---------- player grid ---------- */
+.m-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.m-player {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  text-align: left;
+  background: #0e0a10;
+  border: 1px solid var(--m-line);
+  border-radius: 10px;
+  padding: 11px 12px;
+  color: var(--m-text);
+  font-family: inherit;
+}
+.m-player.tappable {
+  cursor: pointer;
+}
+.m-player.tappable:hover {
+  border-color: var(--m-blood);
+}
+.m-player.dead {
+  opacity: 0.55;
+  background: #150a0c;
+  border-color: var(--m-blood-dk);
+}
+.m-player-name {
+  font-weight: 700;
+}
+.m-player.dead .m-player-name {
+  text-decoration: line-through;
+}
+.m-player-state {
+  font-size: 0.82rem;
+  color: var(--m-muted);
+}
+
+/* ---------- controls / guide ---------- */
+.m-controls {
+  display: flex;
+  gap: 10px;
+}
+.m-controls .m-btn {
+  flex: 1;
+}
+.m-guide {
+  background: var(--m-panel);
+  border: 1px solid var(--m-line);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  color: var(--m-muted);
+}
+.m-guide summary {
+  cursor: pointer;
+  color: var(--m-gold);
+  font-weight: 700;
+}
+.m-guide ol {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.m-end {
+  border-color: var(--m-blood-dk);
+}
+
+/* ---------- role overlay ---------- */
+.m-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(5, 3, 6, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.m-role-card {
+  width: 100%;
+  max-width: 340px;
+  text-align: center;
+  background: linear-gradient(180deg, var(--m-panel-2), #0e0a10);
+  border: 2px solid var(--m-gold);
+  border-radius: 18px;
+  padding: 28px 22px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+.m-role-card.evil {
+  border-color: var(--m-blood);
+  box-shadow: 0 0 40px rgba(197, 23, 46, 0.45);
+}
+.m-role-ico {
+  font-size: 3.4rem;
+}
+.m-role-title {
+  font-family: "Special Elite", serif;
+  font-size: 1.8rem;
+  margin: 8px 0;
+}
+.m-role-desc {
+  color: var(--m-muted);
+  line-height: 1.5;
+  margin: 0 0 14px;
+}
+.m-role-mates {
+  color: var(--m-blood);
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+/* ---------- connecting ---------- */
+.m-connecting {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2500;
+  text-align: center;
+  background: var(--m-blood-dk);
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 6px;
+  letter-spacing: 0.04em;
+}
