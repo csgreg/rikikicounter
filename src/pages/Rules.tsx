@@ -17,14 +17,24 @@ const STEPS = [
     text: "Mindenki megtippeli, hány ütést fog vinni a körben. A tippek csak akkor derülnek ki, ha már MINDENKI rögzített.",
   },
   {
-    ico: "🤚",
-    title: "Lejátszás",
-    text: "Lejátszátok a kört a kártyákkal, és megszámoljátok, ki hány ütést vitt.",
+    ico: "▶️",
+    title: "Ki kezd?",
+    text: "Az első ütést körönként más kezdi (forgásban). Onnantól mindig az hív új ütést, aki az előzőt elvitte.",
+  },
+  {
+    ico: "👇",
+    title: "Lapkijátszás",
+    text: "A hívott színre színt kell tenni. Ha nincs olyan színed, bármit tehetsz — adut vagy más színt is. Ütni nem kötelező.",
+  },
+  {
+    ico: "🏆",
+    title: "Ki viszi az ütést?",
+    text: "A legnagyobb lap. Az adu üt minden más színt; ha nem ment adu, a hívott szín legnagyobbja nyer. Felülütni nem kötelező.",
   },
   {
     ico: "🧮",
     title: "Számolás",
-    text: "Beírjátok az eredményt, az app pedig automatikusan vezeti a pontokat körről körre.",
+    text: "Beírjátok, ki hány ütést vitt, az app pedig automatikusan vezeti a pontokat körről körre.",
   },
 ];
 
