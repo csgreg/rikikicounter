@@ -2,7 +2,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { Redirect } from "react-router-dom";
-import { clearSession, getPid } from "../api/session";
+import { clearSession, clearSnapshot, getPid } from "../api/session";
 import { syncState } from "../api/state";
 import { useConfirm } from "../hooks/useConfirm";
 import { useGame } from "../context/GameContext";
@@ -44,6 +44,7 @@ export function Wait() {
     }
     syncState(socket, roomId, game, remaining);
     clearSession();
+    clearSnapshot();
     history.push("/");
   }
 

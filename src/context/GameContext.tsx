@@ -6,8 +6,22 @@ import {
   type ReactNode,
 } from "react";
 import { socket, type TypedSocket } from "../api/socket";
-import { clearSession, getPid, loadSession } from "../api/session";
-import { parseBroadcastState, parseFetchedState, syncState } from "../api/state";
+import {
+  clearSession,
+  clearSnapshot,
+  getPid,
+  loadSession,
+  loadSnapshot,
+  saveSession,
+  saveSnapshot,
+  type Snapshot,
+} from "../api/session";
+import {
+  buildStatePayload,
+  parseBroadcastState,
+  parseFetchedState,
+  syncState,
+} from "../api/state";
 import type { GameMeta, Player } from "../types";
 
 interface GameContextValue {
@@ -25,6 +39,9 @@ interface GameContextValue {
   restoring: boolean;
   kicked: boolean;
   resetKicked: () => void;
+  recover: Snapshot | null;
+  recoverGame: () => void;
+  dismissRecover: () => void;
 }
 
 const EMPTY_GAME: GameMeta = {
@@ -53,6 +70,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [restoring, setRestoring] = useState<boolean>(() => !!loadSession());
   const [connected, setConnected] = useState(socket.connected);
   const [kicked, setKicked] = useState(false);
+  const [recover, setRecover] = useState<Snapshot | null>(null);
 
   // Track the live socket connection (false during cold starts / drops).
   useEffect(() => {
@@ -78,6 +96,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       // We had a seat but it's gone now -> the host kicked us.
       if (myIdx === -1 && loadSession()) {
         clearSession();
+        clearSnapshot();
         setKicked(true);
         return;
       }
@@ -86,6 +105,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
       setPlayers(state.players);
       // Always recompute by pid: indices shift when players are removed.
       setCurrentPlayerNum(myIdx);
+      // Keep a local snapshot for backend-restart recovery.
+      saveSnapshot({ roomId, game: state.game, players: state.players });
     }
 
     socket.on("state-changed", onStateChanged);
@@ -107,7 +128,19 @@ export function GameProvider({ children }: { children: ReactNode }) {
     function restore() {
       socket.emit("join-room", savedRoomId, (res) => {
         if (!res || res.status !== "ok") {
-          clearSession();
+          // Room is gone server-side (e.g. the backend restarted). If we have
+          // a snapshot of this room, offer to resurrect it instead of bailing.
+          const snap = loadSnapshot();
+          if (
+            snap &&
+            snap.roomId === savedRoomId &&
+            snap.players.some((p) => p.pid === pid)
+          ) {
+            setRecover(snap);
+          } else {
+            clearSession();
+            clearSnapshot();
+          }
           setRestoring(false);
           return;
         }
@@ -121,6 +154,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
             if (idx === -1) {
               // Our seat is gone (kicked while we were away).
               clearSession();
+              clearSnapshot();
               setKicked(true);
               setRestoring(false);
               return;
@@ -131,6 +165,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
             setCurrentPlayerNum(idx);
             setGame(obj.game);
             setPlayers(obj.players);
+            saveSnapshot({ roomId: savedRoomId, game: obj.game, players: obj.players });
             syncState(socket, savedRoomId, obj.game, obj.players);
           } catch {
             clearSession();
@@ -153,6 +188,39 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const me = currentPlayerNum >= 0 ? players[currentPlayerNum] ?? null : null;
   const isBoss = !!(me && me.boss);
 
+  // Host resurrects the game from the local snapshot in a brand-new room,
+  // carrying over scores/round; everyone else rejoins with the new code.
+  function recoverGame() {
+    if (!recover) return;
+    const snap = recover;
+    const pid = getPid();
+    socket.emit("create-room", 6, (resp) => {
+      const newRoomId = resp.roomId;
+      const players = snap.players.map((p) => ({
+        ...p,
+        online: p.pid === pid,
+        socketid: p.pid === pid ? socket.id : "",
+      }));
+      const game = { ...snap.game };
+      saveSession(newRoomId);
+      saveSnapshot({ roomId: newRoomId, game, players });
+      const target = game.game ? "/game" : "/wait";
+      socket.emit(
+        "sync-state",
+        newRoomId,
+        buildStatePayload(game, players),
+        false,
+        () => window.location.assign(target)
+      );
+    });
+  }
+
+  function dismissRecover() {
+    clearSession();
+    clearSnapshot();
+    setRecover(null);
+  }
+
   const value: GameContextValue = {
     socket,
     roomId,
@@ -168,6 +236,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
     restoring,
     kicked,
     resetKicked: () => setKicked(false),
+    recover,
+    recoverGame,
+    dismissRecover,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

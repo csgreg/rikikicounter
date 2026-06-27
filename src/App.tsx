@@ -6,6 +6,7 @@ import { Join } from "./pages/Join";
 import { Wait } from "./pages/Wait";
 import { Game } from "./pages/Game";
 import { Rules } from "./pages/Rules";
+import { getPid } from "./api/session";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
 function KickedScreen() {
@@ -15,6 +16,31 @@ function KickedScreen() {
         <h1 className="brand">Kirúgtak a szobából</h1>
         <p className="hint">A host eltávolított a szobából.</p>
         <button className="btn" onClick={() => (window.location.href = "/")}>
+          Vissza a főoldalra
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function RecoverScreen() {
+  const { recover, recoverGame, dismissRecover } = useGame();
+  const isHost = !!recover?.players.find((p) => p.pid === getPid())?.boss;
+  return (
+    <div className="App">
+      <div className="page">
+        <h1 className="brand">Megszakadt a szoba</h1>
+        <p className="hint">
+          Úgy tűnik, a szerver újraindult. {isHost
+            ? "Hostként folytathatod a játékot az eddigi pontokkal — a többiek az új kóddal tudnak visszacsatlakozni."
+            : "Kérd a hosttól az új szobakódot a folytatáshoz."}
+        </p>
+        {isHost ? (
+          <button className="btn" onClick={recoverGame}>
+            Játék folytatása
+          </button>
+        ) : null}
+        <button className="btn btn-ghost" onClick={dismissRecover}>
           Vissza a főoldalra
         </button>
       </div>
@@ -47,10 +73,14 @@ function Home() {
 }
 
 function AppShell() {
-  const { connected, restoring, kicked } = useGame();
+  const { connected, restoring, kicked, recover } = useGame();
 
   if (kicked) {
     return <KickedScreen />;
+  }
+
+  if (recover) {
+    return <RecoverScreen />;
   }
 
   if (restoring) {

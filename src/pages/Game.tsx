@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
-import { clearSession, getPid } from "../api/session";
+import { clearSession, clearSnapshot, getPid } from "../api/session";
 import { syncState } from "../api/state";
 import { burstConfetti, emojiRain } from "../utils/confetti";
 import { useConfirm } from "../hooks/useConfirm";
@@ -88,6 +88,7 @@ export function Game() {
     }
     pushPlayers(remaining);
     clearSession();
+    clearSnapshot();
     history.push("/");
   }
 
@@ -169,6 +170,7 @@ export function Game() {
 
   function goHome() {
     clearSession();
+    clearSnapshot();
     history.push("/");
   }
 
