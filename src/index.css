@@ -500,20 +500,35 @@ body {
   padding: 0 10px;
   transform: rotate(-2deg);
   transform-origin: top center;
+  backface-visibility: hidden;
   box-shadow: 3px 3px 0 var(--coral-dk);
-  animation: chip-flip 0.22s ease-out;
 }
 
-/* the whole coral chip flips over (keeps the -2deg resting tilt) */
+/* the whole coral chip flips over (keeps the -2deg resting tilt).
+   two identical animations let us restart the flip without re-mounting. */
+.counter-chip.flip-a {
+  animation: chip-flip 0.16s ease-out;
+}
+.counter-chip.flip-b {
+  animation: chip-flip-b 0.16s ease-out;
+}
+
 @keyframes chip-flip {
-  0% {
-    transform: rotate(-2deg) rotateX(-88deg);
-    opacity: 0.25;
+  from {
+    transform: rotate(-2deg) rotateX(-62deg);
+    opacity: 0.7;
   }
-  55% {
-    transform: rotate(-2deg) rotateX(10deg);
+  to {
+    transform: rotate(-2deg) rotateX(0);
+    opacity: 1;
   }
-  100% {
+}
+@keyframes chip-flip-b {
+  from {
+    transform: rotate(-2deg) rotateX(-62deg);
+    opacity: 0.7;
+  }
+  to {
     transform: rotate(-2deg) rotateX(0);
     opacity: 1;
   }
@@ -947,7 +962,8 @@ body {
   .confetti-piece,
   .confetti-emoji,
   .shake,
-  .counter-chip,
+  .counter-chip.flip-a,
+  .counter-chip.flip-b,
   .modal-backdrop,
   .modal {
     animation: none;
