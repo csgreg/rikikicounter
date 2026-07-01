@@ -8,7 +8,6 @@ import { Game } from "./pages/Game";
 import { Rules } from "./pages/Rules";
 import { Menu } from "./pages/Menu";
 import { WaveApp } from "./wave/WaveApp";
-import { ThemeToggle } from "./components/ThemeToggle";
 import { getPid } from "./api/session";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
@@ -57,7 +56,6 @@ function Home() {
   );
   return (
     <div className="page">
-      <ThemeToggle />
       <header className="game-hero">
         <h1 className="game-hero-title" aria-label="Rikiki Counter">
           <span className="gh-chip gh-chip--yellow gh-chip--a" aria-hidden="true">

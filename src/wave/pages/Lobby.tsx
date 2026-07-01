@@ -3,7 +3,6 @@ import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { socket } from "../../api/socket";
 import { getPid } from "../../api/session";
-import { ThemeToggle } from "../../components/ThemeToggle";
 import { useWave, WAVE_SESSION_KEY, EMPTY_GAME } from "../WaveContext";
 import type { WPlayer, WRoom } from "../types";
 
@@ -77,7 +76,6 @@ export function WaveLobby() {
 
   return (
     <div className="page">
-      <ThemeToggle />
       <header className="game-hero">
         <h1 className="game-hero-title" aria-label="Hullámhossz">
           <span className="gh-chip gh-chip--violet gh-chip--a" aria-hidden="true">

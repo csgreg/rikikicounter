@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { ThemeToggle } from "../components/ThemeToggle";
 
 export function Menu() {
   useDocumentTitle("Parti játékok – Rikiki & Hullámhossz | therikiki.hu");
   return (
     <div className="page menu-page">
-      <ThemeToggle />
       <header className="menu-hero">
         <h1 className="menu-hero-title" aria-label="Parti játékok">
           <span className="mh-word mh-word--1" aria-hidden="true">

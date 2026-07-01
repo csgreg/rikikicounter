@@ -8,22 +8,6 @@
     />
     <meta name="theme-color" content="#f4e7c5" />
 
-    <!-- Apply saved/preferred theme before first paint to avoid a flash. -->
-    <script>
-      (function () {
-        try {
-          var t = localStorage.getItem("rikiki_theme");
-          if (t !== "light" && t !== "dark") {
-            t = window.matchMedia &&
-              window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light";
-          }
-          document.documentElement.setAttribute("data-theme", t);
-        } catch (e) {}
-      })();
-    </script>
-
     <title>Rikiki Counter – Online pontszámláló a Rikiki kártyajátékhoz</title>
     <meta
       name="description"

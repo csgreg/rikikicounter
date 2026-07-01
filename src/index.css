@@ -23,16 +23,6 @@
   --bw: 2.5px; /* border width */
 }
 
-/* ---------- Dark theme (neutrals flip; vivid accents stay) ---------- */
-:root[data-theme="dark"] {
-  --bg: #17131f;
-  --panel: #241d33;
-  --panel-2: #2e2643;
-  --ink: #f2ecff;
-  --muted: #9a8fb5;
-  --dot: rgba(255, 255, 255, 0.05);
-}
-
 * {
   box-sizing: border-box;
 }
@@ -54,7 +44,6 @@ body {
   background-size: 18px 18px;
   color: var(--ink);
   overflow-x: hidden;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .App {
@@ -454,127 +443,6 @@ body {
     animation: none;
   }
   .menu-needle {
-    animation: none;
-  }
-}
-
-/* ---------- Day / night theme toggle ---------- */
-.theme-toggle {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  z-index: 6;
-  padding: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.tt-track {
-  display: block;
-  position: relative;
-  width: 62px;
-  height: 30px;
-  border-radius: 999px;
-  border: var(--bw) solid var(--ink);
-  background: linear-gradient(180deg, #ffe07a, #ffd23f);
-  box-shadow: 3px 3px 0 var(--ink);
-  overflow: hidden;
-  transition: background 0.4s ease, box-shadow 0.06s ease;
-}
-:root[data-theme="dark"] .tt-track {
-  background: linear-gradient(180deg, #2c2456, #16112f);
-}
-.theme-toggle:hover .tt-track {
-  box-shadow: 4px 4px 0 var(--ink);
-}
-.theme-toggle:active .tt-track {
-  box-shadow: 1px 1px 0 var(--ink);
-}
-.tt-knob {
-  position: absolute;
-  top: 50%;
-  left: 3px;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ink-fixed); /* black sun on the yellow track */
-  transform: translateY(-50%);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-    color 0.4s ease;
-}
-:root[data-theme="dark"] .tt-knob {
-  color: #eceaff; /* moon */
-  transform: translate(29px, -50%);
-}
-.tt-icon {
-  display: block;
-  overflow: visible;
-}
-.tt-sun,
-.tt-moon {
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-/* light: sun in, moon out */
-.tt-moon {
-  opacity: 0;
-  transform: scale(0.4) rotate(-60deg);
-}
-/* dark: moon in, sun out */
-:root[data-theme="dark"] .tt-sun {
-  opacity: 0;
-  transform: scale(0.4) rotate(60deg);
-}
-:root[data-theme="dark"] .tt-moon {
-  opacity: 1;
-  transform: none;
-}
-.tt-star {
-  position: absolute;
-  width: 2.5px;
-  height: 2.5px;
-  border-radius: 50%;
-  background: #fff;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-:root[data-theme="dark"] .tt-star {
-  opacity: 0.9;
-  animation: ttTwinkle 2s ease-in-out infinite;
-}
-.tt-star--1 {
-  top: 7px;
-  left: 9px;
-}
-.tt-star--2 {
-  top: 17px;
-  left: 15px;
-  width: 2px;
-  height: 2px;
-  animation-delay: 0.6s;
-}
-.tt-star--3 {
-  top: 8px;
-  left: 20px;
-  width: 1.8px;
-  height: 1.8px;
-  animation-delay: 1.1s;
-}
-@keyframes ttTwinkle {
-  0%,
-  100% {
-    opacity: 0.9;
-  }
-  50% {
-    opacity: 0.3;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  :root[data-theme="dark"] .tt-star {
     animation: none;
   }
 }

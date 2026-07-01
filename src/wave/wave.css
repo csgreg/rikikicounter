@@ -23,16 +23,6 @@
   background-size: 18px 18px;
 }
 
-/* Dark theme for /wave — keep the violet identity, drop to a night palette. */
-:root[data-theme="dark"] .wave-app {
-  --bg: #171126;
-  --panel: #241a3a;
-  --panel-2: #2e2247;
-  --ink: #f2ecff;
-  --muted: #9a8fb5;
-  --dot: rgba(255, 255, 255, 0.05);
-}
-
 /* violet primary needs light text; keep ghost + cream buttons dark */
 .wave-app .btn:not(.btn-light):not(.btn-ghost) {
   color: #fff;
