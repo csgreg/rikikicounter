@@ -60,7 +60,7 @@ export function Join() {
   }
 
   return (
-    <div className="card">
+    <div className="card game-card game-card--magenta">
       <h2>Csatlakozás szobához</h2>
       <div className="field">
         <input
@@ -80,7 +80,7 @@ export function Join() {
           onChange={(event) => setJoinName(event.target.value)}
         />
       </div>
-      <button className="btn" onClick={handleJoin}>
+      <button className="btn btn-light" onClick={handleJoin}>
         Csatlakozás
       </button>
     </div>

@@ -51,7 +51,7 @@ export function Create() {
   }
 
   return (
-    <div className="card">
+    <div className="card game-card game-card--yellow">
       <h2>Új szoba létrehozása</h2>
       <div className="field">
         <input
@@ -62,7 +62,7 @@ export function Create() {
           onChange={(event) => setPlayerName(event.target.value)}
         />
       </div>
-      <button className="btn" onClick={handleCreateRoom}>
+      <button className="btn btn-light" onClick={handleCreateRoom}>
         Létrehozás
       </button>
     </div>

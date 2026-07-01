@@ -83,7 +83,7 @@ export function WaveLobby() {
           <span className="gh-chip gh-chip--violet gh-chip--a" aria-hidden="true">
             Hullám
           </span>
-          <span className="gh-chip gh-chip--violet gh-chip--b" aria-hidden="true">
+          <span className="gh-chip gh-chip--magenta gh-chip--b" aria-hidden="true">
             hossz
           </span>
         </h1>
@@ -92,7 +92,7 @@ export function WaveLobby() {
         </p>
       </header>
 
-      <div className="card">
+      <div className="card game-card game-card--yellow">
         <h2>Új játék</h2>
         <div className="field">
           <input
@@ -102,14 +102,14 @@ export function WaveLobby() {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <button className="btn" onClick={handleCreate}>
+        <button className="btn btn-light" onClick={handleCreate}>
           Szoba nyitása
         </button>
       </div>
 
       <div className="divider">vagy</div>
 
-      <div className="card">
+      <div className="card game-card game-card--magenta">
         <h2>Csatlakozás</h2>
         <div className="field">
           <input
@@ -127,7 +127,7 @@ export function WaveLobby() {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <button className="btn" onClick={handleJoin}>
+        <button className="btn btn-light" onClick={handleJoin}>
           Belépek
         </button>
       </div>

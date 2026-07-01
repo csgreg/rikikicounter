@@ -63,7 +63,7 @@ function Home() {
           <span className="gh-chip gh-chip--yellow gh-chip--a" aria-hidden="true">
             Rikiki
           </span>
-          <span className="gh-chip gh-chip--yellow gh-chip--b" aria-hidden="true">
+          <span className="gh-chip gh-chip--magenta gh-chip--b" aria-hidden="true">
             Counter
           </span>
         </h1>

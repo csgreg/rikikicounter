@@ -618,6 +618,62 @@ body {
   color: #fff;
   box-shadow: 4px 4px 0 #3d229f;
 }
+.gh-chip--magenta {
+  background: #ff3d9a;
+  color: #fff;
+  box-shadow: 4px 4px 0 #b81e6a;
+}
+
+/* ---------- Coloured form cards (homepage card design) ---------- */
+.game-card {
+  position: relative;
+  overflow: hidden;
+}
+.game-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    rgba(33, 28, 21, 0.09) 1.5px,
+    transparent 1.5px
+  );
+  background-size: 16px 16px;
+}
+.game-card > * {
+  position: relative;
+  z-index: 1;
+}
+.game-card--yellow {
+  background: #ffd23f;
+  color: var(--ink-fixed);
+  box-shadow: 5px 5px 0 #c98a00;
+}
+.game-card--magenta {
+  background: #ff3d9a;
+  color: #fff;
+  box-shadow: 5px 5px 0 #b81e6a;
+}
+.game-card--magenta::after {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.16) 1.5px,
+    transparent 1.5px
+  );
+}
+
+/* cream button used on top of the coloured cards (like the menu CTA).
+   Compound selector so it beats the later `.btn` primary rule. */
+.btn.btn-light {
+  background: #fffdf3;
+  color: var(--ink-fixed);
+  box-shadow: 4px 4px 0 rgba(33, 28, 21, 0.4);
+}
+.btn.btn-light:hover {
+  box-shadow: 5px 5px 0 rgba(33, 28, 21, 0.45);
+}
+.btn.btn-light:active {
+  box-shadow: 1px 1px 0 rgba(33, 28, 21, 0.45);
+}
 
 /* ---------- Form controls ---------- */
 .field {
