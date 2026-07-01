@@ -137,24 +137,14 @@ body {
 }
 .mh-word--1 {
   --rot: -4deg;
-  background-color: var(--yellow);
-  background-image: radial-gradient(
-    rgba(33, 28, 21, 0.16) 1.5px,
-    transparent 1.5px
-  );
-  background-size: 12px 12px;
+  background: var(--yellow);
   color: var(--ink);
   box-shadow: 5px 5px 0 var(--yellow-dk);
   animation-delay: 0s;
 }
 .mh-word--2 {
   --rot: 4deg;
-  background-color: #7c5cff;
-  background-image: radial-gradient(
-    rgba(255, 255, 255, 0.22) 1.5px,
-    transparent 1.5px
-  );
-  background-size: 12px 12px;
+  background: #7c5cff;
   color: #fff;
   box-shadow: 5px 5px 0 #3d229f;
   animation-delay: 0.55s;
