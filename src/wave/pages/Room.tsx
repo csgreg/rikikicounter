@@ -1,6 +1,9 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router";
+import { useConfirm } from "../../hooks/useConfirm";
+import { burstConfetti } from "../../utils/confetti";
 import { useWave } from "../WaveContext";
 import type { WPlayer } from "../types";
 
@@ -103,19 +106,73 @@ export function WaveRoom() {
     submitGuess,
     hostStart,
     hostNextRound,
+    hostFinish,
+    hostRestart,
+    kick,
     leave,
   } = useWave();
   const history = useHistory();
   const [clue, setClue] = useState("");
   const [guessVal, setGuessVal] = useState(50);
+  const [isCopied, setIsCopied] = useState(false);
+  const { confirm, modal } = useConfirm();
+
+  const gameOver = !!game.finished;
+
+  // Celebrate a strong guess when the round is revealed, and the finish itself.
+  useEffect(() => {
+    if (
+      game.phase === "reveal" &&
+      me &&
+      me.pid !== game.clueGiverPid &&
+      (me.gained ?? 0) >= 3
+    ) {
+      burstConfetti();
+    }
+    // fire once per round reveal
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [game.phase, game.round]);
+
+  useEffect(() => {
+    if (gameOver) burstConfetti();
+  }, [gameOver]);
 
   if (!roomId) {
     return <Redirect to="/wave" />;
   }
 
-  function exit() {
+  async function exit() {
+    const ok = await confirm({
+      title: "Kilépés",
+      message: "Biztosan kilépsz a játékból?",
+      confirmText: "Kilépés",
+      danger: true,
+    });
+    if (!ok) return;
     leave();
     history.push("/wave");
+  }
+
+  async function kickPlayer(pid: string, name: string) {
+    const ok = await confirm({
+      title: "Kirúgás",
+      message: `Kirúgod a játékból: ${name}?`,
+      confirmText: "Kirúgás",
+      danger: true,
+    });
+    if (!ok) return;
+    kick(pid);
+  }
+
+  async function endGame() {
+    const ok = await confirm({
+      title: "Játék befejezése",
+      message: "Biztosan befejezed a játékot mindenkinek?",
+      confirmText: "Befejezés",
+      danger: true,
+    });
+    if (!ok) return;
+    hostFinish();
   }
 
   const clueGiver = players.find((p) => p.pid === game.clueGiverPid) || null;
@@ -129,43 +186,125 @@ export function WaveRoom() {
   // ---------- LOBBY ----------
   if (!game.started || game.phase === "lobby") {
     return (
-      <div className="page">
-        <header>
-          <h1 className="brand">Várószoba</h1>
-          <p className="tagline">Kód: {roomId}</p>
-        </header>
-        <div className="card">
-          <p className="label">Játékosok ({players.length})</p>
-          <div className="scoreboard">
-            {players.map((p) => (
-              <div className="score-row" key={p.pid}>
-                <span className="name">
-                  <span className={`dot ${p.online ? "on" : "off"}`} />
-                  {p.name}
-                  {p.boss ? <span className="tag">host</span> : null}
-                </span>
-              </div>
-            ))}
+      <>
+        <div className="page">
+          <header>
+            <h1 className="brand">Várószoba</h1>
+            <p className="tagline">Várakozás a többi játékosra…</p>
+          </header>
+          <div className="card">
+            <p className="label">Szoba kódja</p>
+            <div className="room-code">
+              <span className="code">{roomId}</span>
+              <CopyToClipboard
+                text={roomId}
+                onCopy={() => {
+                  setIsCopied(true);
+                  setTimeout(() => setIsCopied(false), 1000);
+                }}
+              >
+                <button className="copy-btn">
+                  {isCopied ? "Másolva!" : "Másolás"}
+                </button>
+              </CopyToClipboard>
+            </div>
+
+            <p className="label">Játékosok ({players.length})</p>
+            <div className="scoreboard">
+              {players.map((p) => (
+                <div className="score-row" key={p.pid}>
+                  <span className="name">
+                    <span className={`dot ${p.online ? "on" : "off"}`} />
+                    {p.name}
+                    {p.boss ? <span className="tag">host</span> : null}
+                    {isHost && me && p.pid !== me.pid ? (
+                      <button
+                        className="kick-btn"
+                        title="Kirúgás"
+                        onClick={() => kickPlayer(p.pid, p.name)}
+                      >
+                        ✕
+                      </button>
+                    ) : null}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-        {isHost ? (
-          <button className="btn" disabled={players.length < 2} onClick={hostStart}>
-            Indítás
+          {isHost ? (
+            <button
+              className="btn"
+              disabled={players.length < 2}
+              onClick={hostStart}
+            >
+              Indítás
+            </button>
+          ) : (
+            <p className="hint">A host mindjárt indít…</p>
+          )}
+          {isHost && players.length < 2 ? (
+            <p className="hint">Legalább 2 játékos kell.</p>
+          ) : null}
+          <button className="btn btn-ghost" onClick={exit}>
+            Kilépés
           </button>
-        ) : (
-          <p className="hint">A host mindjárt indít…</p>
-        )}
-        {isHost && players.length < 2 ? (
-          <p className="hint">Legalább 2 játékos kell.</p>
-        ) : null}
-        <button className="btn btn-ghost" onClick={exit}>
-          Kilépés
-        </button>
-      </div>
+        </div>
+        {modal}
+      </>
+    );
+  }
+
+  // ---------- GAME OVER ----------
+  if (gameOver) {
+    return (
+      <>
+        <div className="page">
+          <header>
+            <h1 className="brand">Vége! 🏆</h1>
+          </header>
+          <div className="card">
+            <div className="scoreboard">
+              {leaderboard.map((p, i) => {
+                const isLast =
+                  leaderboard.length > 1 && i === leaderboard.length - 1;
+                return (
+                  <div
+                    className={`score-row ${i === 0 ? "winner" : ""}`}
+                    key={p.pid}
+                  >
+                    <span className="name">
+                      {i + 1}. {p.name}
+                      {i === 0 ? " 🏆" : ""}
+                      {isLast ? " 🥄" : ""}
+                    </span>
+                    <span className="points">{p.score}</span>
+                  </div>
+                );
+              })}
+            </div>
+            {isHost ? (
+              <button
+                className="btn"
+                style={{ marginTop: "16px" }}
+                onClick={hostRestart}
+              >
+                Új játék
+              </button>
+            ) : (
+              <p className="hint">A host indíthat új játékot.</p>
+            )}
+          </div>
+          <button className="btn btn-ghost" onClick={exit}>
+            Kilépés
+          </button>
+        </div>
+        {modal}
+      </>
     );
   }
 
   return (
+    <>
     <div className="page">
       <header className="game-header">
         <p className="game-line">
@@ -311,9 +450,17 @@ export function WaveRoom() {
         </div>
       </div>
 
+      {isHost ? (
+        <button className="btn btn-ghost" onClick={endGame}>
+          Játék befejezése
+        </button>
+      ) : null}
+
       <button className="btn btn-ghost" onClick={exit}>
         Kilépés
       </button>
     </div>
+    {modal}
+    </>
   );
 }

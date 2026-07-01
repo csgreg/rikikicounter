@@ -3,37 +3,30 @@ import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 const STEPS = [
   {
-    ico: "🃏",
     title: "A lapok",
     text: "Minden körben más számú lapot osztotok. A lapszám a maximumtól 1-ig csökken, majd vissza a maximumig — és vége a játéknak.",
   },
   {
-    ico: "🎴",
     title: "Az adu",
     text: "Minden körnek van egy adu színe (néha épp nincs adu). Az adu bármelyik másik színt elüti.",
   },
   {
-    ico: "🎯",
     title: "Tippelés",
     text: "Mindenki megtippeli, hány ütést fog vinni a körben. A tippek csak akkor derülnek ki, ha már MINDENKI rögzített.",
   },
   {
-    ico: "▶️",
     title: "Ki kezd?",
     text: "Az első ütést körönként más kezdi (forgásban). Onnantól mindig az hív új ütést, aki az előzőt elvitte.",
   },
   {
-    ico: "👇",
     title: "Lapkijátszás",
     text: "A hívott színre színt kell tenni. Ha nincs olyan színed, bármit tehetsz — adut vagy más színt is. Ütni nem kötelező.",
   },
   {
-    ico: "🏆",
     title: "Ki viszi az ütést?",
     text: "A legnagyobb lap. Az adu üt minden más színt; ha nem ment adu, a hívott szín legnagyobbja nyer. Felülütni nem kötelező.",
   },
   {
-    ico: "🧮",
     title: "Számolás",
     text: "Beírjátok, ki hány ütést vitt, az app pedig automatikusan vezeti a pontokat körről körre.",
   },
@@ -65,7 +58,6 @@ export function Rules() {
         <ol className="rules-steps">
           {STEPS.map((s, i) => (
             <li className="rule-step" key={i}>
-              <span className="step-ico">{s.ico}</span>
               <div className="step-body">
                 <strong>
                   {i + 1}. {s.title}
@@ -99,7 +91,7 @@ export function Rules() {
         </p>
       </div>
 
-      <Link to="/" className="btn">
+      <Link to="/rikiki" className="btn">
         Értem, jöhet a játék! 🚀
       </Link>
     </div>

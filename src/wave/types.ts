@@ -22,6 +22,7 @@ export interface WGame {
   right: string;
   target: number; // 0..100, secret until reveal
   clue: string;
+  finished?: boolean; // host ended the game -> show final standings
 }
 
 export interface WRoom {

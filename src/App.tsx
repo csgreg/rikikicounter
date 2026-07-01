@@ -6,6 +6,7 @@ import { Join } from "./pages/Join";
 import { Wait } from "./pages/Wait";
 import { Game } from "./pages/Game";
 import { Rules } from "./pages/Rules";
+import { Menu } from "./pages/Menu";
 import { WaveApp } from "./wave/WaveApp";
 import { getPid } from "./api/session";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
@@ -69,8 +70,8 @@ function Home() {
       <Link to="/rules" className="btn btn-ghost">
         📖 Hogyan kell rikikizni?
       </Link>
-      <Link to="/wave" className="btn btn-ghost">
-        🎚️ Hullámhossz parti játék
+      <Link to="/" className="btn btn-ghost">
+        ← Menü
       </Link>
     </div>
   );
@@ -106,7 +107,7 @@ function AppShell() {
       {!connected && <ConnectingOverlay />}
       <div className="App">
         <Switch>
-          <Route exact path="/">
+          <Route path="/rikiki">
             <Home />
           </Route>
           <Route path="/wait">
@@ -138,6 +139,9 @@ export default function App() {
       <Switch>
         <Route path="/wave">
           <WaveApp />
+        </Route>
+        <Route exact path="/">
+          <Menu />
         </Route>
         <Route path="/">
           <RikikiRoot />

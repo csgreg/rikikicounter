@@ -126,7 +126,7 @@ export function WaveLobby() {
       </div>
 
       <Link to="/" className="btn btn-ghost">
-        ← Vissza a Rikikihez
+        ← Menü
       </Link>
     </div>
   );
