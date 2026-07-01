@@ -579,6 +579,46 @@ body {
   }
 }
 
+/* ---------- Game page hero (chip title like the menu, but static) ---------- */
+.game-hero {
+  text-align: center;
+  margin: 40px 0 2px;
+}
+.game-hero-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 0;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-size: clamp(2rem, 7vw, 3.2rem);
+}
+.gh-chip {
+  display: inline-block;
+  padding: 3px 14px 6px;
+  border: var(--bw) solid var(--ink);
+  border-radius: 12px;
+}
+.gh-chip--a {
+  transform: rotate(-2.5deg);
+}
+.gh-chip--b {
+  transform: rotate(2.5deg);
+}
+.gh-chip--yellow {
+  background: #ffd23f;
+  color: var(--ink-fixed);
+  box-shadow: 4px 4px 0 #c98a00;
+}
+.gh-chip--violet {
+  background: #7c5cff;
+  color: #fff;
+  box-shadow: 4px 4px 0 #3d229f;
+}
+
 /* ---------- Form controls ---------- */
 .field {
   margin-bottom: 12px;

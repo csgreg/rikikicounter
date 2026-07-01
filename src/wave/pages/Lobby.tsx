@@ -78,9 +78,14 @@ export function WaveLobby() {
   return (
     <div className="page">
       <ThemeToggle />
-      <header>
-        <h1 className="brand">
-          Hullám<span>hossz</span>
+      <header className="game-hero">
+        <h1 className="game-hero-title" aria-label="Hullámhossz">
+          <span className="gh-chip gh-chip--violet gh-chip--a" aria-hidden="true">
+            Hullám
+          </span>
+          <span className="gh-chip gh-chip--violet gh-chip--b" aria-hidden="true">
+            hossz
+          </span>
         </h1>
         <p className="tagline">
           Találd el a rejtett pontot a skálán — egyetlen kulcsszóból!

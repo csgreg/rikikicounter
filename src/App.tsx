@@ -58,9 +58,14 @@ function Home() {
   return (
     <div className="page">
       <ThemeToggle />
-      <header>
-        <h1 className="brand">
-          Rikiki <span>Counter</span>
+      <header className="game-hero">
+        <h1 className="game-hero-title" aria-label="Rikiki Counter">
+          <span className="gh-chip gh-chip--yellow gh-chip--a" aria-hidden="true">
+            Rikiki
+          </span>
+          <span className="gh-chip gh-chip--yellow gh-chip--b" aria-hidden="true">
+            Counter
+          </span>
         </h1>
         <p className="tagline">
           Hozz létre szobát vagy csatlakozz, és a pontokat mi számoljuk.
