@@ -108,36 +108,162 @@ body {
 }
 
 /* ---------- Game picker menu ---------- */
+.menu-page {
+  max-width: 440px;
+}
+@media (min-width: 660px) {
+  .menu-page {
+    max-width: 800px;
+  }
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 6px;
+}
+@media (min-width: 660px) {
+  .menu-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+  }
+}
+
 .menu-card {
   display: flex;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  text-align: left;
   text-decoration: none;
-  color: var(--ink);
-  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  min-height: 230px;
+  padding: 22px 20px 20px;
+  border: var(--bw) solid var(--ink);
+  border-radius: var(--radius);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
+
+/* decorative pattern overlay */
+.menu-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    rgba(33, 28, 21, 0.09) 1.5px,
+    transparent 1.5px
+  );
+  background-size: 16px 16px;
+  pointer-events: none;
+}
+
+.menu-card--rikiki {
+  background: var(--yellow);
+  color: var(--ink);
+  box-shadow: 7px 7px 0 var(--yellow-dk);
+  transform: rotate(-1.4deg);
+}
+.menu-card--wave {
+  background: #7c5cff;
+  color: #fff;
+  box-shadow: 7px 7px 0 #3d229f;
+  transform: rotate(1.4deg);
+}
+.menu-card--wave::after {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.14) 1.5px,
+    transparent 1.5px
+  );
+}
+
 .menu-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 7px 7px 0 var(--ink);
+  transform: rotate(0deg) translate(-2px, -4px);
+}
+.menu-card--rikiki:hover {
+  box-shadow: 10px 13px 0 var(--yellow-dk);
+}
+.menu-card--wave:hover {
+  box-shadow: 10px 13px 0 #3d229f;
 }
 .menu-card:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--ink);
+  transform: rotate(0deg) translate(2px, 2px);
 }
-.menu-text {
+.menu-card--rikiki:active {
+  box-shadow: 3px 3px 0 var(--yellow-dk);
+}
+.menu-card--wave:active {
+  box-shadow: 3px 3px 0 #3d229f;
+}
+
+.menu-deco {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2px;
+}
+.menu-deco--suits {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  gap: 8px;
+  font-size: 2.1rem;
+  line-height: 1;
 }
+.menu-deco--suits .s-black {
+  color: var(--ink);
+}
+.menu-deco--suits .s-red {
+  color: var(--coral-dk);
+}
+.menu-deco--wave {
+  height: 26px;
+  border: var(--bw) solid var(--ink);
+  border-radius: 8px;
+  background: linear-gradient(90deg, #5b8def, #ffd23f 50%, #ff6f61);
+  box-shadow: 3px 3px 0 rgba(20, 12, 60, 0.55);
+}
+.menu-needle {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  left: 64%;
+  width: 4px;
+  background: #221a30;
+  border-radius: 2px;
+}
+
 .menu-title {
-  font-size: 1.2rem;
+  position: relative;
+  z-index: 1;
+  font-size: 1.75rem;
   font-weight: 800;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
 }
 .menu-desc {
-  font-size: 0.9rem;
-  color: var(--muted);
+  position: relative;
+  z-index: 1;
+  font-size: 0.92rem;
   font-weight: 500;
+  opacity: 0.82;
+}
+.menu-cta {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  align-self: flex-start;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 5px 14px;
+  background: var(--panel);
+  color: var(--ink);
+  border: var(--bw) solid var(--ink);
+  border-radius: 8px;
+  box-shadow: 3px 3px 0 rgba(33, 28, 21, 0.35);
+}
+.menu-card:hover .menu-cta {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 rgba(33, 28, 21, 0.4);
 }
 
 /* ---------- Form controls ---------- */
