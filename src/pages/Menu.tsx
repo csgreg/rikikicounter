@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import { ThemeToggle } from "../components/ThemeToggle";
 
 export function Menu() {
   useDocumentTitle("Parti játékok – Rikiki & Hullámhossz | therikiki.hu");
   return (
     <div className="page menu-page">
+      <ThemeToggle />
       <header className="menu-hero">
         <h1 className="menu-hero-title" aria-label="Parti játékok">
           <span className="mh-word mh-word--1" aria-hidden="true">
@@ -29,7 +31,9 @@ export function Menu() {
           <span className="menu-desc">
             Online pontszámláló a Rikiki kártyajátékhoz.
           </span>
-          <span className="menu-cta">Játék →</span>
+          <span className="menu-cta">
+            Játék <span className="menu-arrow">→</span>
+          </span>
         </Link>
 
         <Link to="/wave" className="menu-card menu-card--wave">
@@ -40,7 +44,9 @@ export function Menu() {
           <span className="menu-desc">
             Találd el a rejtett pontot a skálán — egyetlen kulcsszóból.
           </span>
-          <span className="menu-cta">Játék →</span>
+          <span className="menu-cta">
+            Játék <span className="menu-arrow">→</span>
+          </span>
         </Link>
       </div>
     </div>
