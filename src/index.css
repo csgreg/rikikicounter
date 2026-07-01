@@ -672,10 +672,11 @@ body {
   -webkit-text-stroke: 1.2px var(--ink-fixed);
   paint-order: stroke;
 }
-/* inputs inside a card: always white with a dark shadow, in both themes */
+/* inputs inside a card: always white with a black border + dark shadow */
 .game-card .input {
   background: #fffdf3;
   color: var(--ink-fixed);
+  border-color: var(--ink-fixed);
   box-shadow: 3px 3px 0 rgba(33, 28, 21, 0.4);
 }
 .game-card .input::placeholder {
@@ -690,6 +691,7 @@ body {
 .btn.btn-light {
   background: #fffdf3;
   color: var(--ink-fixed);
+  border-color: var(--ink-fixed);
   box-shadow: 4px 4px 0 rgba(33, 28, 21, 0.4);
 }
 .btn.btn-light:hover {
@@ -763,10 +765,11 @@ body {
   box-shadow: 1px 1px 0 var(--yellow-dk);
 }
 
-/* secondary / nav buttons: always white with a dark shadow (both themes) */
+/* secondary / nav buttons: always white with a black border + dark shadow */
 .btn-ghost {
   background: #fffdf3;
   color: var(--ink-fixed);
+  border-color: var(--ink-fixed);
   box-shadow: 4px 4px 0 rgba(33, 28, 21, 0.4);
 }
 
