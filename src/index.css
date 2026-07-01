@@ -141,7 +141,7 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 10px 14px;
+  gap: 8px;
   margin: 0;
   line-height: 1;
   font-weight: 800;
@@ -666,11 +666,13 @@ body {
   );
 }
 
-/* card heading: always white, outlined so it stays legible on any card colour */
+/* card heading: colour picked for contrast against the card (black on yellow,
+   white on the dark violet card) */
 .game-card h2 {
   color: #fff;
-  -webkit-text-stroke: 1.2px var(--ink-fixed);
-  paint-order: stroke;
+}
+.game-card--yellow h2 {
+  color: var(--ink-fixed);
 }
 /* inputs inside a card: always white with a black border + dark shadow */
 .game-card .input {
