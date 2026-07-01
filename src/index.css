@@ -618,10 +618,15 @@ body {
   color: #fff;
   box-shadow: 4px 4px 0 #3d229f;
 }
-.gh-chip--magenta {
-  background: #ff3d9a;
+.gh-chip--yellow-dk {
+  background: #f2b60c;
+  color: var(--ink-fixed);
+  box-shadow: 4px 4px 0 #9c6f00;
+}
+.gh-chip--violet-dk {
+  background: #5f43e0;
   color: #fff;
-  box-shadow: 4px 4px 0 #b81e6a;
+  box-shadow: 4px 4px 0 #2c1a80;
 }
 
 /* ---------- Coloured form cards (homepage card design) ---------- */
@@ -649,16 +654,35 @@ body {
   color: var(--ink-fixed);
   box-shadow: 5px 5px 0 #c98a00;
 }
-.game-card--magenta {
-  background: #ff3d9a;
+.game-card--violet {
+  background: #7c5cff;
   color: #fff;
-  box-shadow: 5px 5px 0 #b81e6a;
+  box-shadow: 5px 5px 0 #3d229f;
 }
-.game-card--magenta::after {
+.game-card--violet::after {
   background-image: radial-gradient(
-    rgba(255, 255, 255, 0.16) 1.5px,
+    rgba(255, 255, 255, 0.14) 1.5px,
     transparent 1.5px
   );
+}
+
+/* card heading: always white, outlined so it stays legible on any card colour */
+.game-card h2 {
+  color: #fff;
+  -webkit-text-stroke: 1.2px var(--ink-fixed);
+  paint-order: stroke;
+}
+/* inputs inside a card: always white with a dark shadow, in both themes */
+.game-card .input {
+  background: #fffdf3;
+  color: var(--ink-fixed);
+  box-shadow: 3px 3px 0 rgba(33, 28, 21, 0.4);
+}
+.game-card .input::placeholder {
+  color: #8c8167;
+}
+.game-card .input:focus {
+  box-shadow: 4px 4px 0 rgba(33, 28, 21, 0.5);
 }
 
 /* cream button used on top of the coloured cards (like the menu CTA).
@@ -739,15 +763,19 @@ body {
   box-shadow: 1px 1px 0 var(--yellow-dk);
 }
 
+/* secondary / nav buttons: always white with a dark shadow (both themes) */
 .btn-ghost {
-  background: var(--panel);
-  color: var(--ink);
-  box-shadow: 4px 4px 0 var(--ink);
+  background: #fffdf3;
+  color: var(--ink-fixed);
+  box-shadow: 4px 4px 0 rgba(33, 28, 21, 0.4);
 }
 
-.btn-ghost:hover,
+.btn-ghost:hover {
+  box-shadow: 5px 5px 0 rgba(33, 28, 21, 0.45);
+}
+
 .btn-ghost:active {
-  box-shadow: 1px 1px 0 var(--ink);
+  box-shadow: 1px 1px 0 rgba(33, 28, 21, 0.45);
 }
 
 .btn-danger {

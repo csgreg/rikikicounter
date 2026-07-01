@@ -63,7 +63,7 @@ function Home() {
           <span className="gh-chip gh-chip--yellow gh-chip--a" aria-hidden="true">
             Rikiki
           </span>
-          <span className="gh-chip gh-chip--magenta gh-chip--b" aria-hidden="true">
+          <span className="gh-chip gh-chip--yellow-dk gh-chip--b" aria-hidden="true">
             Counter
           </span>
         </h1>
@@ -75,7 +75,7 @@ function Home() {
       <div className="divider">vagy</div>
       <Join />
       <Link to="/rules" className="btn btn-ghost">
-        📖 Hogyan kell rikikizni?
+        Hogyan kell rikikizni?
       </Link>
       <Link to="/" className="btn btn-ghost">
         ← Menü

@@ -83,7 +83,7 @@ export function WaveLobby() {
           <span className="gh-chip gh-chip--violet gh-chip--a" aria-hidden="true">
             Hullám
           </span>
-          <span className="gh-chip gh-chip--magenta gh-chip--b" aria-hidden="true">
+          <span className="gh-chip gh-chip--violet-dk gh-chip--b" aria-hidden="true">
             hossz
           </span>
         </h1>
@@ -92,7 +92,7 @@ export function WaveLobby() {
         </p>
       </header>
 
-      <div className="card game-card game-card--yellow">
+      <div className="card game-card game-card--violet">
         <h2>Új játék</h2>
         <div className="field">
           <input
@@ -109,7 +109,7 @@ export function WaveLobby() {
 
       <div className="divider">vagy</div>
 
-      <div className="card game-card game-card--magenta">
+      <div className="card game-card game-card--violet">
         <h2>Csatlakozás</h2>
         <div className="field">
           <input

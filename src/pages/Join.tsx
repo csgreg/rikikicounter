@@ -60,7 +60,7 @@ export function Join() {
   }
 
   return (
-    <div className="card game-card game-card--magenta">
+    <div className="card game-card game-card--yellow">
       <h2>Csatlakozás szobához</h2>
       <div className="field">
         <input

@@ -34,11 +34,11 @@
 }
 
 /* violet primary needs light text; keep ghost + cream buttons dark */
-.wave-app .btn:not(.btn-light) {
+.wave-app .btn:not(.btn-light):not(.btn-ghost) {
   color: #fff;
 }
 .wave-app .btn-ghost {
-  color: var(--ink);
+  color: var(--ink-fixed);
 }
 
 /* Wavelength-specific bits; reuses the base neobrutalist theme from index.css */
