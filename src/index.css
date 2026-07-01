@@ -126,7 +126,15 @@ body {
 /* ---------- Game picker menu ---------- */
 .menu-hero {
   text-align: center;
-  margin: 10px 0 4px;
+  margin: 52px 0 4px;
+}
+.menu-footer {
+  margin-top: auto;
+  padding-top: 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
 }
 .menu-hero-title {
   display: flex;
@@ -287,12 +295,20 @@ body {
 }
 .menu-deco--suits {
   display: flex;
-  gap: 8px;
-  font-size: 2.1rem;
+  gap: 7px;
   line-height: 1;
 }
 .menu-deco--suits .ms {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 42px;
+  font-size: 1.3rem;
+  background: #fffdf3;
+  border: 2.5px solid var(--ink-fixed);
+  border-radius: 6px;
+  box-shadow: 2px 2px 0 rgba(33, 28, 21, 0.32);
   transform-origin: bottom center;
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -300,7 +316,7 @@ body {
   color: var(--ink-fixed);
 }
 .menu-deco--suits .s-red {
-  color: var(--coral-dk);
+  color: #d62f22;
 }
 /* suits fan out when the Rikiki card is hovered */
 .menu-card--rikiki:hover .ms:nth-child(1) {
@@ -461,7 +477,7 @@ body {
   height: 30px;
   border-radius: 999px;
   border: var(--bw) solid var(--ink);
-  background: linear-gradient(180deg, #c6e6ff, #8ec9ff);
+  background: linear-gradient(180deg, #ffe07a, #ffd23f);
   box-shadow: 3px 3px 0 var(--ink);
   overflow: hidden;
   transition: background 0.4s ease, box-shadow 0.06s ease;
@@ -484,7 +500,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #f7a80a; /* sun */
+  color: var(--ink-fixed); /* black sun on the yellow track */
   transform: translateY(-50%);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
     color 0.4s ease;

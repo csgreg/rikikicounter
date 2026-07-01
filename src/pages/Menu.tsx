@@ -49,6 +49,10 @@ export function Menu() {
           </span>
         </Link>
       </div>
+
+      <footer className="menu-footer">
+        Készült nektek tőlem · therikiki.hu
+      </footer>
     </div>
   );
 }
