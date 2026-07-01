@@ -16,9 +16,21 @@
   --blue: #5b8def;
   --blue-dk: #2f5bc0;
 
+  --dot: rgba(34, 26, 48, 0.06);
+
   background-color: var(--bg);
-  background-image: radial-gradient(rgba(34, 26, 48, 0.06) 1.4px, transparent 1.4px);
+  background-image: radial-gradient(var(--dot) 1.4px, transparent 1.4px);
   background-size: 18px 18px;
+}
+
+/* Dark theme for /wave — keep the violet identity, drop to a night palette. */
+:root[data-theme="dark"] .wave-app {
+  --bg: #171126;
+  --panel: #241a3a;
+  --panel-2: #2e2247;
+  --ink: #f2ecff;
+  --muted: #9a8fb5;
+  --dot: rgba(255, 255, 255, 0.05);
 }
 
 /* violet primary needs light text; keep ghost buttons dark */

@@ -50,7 +50,7 @@ export function Menu() {
         </Link>
       </div>
 
-      <footer className="menu-footer">
+      <footer className="site-footer">
         Készült nektek tőlem · therikiki.hu
       </footer>
     </div>

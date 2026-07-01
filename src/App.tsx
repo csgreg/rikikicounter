@@ -8,6 +8,7 @@ import { Game } from "./pages/Game";
 import { Rules } from "./pages/Rules";
 import { Menu } from "./pages/Menu";
 import { WaveApp } from "./wave/WaveApp";
+import { ThemeToggle } from "./components/ThemeToggle";
 import { getPid } from "./api/session";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
@@ -56,6 +57,7 @@ function Home() {
   );
   return (
     <div className="page">
+      <ThemeToggle />
       <header>
         <h1 className="brand">
           Rikiki <span>Counter</span>
@@ -73,6 +75,9 @@ function Home() {
       <Link to="/" className="btn btn-ghost">
         ← Menü
       </Link>
+      <footer className="site-footer">
+        Készült nektek tőlem · therikiki.hu
+      </footer>
     </div>
   );
 }

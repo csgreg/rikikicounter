@@ -3,6 +3,7 @@ import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { socket } from "../../api/socket";
 import { getPid } from "../../api/session";
+import { ThemeToggle } from "../../components/ThemeToggle";
 import { useWave, WAVE_SESSION_KEY, EMPTY_GAME } from "../WaveContext";
 import type { WPlayer, WRoom } from "../types";
 
@@ -76,6 +77,7 @@ export function WaveLobby() {
 
   return (
     <div className="page">
+      <ThemeToggle />
       <header>
         <h1 className="brand">
           Hullám<span>hossz</span>
@@ -128,6 +130,9 @@ export function WaveLobby() {
       <Link to="/" className="btn btn-ghost">
         ← Menü
       </Link>
+      <footer className="site-footer">
+        Készült nektek tőlem · therikiki.hu
+      </footer>
     </div>
   );
 }
