@@ -108,6 +108,72 @@ body {
 }
 
 /* ---------- Game picker menu ---------- */
+.menu-hero {
+  text-align: center;
+  margin: 10px 0 4px;
+}
+.menu-hero-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px 14px;
+  margin: 0;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-size: clamp(2.6rem, 9vw, 4.4rem);
+  perspective: 600px;
+}
+.mh-word {
+  --rot: 0deg;
+  display: inline-block;
+  padding: 4px 16px 8px;
+  border: var(--bw) solid var(--ink);
+  border-radius: 14px;
+  transform: rotate(var(--rot));
+  animation: mhFloat 3.4s ease-in-out infinite;
+  will-change: transform;
+}
+.mh-word--1 {
+  --rot: -4deg;
+  background: var(--yellow);
+  color: var(--ink);
+  box-shadow: 5px 5px 0 var(--yellow-dk);
+  animation-delay: 0s;
+}
+.mh-word--2 {
+  --rot: 4deg;
+  background: #7c5cff;
+  color: #fff;
+  box-shadow: 5px 5px 0 #3d229f;
+  animation-delay: 0.55s;
+}
+@keyframes mhFloat {
+  0%,
+  100% {
+    transform: rotate(var(--rot)) translateY(0);
+  }
+  50% {
+    transform: rotate(var(--rot)) translateY(-10px);
+  }
+}
+.mh-word:hover {
+  animation-play-state: paused;
+}
+.menu-hero-sub {
+  margin: 16px 0 0;
+  color: var(--ink);
+  opacity: 0.7;
+  font-size: 0.98rem;
+  font-weight: 500;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mh-word {
+    animation: none;
+  }
+}
+
 .menu-page {
   max-width: 440px;
 }

@@ -5,11 +5,16 @@ export function Menu() {
   useDocumentTitle("Parti játékok – Rikiki & Hullámhossz | therikiki.hu");
   return (
     <div className="page menu-page">
-      <header>
-        <h1 className="brand">
-          Parti <span>játékok</span>
+      <header className="menu-hero">
+        <h1 className="menu-hero-title" aria-label="Parti játékok">
+          <span className="mh-word mh-word--1" aria-hidden="true">
+            Parti
+          </span>
+          <span className="mh-word mh-word--2" aria-hidden="true">
+            játékok
+          </span>
         </h1>
-        <p className="tagline">Válaszd ki, mivel játszotok ma este.</p>
+        <p className="menu-hero-sub">Válaszd ki, mivel játszotok ma este.</p>
       </header>
 
       <div className="menu-grid">
