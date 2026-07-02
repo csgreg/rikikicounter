@@ -1,0 +1,81 @@
+/* ------------------------------------------------------------------
+   Buttons — chunky slabs with hard shadows that physically react.
+   (.btn/.btn-ghost/.btn-light/.btn-danger are reused by the wave app.)
+   ------------------------------------------------------------------ */
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 13px 18px;
+  border: var(--bw) solid var(--ink);
+  border-radius: 14px;
+  background: var(--yellow);
+  color: var(--ink-fixed);
+  font-size: 0.95rem;
+  font-family: inherit;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 5px 5px 0 var(--yellow-dk);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn:hover {
+  transform: translate(-2px, -2px) rotate(-0.6deg);
+  box-shadow: 8px 8px 0 var(--yellow-dk);
+}
+
+.btn:active {
+  transform: translate(4px, 4px) scale(0.97);
+  box-shadow: 0 0 0 var(--yellow-dk);
+}
+
+/* secondary / nav buttons: paper with a soft-ink shadow */
+.btn-ghost {
+  background: var(--paper-fixed);
+  color: var(--ink-fixed);
+  border-color: var(--ink-fixed);
+  box-shadow: 5px 5px 0 rgba(29, 24, 50, 0.35);
+}
+
+.btn-ghost:hover {
+  box-shadow: 8px 8px 0 rgba(29, 24, 50, 0.4);
+}
+
+.btn-ghost:active {
+  box-shadow: 0 0 0 rgba(29, 24, 50, 0.4);
+}
+
+/* cream button used on top of coloured cards.
+   Compound selector so it beats the `.btn` primary rule. */
+.btn.btn-light {
+  background: var(--paper-fixed);
+  color: var(--ink-fixed);
+  border-color: var(--ink-fixed);
+  box-shadow: 5px 5px 0 rgba(29, 24, 50, 0.4);
+}
+
+.btn.btn-light:hover {
+  box-shadow: 8px 8px 0 rgba(29, 24, 50, 0.45);
+}
+
+.btn.btn-light:active {
+  box-shadow: 0 0 0 rgba(29, 24, 50, 0.45);
+}
+
+.btn-danger {
+  background: var(--coral);
+  color: var(--paper-fixed);
+  box-shadow: 5px 5px 0 var(--coral-dk);
+}
+
+.btn-danger:hover {
+  box-shadow: 8px 8px 0 var(--coral-dk);
+}
+
+.btn-danger:active {
+  box-shadow: 0 0 0 var(--coral-dk);
+}

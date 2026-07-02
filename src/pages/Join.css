@@ -1,0 +1,11 @@
+/* Join-room card: pink slab, diamond watermark, tilted right. */
+.join-card {
+  --suit: "♦";
+  transform: rotate(1.2deg);
+  animation-delay: 0.24s;
+}
+
+.join-card:focus-within {
+  transform: rotate(0deg);
+  transition: transform 0.2s var(--pop);
+}

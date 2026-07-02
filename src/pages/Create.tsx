@@ -4,6 +4,7 @@ import { getPid, saveSession } from "../api/session";
 import { syncState } from "../api/state";
 import { useGame } from "../context/GameContext";
 import type { GameMeta, Player } from "../types";
+import "./Create.css";
 
 const MAX_PLAYERS = 6;
 
@@ -51,7 +52,7 @@ export function Create() {
   }
 
   return (
-    <div className="card game-card game-card--yellow">
+    <div className="card game-card game-card--yellow suit-mark create-card">
       <h2>Új szoba létrehozása</h2>
       <div className="field">
         <input

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import "./Rules.css";
 
 const STEPS = [
   {
@@ -58,10 +59,11 @@ export function Rules() {
         <ol className="rules-steps">
           {STEPS.map((s, i) => (
             <li className="rule-step" key={i}>
+              <span className="step-num" aria-hidden="true">
+                {i + 1}
+              </span>
               <div className="step-body">
-                <strong>
-                  {i + 1}. {s.title}
-                </strong>
+                <strong>{s.title}</strong>
                 <p>{s.text}</p>
               </div>
             </li>

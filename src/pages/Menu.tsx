@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import "./Menu.css";
+
+const TICKER = ["Parti", "♠", "játékok", "♥", "therikiki.hu", "♣", "Jó szórakozást!", "♦"];
 
 export function Menu() {
   useDocumentTitle("Parti játékok – Rikiki & Hullámhossz | therikiki.hu");
@@ -19,6 +22,9 @@ export function Menu() {
 
       <div className="menu-grid">
         <Link to="/rikiki" className="menu-card menu-card--rikiki">
+          <span className="menu-ring" aria-hidden="true">
+            <span>♠</span>
+          </span>
           <div className="menu-deco menu-deco--suits">
             <span className="ms s-black">♠</span>
             <span className="ms s-red">♥</span>
@@ -35,6 +41,9 @@ export function Menu() {
         </Link>
 
         <Link to="/wave" className="menu-card menu-card--wave">
+          <span className="menu-ring" aria-hidden="true">
+            <span>🌊</span>
+          </span>
           <div className="menu-deco menu-deco--wave">
             <span className="menu-needle" />
           </div>
@@ -46,6 +55,14 @@ export function Menu() {
             Játék <span className="menu-arrow">→</span>
           </span>
         </Link>
+      </div>
+
+      <div className="ticker" aria-hidden="true">
+        <div className="ticker-track">
+          {[...TICKER, ...TICKER].map((t, i) => (
+            <span key={i}>{t}</span>
+          ))}
+        </div>
       </div>
 
       <footer className="site-footer">

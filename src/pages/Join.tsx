@@ -3,6 +3,7 @@ import { useHistory } from "react-router";
 import { getPid, saveSession } from "../api/session";
 import { parseFetchedState, syncState } from "../api/state";
 import { useGame } from "../context/GameContext";
+import "./Join.css";
 
 export function Join() {
   const { socket, setRoomId, setPlayers, setGame } = useGame();
@@ -60,7 +61,7 @@ export function Join() {
   }
 
   return (
-    <div className="card game-card game-card--yellow">
+    <div className="card game-card game-card--yellow suit-mark join-card">
       <h2>Csatlakozás szobához</h2>
       <div className="field">
         <input

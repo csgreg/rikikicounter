@@ -1,0 +1,11 @@
+/* Create-room card: lime slab, club watermark, tilted left. */
+.create-card {
+  --suit: "♣";
+  transform: rotate(-1.2deg);
+  animation-delay: 0.12s;
+}
+
+.create-card:focus-within {
+  transform: rotate(0deg);
+  transition: transform 0.2s var(--pop);
+}

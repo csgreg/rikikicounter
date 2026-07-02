@@ -1,0 +1,178 @@
+/* ------------------------------------------------------------------
+   Rules page (/rules)
+   ------------------------------------------------------------------ */
+
+/* bobbing suit chips under the title */
+.suits {
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+}
+
+.suit-chip {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  background: var(--panel);
+  border: var(--bw) solid var(--ink);
+  border-radius: 11px;
+  box-shadow: 4px 4px 0 var(--ink);
+  animation: suit-bob 2.8s ease-in-out infinite;
+  transition: transform 0.3s var(--pop);
+}
+
+.suit-chip:hover {
+  transform: rotate(360deg);
+}
+
+.suit-chip:nth-child(1) {
+  animation-delay: 0s;
+}
+.suit-chip:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.suit-chip:nth-child(3) {
+  animation-delay: 0.36s;
+}
+.suit-chip:nth-child(4) {
+  animation-delay: 0.54s;
+}
+.suit-chip:nth-child(5) {
+  animation-delay: 0.72s;
+}
+
+@keyframes suit-bob {
+  0%,
+  55%,
+  100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-9px) rotate(-6deg);
+  }
+}
+
+.suit-chip.s-red {
+  color: var(--coral-dk);
+}
+
+.suit-chip.s-none {
+  color: var(--muted);
+}
+
+/* ---------- Step list with rainbow number chips ---------- */
+.rules-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rule-step,
+.score-rule {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+}
+
+.score-rule {
+  margin-bottom: 12px;
+}
+
+.step-num {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1rem;
+  border: var(--bw) solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: rotate(-5deg);
+}
+
+.rule-step:nth-child(even) .step-num {
+  transform: rotate(5deg);
+}
+
+.rule-step:nth-child(odd) .step-num {
+  background: var(--yellow);
+}
+
+.rule-step:nth-child(even) .step-num {
+  background: var(--coral);
+  color: var(--paper-fixed);
+}
+
+.score-ico {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  background: var(--panel-2);
+  border: var(--bw) solid var(--ink);
+  border-radius: 11px;
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: rotate(-4deg);
+}
+
+.score-rule.good .score-ico {
+  background: var(--teal);
+}
+
+.score-rule.bad .score-ico {
+  background: var(--coral);
+  transform: rotate(4deg);
+}
+
+.step-body strong {
+  display: block;
+  font-size: 0.98rem;
+}
+
+.step-body p {
+  margin: 3px 0 0;
+  font-size: 0.88rem;
+  opacity: 0.78;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.rules-eg {
+  margin: 4px 0 0;
+  background: var(--panel-2);
+  border: 2.5px dashed var(--ink);
+  border-radius: 11px;
+  padding: 11px 13px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.eg-good {
+  color: var(--teal-dk);
+  font-weight: 700;
+}
+
+.eg-bad {
+  color: var(--coral-dk);
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .suit-chip {
+    animation: none;
+  }
+}

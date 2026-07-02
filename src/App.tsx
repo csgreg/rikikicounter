@@ -14,8 +14,13 @@ import { useDocumentTitle } from "./hooks/useDocumentTitle";
 function KickedScreen() {
   return (
     <div className="App">
-      <div className="page">
-        <h1 className="brand">Kirúgtak a szobából</h1>
+      <div className="page page-center">
+        <div className="big-emoji" aria-hidden="true">
+          🥾
+        </div>
+        <h1 className="brand">
+          Kirúgtak a <span>szobából</span>
+        </h1>
         <p className="hint">A host eltávolított a szobából.</p>
         <button className="btn" onClick={() => (window.location.href = "/")}>
           Vissza a főoldalra
@@ -30,8 +35,13 @@ function RecoverScreen() {
   const isHost = !!recover?.players.find((p) => p.pid === getPid())?.boss;
   return (
     <div className="App">
-      <div className="page">
-        <h1 className="brand">Megszakadt a szoba</h1>
+      <div className="page page-center">
+        <div className="big-emoji" aria-hidden="true">
+          🔌
+        </div>
+        <h1 className="brand">
+          Megszakadt a <span>szoba</span>
+        </h1>
         <p className="hint">
           Úgy tűnik, a szerver újraindult. {isHost
             ? "Hostként folytathatod a játékot az eddigi pontokkal — a többiek az új kóddal tudnak visszacsatlakozni."
@@ -49,6 +59,8 @@ function RecoverScreen() {
     </div>
   );
 }
+
+const HOME_TICKER = ["Rikiki", "♠", "Counter", "♥", "therikiki.hu", "♣", "Tippelj!", "♦"];
 
 function Home() {
   useDocumentTitle(
@@ -69,6 +81,13 @@ function Home() {
           Hozz létre szobát vagy csatlakozz, és a pontokat mi számoljuk.
         </p>
       </header>
+      <div className="ticker" aria-hidden="true">
+        <div className="ticker-track">
+          {[...HOME_TICKER, ...HOME_TICKER].map((t, i) => (
+            <span key={i}>{t}</span>
+          ))}
+        </div>
+      </div>
       <Create />
       <div className="divider">vagy</div>
       <Join />
@@ -101,8 +120,13 @@ function AppShell() {
       <>
         {!connected && <ConnectingOverlay />}
         <div className="App">
-          <div className="page">
-            <h1 className="brand">Rikiki</h1>
+          <div className="page page-center">
+            <div className="big-emoji" aria-hidden="true">
+              🃏
+            </div>
+            <h1 className="brand">
+              <span>Rikiki</span>
+            </h1>
             <p className="hint">Visszacsatlakozás a szobához…</p>
           </div>
         </div>

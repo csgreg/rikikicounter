@@ -1,0 +1,94 @@
+/* ------------------------------------------------------------------
+   Page hero — floating chip title (Home + wave lobby).
+   ------------------------------------------------------------------ */
+
+.game-hero {
+  text-align: center;
+  margin: 22px 0 2px;
+  animation: hero-pop 0.5s var(--pop) backwards;
+}
+
+.game-hero-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px 12px;
+  margin: 0;
+  line-height: 1;
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0;
+  font-size: clamp(1.9rem, 6.6vw, 2.9rem);
+  text-transform: uppercase;
+}
+
+.gh-chip {
+  display: inline-block;
+  padding: 6px 16px 10px;
+  border: var(--bw) solid var(--ink);
+  border-radius: 14px;
+  animation: gh-float 3.4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.gh-chip--a {
+  --rot: -2.5deg;
+}
+
+.gh-chip--b {
+  --rot: 2.5deg;
+  animation-delay: 0.55s;
+}
+
+.gh-chip:hover {
+  animation-play-state: paused;
+}
+
+@keyframes gh-float {
+  0%,
+  100% {
+    transform: rotate(var(--rot, 0deg)) translateY(0);
+  }
+  50% {
+    transform: rotate(var(--rot, 0deg)) translateY(-8px);
+  }
+}
+
+@keyframes hero-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.9);
+  }
+}
+
+.gh-chip--yellow {
+  background: var(--yellow);
+  color: var(--ink-fixed);
+  box-shadow: 5px 5px 0 var(--yellow-dk);
+}
+
+.gh-chip--yellow-dk {
+  background: #f2b60c;
+  color: var(--ink-fixed);
+  box-shadow: 5px 5px 0 #9c6f00;
+}
+
+.gh-chip--violet {
+  background: var(--violet);
+  color: #fff;
+  box-shadow: 5px 5px 0 var(--violet-dk);
+}
+
+.gh-chip--violet-dk {
+  background: #5f43e0;
+  color: #fff;
+  box-shadow: 5px 5px 0 #2c1a80;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-hero,
+  .gh-chip {
+    animation: none;
+  }
+}

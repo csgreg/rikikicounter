@@ -6,6 +6,7 @@ import { clearSession, clearSnapshot, getPid } from "../api/session";
 import { syncState } from "../api/state";
 import { useConfirm } from "../hooks/useConfirm";
 import { useGame } from "../context/GameContext";
+import "./Wait.css";
 
 export function Wait() {
   const { socket, roomId, players, game, me, isBoss } = useGame();
@@ -72,7 +73,12 @@ export function Wait() {
     <>
       <div className="page">
         <header>
-          <h1 className="brand">Várakozó</h1>
+          <div className="big-emoji wait-emoji" aria-hidden="true">
+            ⏳
+          </div>
+          <h1 className="brand">
+            <span>Várakozó</span>
+          </h1>
           <p className="tagline">Várakozás a többi játékosra…</p>
         </header>
 
@@ -99,9 +105,9 @@ export function Wait() {
                   {p.name}
                 </span>
                 <span className="row-tags">
-                  {p.boss ? <span className="tag">host</span> : null}
+                  {p.boss ? <span className="tag tag-host">host</span> : null}
                   {p.online === false ? (
-                    <span className="tag">offline</span>
+                    <span className="tag tag-offline">offline</span>
                   ) : null}
                   {isBoss && me && p.pid !== me.pid ? (
                     <button
@@ -119,8 +125,8 @@ export function Wait() {
         </div>
 
         {isBoss ? (
-          <button className="btn" onClick={handleBossStarts}>
-            Indítás
+          <button className="btn btn-mega" onClick={handleBossStarts}>
+            Indítás 🚀
           </button>
         ) : (
           <p className="hint">A host indítja el a játékot.</p>

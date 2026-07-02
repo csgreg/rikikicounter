@@ -1,0 +1,42 @@
+/* ------------------------------------------------------------------
+   Design tokens — single source of truth for the whole app.
+   NOTE: the /wave app re-themes itself by overriding these variables
+   (see src/wave/wave.css), so the variable NAMES are a public contract:
+   --bg --panel --panel-2 --ink --muted --yellow(-dk) --coral(-dk)
+   --teal(-dk) --blue(-dk) --dot --ink-fixed --bw --radius
+   ------------------------------------------------------------------ */
+:root {
+  /* surfaces */
+  --bg: #b8ecff; /* pool-water cyan */
+  --panel: #fffdf5; /* warm paper */
+  --panel-2: #fff1c9; /* butter tint */
+  --ink: #1d1832; /* deep violet-black (text + borders) */
+  --muted: #6d6890;
+
+  /* core accents — the wave app remaps these, keep the names */
+  --yellow: #ffd23f;
+  --yellow-dk: #d98e00;
+  --coral: #ff5d73;
+  --coral-dk: #c62b47;
+  --teal: #2ec4b6;
+  --teal-dk: #0e8d80;
+  --blue: #4da6ff;
+  --blue-dk: #1f66c4;
+
+  /* the wave app's brand colour (menu card, shared violet variants) */
+  --violet: #7c5cff;
+  --violet-dk: #4a2fc2;
+
+  /* text/graphics that always sit on a permanently-light accent */
+  --ink-fixed: #1d1832;
+  --paper-fixed: #fffdf5;
+  /* dotted page texture colour */
+  --dot: rgba(29, 24, 50, 0.09);
+
+  --radius: 16px;
+  --radius-sm: 11px;
+  --bw: 3px; /* border width */
+
+  --font-display: "Archivo Black", "Space Grotesk", -apple-system, sans-serif;
+  --pop: cubic-bezier(0.34, 1.56, 0.64, 1); /* springy overshoot */
+}

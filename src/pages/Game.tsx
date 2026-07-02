@@ -6,6 +6,7 @@ import { burstConfetti, emojiRain } from "../utils/confetti";
 import { useConfirm } from "../hooks/useConfirm";
 import { useGame } from "../context/GameContext";
 import type { Player } from "../types";
+import "./Game.css";
 
 const SUITS = ["♠︎", "♥", "♣", "♦", "Nincs adu!"];
 
@@ -195,7 +196,14 @@ export function Game() {
         )}
         <header className="game-header">
           <p className="game-line">
-            <span className="adu-suit">
+            <span
+              key={gameOver ? "over" : game.laps}
+              className={`adu-suit${
+                !gameOver && (game.laps % 5 === 1 || game.laps % 5 === 3)
+                  ? " adu-red"
+                  : ""
+              }${!gameOver && game.laps % 5 === 4 ? " adu-none" : ""}`}
+            >
               {gameOver ? "🏁" : SUITS[game.laps % 5]}
             </span>
             <span className="game-meta">
@@ -205,6 +213,21 @@ export function Game() {
             </span>
           </p>
         </header>
+
+        {!gameOver && (
+          <div
+            className="round-progress"
+            role="progressbar"
+            aria-valuemin={1}
+            aria-valuemax={totalRounds}
+            aria-valuenow={game.laps + 1}
+          >
+            <div
+              className="round-progress-fill"
+              style={{ width: `${((game.laps + 1) / totalRounds) * 100}%` }}
+            />
+          </div>
+        )}
 
         {/* Scoreboard */}
         <div className="scoreboard">
@@ -227,7 +250,7 @@ export function Game() {
                     className={`dot ${p.online === false ? "off" : "on"}`}
                   />
                   {p.name}
-                  {p.boss ? <span className="tag">host</span> : null}
+                  {p.boss ? <span className="tag tag-host">host</span> : null}
                   {!allTipped && p.tipLocked ? (
                     <span className="tag done">kész</span>
                   ) : null}
@@ -264,7 +287,7 @@ export function Game() {
 
         {/* Final standings */}
         {gameOver && (
-          <div className="card">
+          <div className="card game-card game-card--yellow suit-mark final-card">
             <h2>Vége! 🏆</h2>
             <div className="scoreboard">
               {standings.map((p, i) => {
@@ -275,7 +298,8 @@ export function Game() {
                     key={p.id}
                   >
                     <span className="name">
-                      {i + 1}. {p.name}
+                      <span className={`rank rank-${i + 1}`}>{i + 1}</span>
+                      {p.name}
                       {i === 0 ? " 🏆" : ""}
                       {isLast ? " 🥄" : ""}
                     </span>
@@ -285,7 +309,7 @@ export function Game() {
               })}
             </div>
             <button
-              className="btn"
+              className="btn btn-light"
               style={{ marginTop: "16px" }}
               onClick={goHome}
             >
@@ -296,8 +320,8 @@ export function Game() {
 
         {/* Phase 1: tipping — tips hidden until everyone locked in */}
         {!gameOver && !allTipped && (
-          <div className="card">
-            <h2>Tippelés</h2>
+          <div className="card game-card game-card--yellow phase-card">
+            <h2>Tippelés 🎯</h2>
             {me && !me.tipLocked ? (
               <>
                 <div className="field">
@@ -308,7 +332,7 @@ export function Game() {
                     onChange={(e) => setTip(Number(e.target.value))}
                   />
                 </div>
-                <button className="btn" onClick={confirmTip}>
+                <button className="btn btn-light" onClick={confirmTip}>
                   Tipp rögzítése
                 </button>
               </>
@@ -322,8 +346,8 @@ export function Game() {
 
         {/* Phase 2: results — tips revealed, enter how many you actually won */}
         {!gameOver && allTipped && !allHit && (
-          <div className="card">
-            <h2>Tippek</h2>
+          <div className="card game-card game-card--yellow phase-card">
+            <h2>Tippek 👀</h2>
             <div className="scoreboard" style={{ marginBottom: "16px" }}>
               {players.map((p) => (
                 <div className="score-row" key={p.id}>
@@ -343,7 +367,7 @@ export function Game() {
                     onChange={(e) => setHit(Number(e.target.value))}
                   />
                 </div>
-                <button className="btn" onClick={confirmHit}>
+                <button className="btn btn-light" onClick={confirmHit}>
                   Eredmény rögzítése
                 </button>
               </>
@@ -357,10 +381,10 @@ export function Game() {
 
         {/* Phase 3: round done */}
         {!gameOver && allHit && (
-          <div className="card">
-            <h2>Kör vége</h2>
+          <div className="card game-card game-card--yellow phase-card">
+            <h2>Kör vége 🔄</h2>
             {isBoss ? (
-              <button className="btn" onClick={nextRound}>
+              <button className="btn btn-light" onClick={nextRound}>
                 {game.laps + 1 >= totalRounds ? "Eredmények" : "Következő kör"}
               </button>
             ) : (

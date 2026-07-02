@@ -1,0 +1,54 @@
+/* ------------------------------------------------------------------
+   Waiting room (/wait)
+   ------------------------------------------------------------------ */
+
+/* flipping hourglass above the title */
+.wait-emoji {
+  animation: hour-flip 2.6s ease-in-out infinite;
+}
+
+@keyframes hour-flip {
+  0%,
+  50% {
+    transform: rotate(0deg);
+  }
+  68%,
+  100% {
+    transform: rotate(180deg);
+  }
+}
+
+/* the big START slab the host gets */
+.btn.btn-mega {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.05rem;
+  letter-spacing: 0.1em;
+  padding: 17px 18px;
+  animation: mega-pulse 1.6s ease-in-out infinite;
+}
+
+.btn.btn-mega:hover {
+  animation: none;
+}
+
+.btn.btn-mega:active {
+  animation: none;
+}
+
+@keyframes mega-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.025) rotate(-0.4deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wait-emoji,
+  .btn.btn-mega {
+    animation: none;
+  }
+}

@@ -1,0 +1,302 @@
+/* ------------------------------------------------------------------
+   Scoreboard rows, tags, presence dots — shared by rikiki + wave.
+   ------------------------------------------------------------------ */
+
+.scoreboard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--panel);
+  border: var(--bw) solid var(--ink);
+  border-radius: 12px;
+  padding: 10px 13px;
+  font-weight: 600;
+  box-shadow: 4px 4px 0 var(--ink);
+  animation: row-in 0.4s var(--pop) backwards;
+}
+
+/* stagger the first handful of rows */
+.score-row:nth-child(1) {
+  animation-delay: 0.03s;
+}
+.score-row:nth-child(2) {
+  animation-delay: 0.09s;
+}
+.score-row:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.score-row:nth-child(4) {
+  animation-delay: 0.21s;
+}
+.score-row:nth-child(5) {
+  animation-delay: 0.27s;
+}
+.score-row:nth-child(6) {
+  animation-delay: 0.33s;
+}
+
+@keyframes row-in {
+  from {
+    opacity: 0;
+    transform: translateX(-14px) rotate(-1deg);
+  }
+}
+
+.score-row .name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.score-row .points {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.1rem;
+}
+
+/* revealed tip value: little yellow chip */
+.value {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 0.9rem;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 2px 10px;
+  box-shadow: 2px 2px 0 var(--ink);
+  transform: rotate(2deg);
+}
+
+/* ---------- Chunky sticker tags ---------- */
+.tag {
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--panel-2);
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  transform: rotate(-3deg);
+  box-shadow: 2px 2px 0 rgba(29, 24, 50, 0.3);
+}
+
+.tag-host {
+  background: var(--yellow);
+  color: var(--ink-fixed);
+}
+
+.tag-host::before {
+  content: "👑 ";
+}
+
+.tag-offline {
+  background: var(--panel-2);
+  opacity: 0.85;
+}
+
+.tag.done {
+  background: var(--teal);
+  color: var(--ink-fixed);
+  animation: tag-pop 0.32s var(--pop) both;
+}
+
+@keyframes tag-pop {
+  0% {
+    transform: scale(0) rotate(-30deg);
+  }
+  100% {
+    transform: scale(1) rotate(-3deg);
+  }
+}
+
+/* ---------- Presence ---------- */
+.pname {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.row-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  flex: 0 0 auto;
+}
+
+.dot.on {
+  background: var(--teal);
+  animation: dot-ping 2.2s ease-out infinite;
+}
+
+@keyframes dot-ping {
+  0% {
+    box-shadow: 0 0 0 0 rgba(46, 196, 182, 0.55);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 8px rgba(46, 196, 182, 0);
+  }
+}
+
+.dot.off {
+  background: var(--muted);
+}
+
+.score-row.offline,
+.player-list li.offline {
+  opacity: 0.5;
+}
+
+.kick-btn {
+  border: 2px solid var(--ink);
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 3px 7px;
+  border-radius: 7px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform 0.1s ease;
+}
+
+.kick-btn:hover {
+  background: var(--coral);
+  color: var(--paper-fixed);
+  transform: rotate(-8deg) scale(1.1);
+}
+
+.kick-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+/* ---------- Winner row (final standings) ---------- */
+.score-row.winner {
+  background: linear-gradient(
+    110deg,
+    var(--yellow) 0%,
+    #ffe98f 42%,
+    var(--yellow) 55%
+  );
+  background-size: 220% 100%;
+  color: var(--ink-fixed);
+  box-shadow: 4px 4px 0 var(--yellow-dk);
+  animation: row-in 0.4s var(--pop) backwards,
+    winner-sheen 2.4s linear infinite;
+}
+
+.score-row.winner .points {
+  color: var(--ink-fixed);
+}
+
+@keyframes winner-sheen {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+/* ---------- Point-change feedback ---------- */
+.score-row.flash-gain {
+  animation: flash-gain 1.4s ease;
+}
+
+.score-row.flash-loss {
+  animation: flash-loss 1.4s ease;
+}
+
+@keyframes flash-gain {
+  0%,
+  100% {
+    background: var(--panel);
+    transform: none;
+  }
+  20% {
+    background: var(--teal);
+    transform: rotate(-1deg) scale(1.02);
+  }
+}
+
+@keyframes flash-loss {
+  0%,
+  100% {
+    background: var(--panel);
+    transform: none;
+  }
+  20% {
+    background: var(--coral);
+    transform: rotate(1deg) scale(0.99);
+  }
+}
+
+/* floating +/- delta over the points */
+.points {
+  position: relative;
+}
+
+.delta-float {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  pointer-events: none;
+  animation: delta-rise 1.6s ease forwards;
+}
+
+.delta-float.gain {
+  color: var(--teal-dk);
+}
+
+.delta-float.loss {
+  color: var(--coral-dk);
+}
+
+@keyframes delta-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.7);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.25);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-26px) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .score-row,
+  .score-row.winner,
+  .tag.done,
+  .dot.on,
+  .score-row.flash-gain,
+  .score-row.flash-loss,
+  .delta-float {
+    animation: none;
+  }
+}

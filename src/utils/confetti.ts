@@ -1,3 +1,5 @@
+import "./confetti.css";
+
 // Tiny dependency-free confetti burst. Spawns DOM pieces, lets CSS animate
 // them, then cleans up. Used when a player nails their tip exactly.
 export function burstConfetti(): void {

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
+import "./useConfirm.css";
 
 interface ConfirmOptions {
   title?: string;

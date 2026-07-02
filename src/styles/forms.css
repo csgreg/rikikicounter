@@ -1,0 +1,37 @@
+/* ------------------------------------------------------------------
+   Form controls.
+   ------------------------------------------------------------------ */
+
+.field {
+  margin-bottom: 12px;
+}
+
+.field:last-of-type {
+  margin-bottom: 14px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: var(--bw) solid var(--ink);
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 600;
+  outline: none;
+  caret-color: var(--coral);
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.input::placeholder {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.input:focus {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--yellow-dk);
+}

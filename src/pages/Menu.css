@@ -1,0 +1,404 @@
+/* ------------------------------------------------------------------
+   Game picker menu (/)
+   ------------------------------------------------------------------ */
+
+.menu-page {
+  max-width: 460px;
+}
+
+@media (min-width: 660px) {
+  .menu-page {
+    max-width: 820px;
+  }
+}
+
+.menu-hero {
+  text-align: center;
+  margin: 48px 0 4px;
+  animation: menu-hero-in 0.5s var(--pop) backwards;
+  animation-delay: 0.05s;
+}
+
+.menu-hero-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  line-height: 1;
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  font-size: clamp(2.3rem, 8.5vw, 4rem);
+  perspective: 600px;
+}
+
+.mh-word {
+  --rot: 0deg;
+  display: inline-block;
+  padding: 8px 18px 12px;
+  border: var(--bw) solid var(--ink);
+  border-radius: 16px;
+  transform: rotate(var(--rot));
+  animation: mh-float 3.4s ease-in-out infinite;
+  will-change: transform;
+}
+
+.mh-word--1 {
+  --rot: -4deg;
+  background: var(--yellow);
+  color: var(--ink-fixed);
+  box-shadow: 6px 6px 0 var(--yellow-dk);
+}
+
+.mh-word--2 {
+  --rot: 4deg;
+  background: var(--violet);
+  color: #fff;
+  box-shadow: 6px 6px 0 var(--violet-dk);
+  animation-delay: 0.55s;
+}
+
+.mh-word:hover {
+  animation-play-state: paused;
+}
+
+@keyframes mh-float {
+  0%,
+  100% {
+    transform: rotate(var(--rot)) translateY(0);
+  }
+  50% {
+    transform: rotate(var(--rot)) translateY(-10px);
+  }
+}
+
+.menu-hero-sub {
+  margin: 18px 0 0;
+  color: var(--ink);
+  opacity: 0.75;
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+/* ---------- Cards grid ---------- */
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+  margin-top: 6px;
+}
+
+@media (min-width: 660px) {
+  .menu-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+    align-items: stretch;
+  }
+}
+
+.menu-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  text-align: left;
+  text-decoration: none;
+  min-height: 236px;
+  padding: 24px 20px 20px;
+  border: var(--bw) solid var(--ink);
+  border-radius: var(--radius);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+/* dotted texture overlay */
+.menu-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    rgba(29, 24, 50, 0.1) 1.5px,
+    transparent 1.5px
+  );
+  background-size: 16px 16px;
+  pointer-events: none;
+}
+
+.menu-card--rikiki {
+  background: var(--yellow);
+  color: var(--ink-fixed);
+  box-shadow: 8px 8px 0 var(--yellow-dk);
+  transform: rotate(-1.4deg);
+  animation: pop-rikiki 0.55s var(--pop) backwards;
+  animation-delay: 0.18s;
+}
+
+.menu-card--wave {
+  background: var(--violet);
+  color: #fff;
+  box-shadow: 8px 8px 0 var(--violet-dk);
+  transform: rotate(1.4deg);
+  animation: pop-wave 0.55s var(--pop) backwards;
+  animation-delay: 0.3s;
+}
+
+.menu-card--wave::after {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.14) 1.5px,
+    transparent 1.5px
+  );
+}
+
+.menu-card:hover {
+  transform: rotate(0deg) translate(-3px, -5px);
+}
+
+.menu-card--rikiki:hover {
+  box-shadow: 12px 14px 0 var(--yellow-dk);
+}
+
+.menu-card--wave:hover {
+  box-shadow: 12px 14px 0 var(--violet-dk);
+}
+
+.menu-card:active {
+  transform: rotate(0deg) translate(3px, 3px);
+}
+
+.menu-card--rikiki:active {
+  box-shadow: 3px 3px 0 var(--yellow-dk);
+}
+
+.menu-card--wave:active {
+  box-shadow: 3px 3px 0 var(--violet-dk);
+}
+
+/* spinning dashed badge in the corner */
+.menu-ring {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  background: var(--paper-fixed);
+  color: var(--ink-fixed);
+  border: 3px dashed var(--ink);
+  border-radius: 50%;
+  box-shadow: 3px 3px 0 rgba(29, 24, 50, 0.35);
+  animation: ring-spin 14s linear infinite;
+}
+
+.menu-ring span {
+  display: block;
+  animation: ring-spin-reverse 14s linear infinite;
+}
+
+@keyframes ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ring-spin-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+/* ---------- Card decorations ---------- */
+.menu-deco {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2px;
+}
+
+.menu-deco--suits {
+  display: flex;
+  gap: 7px;
+  line-height: 1;
+}
+
+.menu-deco--suits .ms {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 46px;
+  font-size: 1.35rem;
+  background: var(--paper-fixed);
+  border: var(--bw) solid var(--ink-fixed);
+  border-radius: 7px;
+  box-shadow: 2px 2px 0 rgba(29, 24, 50, 0.35);
+  transform-origin: bottom center;
+  transition: transform 0.2s var(--pop);
+}
+
+.menu-deco--suits .s-black {
+  color: var(--ink-fixed);
+}
+
+.menu-deco--suits .s-red {
+  color: #d62f22;
+}
+
+/* suits fan out when the Rikiki card is hovered */
+.menu-card--rikiki:hover .ms:nth-child(1) {
+  transform: rotate(-18deg) translateY(-4px);
+}
+
+.menu-card--rikiki:hover .ms:nth-child(2) {
+  transform: rotate(-6deg) translateY(-1px);
+}
+
+.menu-card--rikiki:hover .ms:nth-child(3) {
+  transform: rotate(6deg) translateY(-1px);
+}
+
+.menu-card--rikiki:hover .ms:nth-child(4) {
+  transform: rotate(18deg) translateY(-4px);
+}
+
+.menu-deco--wave {
+  height: 28px;
+  margin-right: 64px; /* keep clear of the corner ring */
+  border: var(--bw) solid var(--ink);
+  border-radius: 8px;
+  background: linear-gradient(90deg, #5b8def, #ffd23f 50%, #ff6f61);
+  box-shadow: 3px 3px 0 rgba(20, 12, 60, 0.55);
+}
+
+.menu-needle {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  left: 64%;
+  width: 4px;
+  background: #221a30;
+  border-radius: 2px;
+  animation: needle-sweep 4.5s ease-in-out infinite;
+}
+
+.menu-card--wave:hover .menu-needle {
+  animation-duration: 1.5s;
+}
+
+@keyframes needle-sweep {
+  0% {
+    left: 10%;
+  }
+  50% {
+    left: 88%;
+  }
+  100% {
+    left: 10%;
+  }
+}
+
+/* ---------- Card text ---------- */
+.menu-title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  line-height: 1.05;
+}
+
+.menu-desc {
+  position: relative;
+  z-index: 1;
+  font-size: 0.92rem;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.menu-cta {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  align-self: flex-start;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 6px 14px;
+  background: var(--paper-fixed);
+  color: var(--ink-fixed);
+  border: var(--bw) solid var(--ink);
+  border-radius: 9px;
+  box-shadow: 3px 3px 0 rgba(29, 24, 50, 0.35);
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+.menu-card:hover .menu-cta {
+  transform: translate(-1px, -1px) rotate(-1deg);
+  box-shadow: 5px 5px 0 rgba(29, 24, 50, 0.4);
+}
+
+.menu-arrow {
+  display: inline-block;
+  transition: transform 0.16s ease;
+}
+
+.menu-card:hover .menu-arrow {
+  transform: translateX(6px);
+}
+
+/* ---------- Entrances ---------- */
+@keyframes menu-hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.9);
+  }
+}
+
+@keyframes pop-rikiki {
+  from {
+    opacity: 0;
+    transform: rotate(-1.4deg) translateY(24px) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-1.4deg);
+  }
+}
+
+@keyframes pop-wave {
+  from {
+    opacity: 0;
+    transform: rotate(1.4deg) translateY(24px) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(1.4deg);
+  }
+}
+
+.menu-page .ticker {
+  animation: menu-hero-in 0.5s var(--pop) backwards;
+  animation-delay: 0.42s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-hero,
+  .mh-word,
+  .menu-card--rikiki,
+  .menu-card--wave,
+  .menu-needle,
+  .menu-ring,
+  .menu-ring span,
+  .menu-page .ticker {
+    animation: none;
+  }
+}

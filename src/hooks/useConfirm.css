@@ -1,0 +1,78 @@
+/* ------------------------------------------------------------------
+   Promise-based confirm dialog (useConfirm hook).
+   ------------------------------------------------------------------ */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(29, 24, 50, 0.5);
+  animation: backdrop-in 0.16s ease both;
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.modal {
+  width: 100%;
+  max-width: 350px;
+  background: var(--panel);
+  border: var(--bw) solid var(--ink);
+  border-radius: var(--radius);
+  padding: 24px 22px;
+  text-align: center;
+  box-shadow: 8px 8px 0 var(--ink);
+  transform: rotate(-1deg);
+  animation: modal-in 0.28s var(--pop) both;
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) rotate(2deg) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-1deg);
+  }
+}
+
+.modal-title {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+}
+
+.modal-msg {
+  margin: 0 0 18px;
+  color: var(--ink);
+  opacity: 0.8;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-actions .btn {
+  flex: 1;
+  padding: 12px 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop,
+  .modal {
+    animation: none;
+  }
+}

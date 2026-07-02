@@ -1,0 +1,47 @@
+/* ------------------------------------------------------------------
+   Confetti + emoji rain (spawned onto <body> from confetti.ts).
+   ------------------------------------------------------------------ */
+
+.confetti-piece {
+  position: fixed;
+  top: -16px;
+  width: 10px;
+  height: 14px;
+  z-index: 2000;
+  pointer-events: none;
+  border: 2px solid var(--ink);
+  animation-name: confetti-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+/* funny emoji rain (e.g. when you lose points) */
+.confetti-emoji {
+  position: fixed;
+  top: -28px;
+  z-index: 2000;
+  pointer-events: none;
+  line-height: 1;
+  animation-name: confetti-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) translateX(0) rotate(0);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translateY(105svh) translateX(var(--drift)) rotate(var(--spin));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti-piece,
+  .confetti-emoji {
+    animation: none;
+    display: none;
+  }
+}

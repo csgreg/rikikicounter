@@ -1,0 +1,150 @@
+/* ------------------------------------------------------------------
+   Cards. `.card` is the paper panel; `.game-card--*` are the loud
+   colour-blocked variants (yellow + violet are also used by /wave).
+   ------------------------------------------------------------------ */
+
+.card {
+  background: var(--panel);
+  border: var(--bw) solid var(--ink);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: left;
+  box-shadow: 7px 7px 0 var(--ink);
+  animation: card-in 0.45s var(--pop) both;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.94) rotate(0.6deg);
+  }
+}
+
+.card h2 {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* candy-stripe underline — the signature card detail */
+.card h2::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 7px;
+  margin-top: 7px;
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--coral) 0 7px,
+    var(--yellow) 7px 14px
+  );
+}
+
+/* ---------- Coloured variants ---------- */
+.game-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* dotted texture overlay */
+.game-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    rgba(29, 24, 50, 0.1) 1.5px,
+    transparent 1.5px
+  );
+  background-size: 16px 16px;
+}
+
+.game-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* giant suit watermark peeking out of the corner.
+   Pages set --suit ("♠" "♥" "♣" "♦") on their card. */
+.suit-mark::before {
+  content: var(--suit, "♠");
+  position: absolute;
+  right: -16px;
+  bottom: -34px;
+  z-index: 0;
+  font-size: 7.5rem;
+  line-height: 1;
+  opacity: 0.16;
+  transform: rotate(-14deg);
+  pointer-events: none;
+}
+
+.game-card--yellow {
+  background: var(--yellow);
+  color: var(--ink-fixed);
+  box-shadow: 7px 7px 0 var(--yellow-dk);
+}
+
+.game-card--violet {
+  background: var(--violet);
+  color: #fff;
+  box-shadow: 7px 7px 0 var(--violet-dk);
+}
+
+.game-card--violet::after {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.14) 1.5px,
+    transparent 1.5px
+  );
+}
+
+/* heading colour per card background */
+.game-card h2 {
+  color: var(--ink-fixed);
+}
+
+.game-card--violet h2 {
+  color: #fff;
+}
+
+.game-card--violet .label {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.game-card--violet .hint {
+  color: #fff;
+}
+
+/* inputs on a coloured card: always paper with an ink border */
+.game-card .input {
+  background: var(--paper-fixed);
+  color: var(--ink-fixed);
+  border-color: var(--ink-fixed);
+  box-shadow: 4px 4px 0 rgba(29, 24, 50, 0.42);
+}
+
+.game-card .input::placeholder {
+  color: #8b86a5;
+}
+
+.game-card .input:focus {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 rgba(29, 24, 50, 0.55);
+}
+
+@media (max-width: 420px) {
+  .card {
+    padding: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    animation: none;
+  }
+}

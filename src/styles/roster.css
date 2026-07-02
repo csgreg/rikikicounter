@@ -1,0 +1,109 @@
+/* ------------------------------------------------------------------
+   Waiting-room roster: room-code ticket + player list.
+   ------------------------------------------------------------------ */
+
+.room-code {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--ink-fixed);
+  background: var(--yellow);
+  border: var(--bw) solid var(--ink);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  box-shadow: 5px 5px 0 var(--yellow-dk);
+  transform: rotate(-1deg);
+  /* perforated "ticket" inner edge */
+  outline: 2px dashed rgba(29, 24, 50, 0.65);
+  outline-offset: -8px;
+}
+
+.room-code .code {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.45rem;
+  letter-spacing: 0.14em;
+}
+
+.copy-btn {
+  background: var(--paper-fixed);
+  border: var(--bw) solid var(--ink);
+  border-radius: 9px;
+  color: var(--ink-fixed);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 6px 10px;
+  box-shadow: 3px 3px 0 rgba(29, 24, 50, 0.45);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.copy-btn:hover {
+  transform: translate(-1px, -1px) rotate(2deg);
+  box-shadow: 4px 4px 0 rgba(29, 24, 50, 0.5);
+}
+
+.copy-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 rgba(29, 24, 50, 0.5);
+}
+
+.player-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.player-list li {
+  background: var(--panel-2);
+  border: var(--bw) solid var(--ink);
+  border-radius: 11px;
+  padding: 10px 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  box-shadow: 3px 3px 0 rgba(29, 24, 50, 0.55);
+  animation: player-in 0.4s var(--pop) backwards;
+}
+
+.player-list li:nth-child(1) {
+  animation-delay: 0.03s;
+}
+.player-list li:nth-child(2) {
+  animation-delay: 0.09s;
+}
+.player-list li:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.player-list li:nth-child(4) {
+  animation-delay: 0.21s;
+}
+.player-list li:nth-child(5) {
+  animation-delay: 0.27s;
+}
+.player-list li:nth-child(6) {
+  animation-delay: 0.33s;
+}
+
+@keyframes player-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) rotate(1.5deg) scale(0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .player-list li {
+    animation: none;
+  }
+}
