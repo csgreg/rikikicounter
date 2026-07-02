@@ -73,9 +73,6 @@ export function Wait() {
     <>
       <div className="page">
         <header>
-          <div className="big-emoji wait-emoji" aria-hidden="true">
-            ⏳
-          </div>
           <h1 className="brand">
             <span>Várakozó</span>
           </h1>
@@ -126,7 +123,7 @@ export function Wait() {
 
         {isBoss ? (
           <button className="btn btn-mega" onClick={handleBossStarts}>
-            Indítás 🚀
+            Indítás
           </button>
         ) : (
           <p className="hint">A host indítja el a játékot.</p>

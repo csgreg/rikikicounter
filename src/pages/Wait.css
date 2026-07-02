@@ -2,22 +2,6 @@
    Waiting room (/wait)
    ------------------------------------------------------------------ */
 
-/* flipping hourglass above the title */
-.wait-emoji {
-  animation: hour-flip 2.6s ease-in-out infinite;
-}
-
-@keyframes hour-flip {
-  0%,
-  50% {
-    transform: rotate(0deg);
-  }
-  68%,
-  100% {
-    transform: rotate(180deg);
-  }
-}
-
 /* the big START slab the host gets */
 .btn.btn-mega {
   font-family: var(--font-display);
@@ -47,7 +31,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wait-emoji,
   .btn.btn-mega {
     animation: none;
   }

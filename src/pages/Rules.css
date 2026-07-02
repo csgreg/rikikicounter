@@ -114,28 +114,12 @@
   color: var(--paper-fixed);
 }
 
-.score-ico {
-  flex: 0 0 auto;
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.3rem;
-  background: var(--panel-2);
-  border: var(--bw) solid var(--ink);
-  border-radius: 11px;
-  box-shadow: 3px 3px 0 var(--ink);
-  transform: rotate(-4deg);
+.score-rule.good strong {
+  color: var(--teal-dk);
 }
 
-.score-rule.good .score-ico {
-  background: var(--teal);
-}
-
-.score-rule.bad .score-ico {
-  background: var(--coral);
-  transform: rotate(4deg);
+.score-rule.bad strong {
+  color: var(--coral-dk);
 }
 
 .step-body strong {

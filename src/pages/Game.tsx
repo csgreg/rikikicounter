@@ -382,7 +382,7 @@ export function Game() {
         {/* Phase 3: round done */}
         {!gameOver && allHit && (
           <div className="card game-card game-card--yellow phase-card">
-            <h2>Kör vége 🔄</h2>
+            <h2>Kör vége</h2>
             {isBoss ? (
               <button className="btn btn-light" onClick={nextRound}>
                 {game.laps + 1 >= totalRounds ? "Eredmények" : "Következő kör"}

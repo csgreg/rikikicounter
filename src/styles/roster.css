@@ -26,9 +26,15 @@
   font-weight: 400;
   font-size: 1.45rem;
   letter-spacing: 0.14em;
+  /* long room ids (uuids) get cut with an ellipsis instead of overflowing */
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .copy-btn {
+  flex: 0 0 auto;
   background: var(--paper-fixed);
   border: var(--bw) solid var(--ink);
   border-radius: 9px;

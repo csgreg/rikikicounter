@@ -74,14 +74,12 @@ export function Rules() {
       <div className="card">
         <h2>Pontozás</h2>
         <div className="score-rule good">
-          <span className="score-ico">✅</span>
           <div className="step-body">
             <strong>Eltaláltad a tipped</strong>
             <p>+10 pont, és még +2 pont minden megnyert ütésért.</p>
           </div>
         </div>
         <div className="score-rule bad">
-          <span className="score-ico">❌</span>
           <div className="step-body">
             <strong>Nem találtad el</strong>
             <p>−4 pont minden ütésnyi eltérésért (tipp ↔ valóság).</p>
@@ -94,7 +92,7 @@ export function Rules() {
       </div>
 
       <Link to="/rikiki" className="btn">
-        Értem, jöhet a játék! 🚀
+        Értem, jöhet a játék!
       </Link>
     </div>
   );

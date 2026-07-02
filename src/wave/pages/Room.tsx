@@ -189,7 +189,9 @@ export function WaveRoom() {
       <>
         <div className="page">
           <header>
-            <h1 className="brand">Várószoba</h1>
+            <h1 className="brand">
+              <span>Várakozó</span>
+            </h1>
             <p className="tagline">Várakozás a többi játékosra…</p>
           </header>
           <div className="card">

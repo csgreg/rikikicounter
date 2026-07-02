@@ -96,10 +96,6 @@
   color: var(--ink-fixed);
 }
 
-.tag-host::before {
-  content: "👑 ";
-}
-
 .tag-offline {
   background: var(--panel-2);
   opacity: 0.85;
