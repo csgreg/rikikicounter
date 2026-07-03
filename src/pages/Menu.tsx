@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import "./Menu.css";
 
-const TICKER = ["Parti", "♠", "játékok", "♥", "therikiki.hu", "♣", "Jó szórakozást!", "♦"];
+const TICKER = ["Rikiki", "♠", "Wavelength", "♥", "játékok", "♣", "Jó szórakozást!", "♦"];
 
 export function Menu() {
   useDocumentTitle("Parti játékok – Rikiki & Hullámhossz | therikiki.hu");
@@ -41,9 +41,6 @@ export function Menu() {
         </Link>
 
         <Link to="/wave" className="menu-card menu-card--wave">
-          <span className="menu-ring" aria-hidden="true">
-            <span>🌊</span>
-          </span>
           <div className="menu-deco menu-deco--wave">
             <span className="menu-needle" />
           </div>

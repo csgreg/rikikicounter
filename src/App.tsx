@@ -60,7 +60,7 @@ function RecoverScreen() {
   );
 }
 
-const HOME_TICKER = ["Rikiki", "♠", "Counter", "♥", "therikiki.hu", "♣", "Tippelj!", "♦"];
+const HOME_TICKER = ["Tippelj!", "♠", "Játsz!", "♥", "Nyerj!", "♣", "Hajrá!", "♦"];
 
 function Home() {
   useDocumentTitle(
