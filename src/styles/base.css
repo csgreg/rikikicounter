@@ -161,10 +161,13 @@ body {
   flex: 1;
   height: 5px;
   border-radius: 3px;
+  /* classic one-position stops: cssnano mangles two-position stops in prod */
   background: repeating-linear-gradient(
     90deg,
-    var(--ink) 0 12px,
-    transparent 12px 22px
+    var(--ink),
+    var(--ink) 12px,
+    transparent 12px,
+    transparent 22px
   );
 }
 

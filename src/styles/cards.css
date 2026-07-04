@@ -38,10 +38,14 @@
   margin-top: 7px;
   border: 2px solid var(--ink);
   border-radius: 4px;
+  /* classic one-position stops: cssnano mangles the `color 0 7px` two-position
+     syntax in prod (drops the 0), collapsing the stripes to a solid color */
   background: repeating-linear-gradient(
     -45deg,
-    var(--coral) 0 7px,
-    var(--yellow) 7px 14px
+    var(--coral),
+    var(--coral) 7px,
+    var(--yellow) 7px,
+    var(--yellow) 14px
   );
 }
 

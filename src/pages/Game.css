@@ -104,10 +104,13 @@
   min-width: 14px;
   border-right: var(--bw) solid var(--ink);
   border-radius: 0 999px 999px 0;
+  /* classic one-position stops: cssnano mangles two-position stops in prod */
   background: repeating-linear-gradient(
     -55deg,
-    var(--coral) 0 12px,
-    var(--yellow) 12px 24px
+    var(--coral),
+    var(--coral) 12px,
+    var(--yellow) 12px,
+    var(--yellow) 24px
   );
   background-size: 200% 100%;
   animation: barber 1.2s linear infinite;
