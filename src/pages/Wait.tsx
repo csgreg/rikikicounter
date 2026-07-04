@@ -6,6 +6,7 @@ import { clearSession, clearSnapshot, getPid } from "../api/session";
 import { syncState } from "../api/state";
 import { useConfirm } from "../hooks/useConfirm";
 import { useEditPlayer } from "../hooks/useEditPlayer";
+import { useHostAlert } from "../hooks/useHostAlert";
 import { useGame } from "../context/GameContext";
 import type { Player } from "../types";
 import "./Wait.css";
@@ -16,6 +17,12 @@ export function Wait() {
   const [isCopied, setIsCopied] = useState(false);
   const { confirm, modal } = useConfirm();
   const { editPlayer, modal: editModal } = useEditPlayer();
+  const { secretTapProps, alertUi } = useHostAlert({
+    socket,
+    roomId,
+    isHost: isBoss,
+    senderName: me?.name || "Host",
+  });
 
   const onCopyText = () => {
     setIsCopied(true);
@@ -91,7 +98,7 @@ export function Wait() {
     <>
       <div className="page">
         <header>
-          <h1 className="brand">
+          <h1 className="brand" {...secretTapProps}>
             <span>Várakozó</span>
           </h1>
           <p className="tagline">Várakozás a többi játékosra…</p>
@@ -162,6 +169,7 @@ export function Wait() {
       </div>
       {modal}
       {editModal}
+      {alertUi}
     </>
   );
 }

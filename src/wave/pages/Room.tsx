@@ -4,6 +4,8 @@ import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router";
 import { useConfirm } from "../../hooks/useConfirm";
 import { useEditPlayer } from "../../hooks/useEditPlayer";
+import { useHostAlert } from "../../hooks/useHostAlert";
+import { socket } from "../../api/socket";
 import { burstConfetti } from "../../utils/confetti";
 import { useWave } from "../WaveContext";
 import type { WPlayer } from "../types";
@@ -119,6 +121,12 @@ export function WaveRoom() {
   const [isCopied, setIsCopied] = useState(false);
   const { confirm, modal } = useConfirm();
   const { editPlayer, modal: editModal } = useEditPlayer();
+  const { secretTapProps, alertUi } = useHostAlert({
+    socket,
+    roomId,
+    isHost,
+    senderName: me?.name || "Host",
+  });
 
   const gameOver = !!game.finished;
 
@@ -200,7 +208,7 @@ export function WaveRoom() {
       <>
         <div className="page">
           <header>
-            <h1 className="brand">
+            <h1 className="brand" {...secretTapProps}>
               <span>Várakozó</span>
             </h1>
             <p className="tagline">Várakozás a többi játékosra…</p>
@@ -273,6 +281,7 @@ export function WaveRoom() {
         </div>
         {modal}
         {editModal}
+        {alertUi}
       </>
     );
   }
@@ -283,7 +292,9 @@ export function WaveRoom() {
       <>
         <div className="page">
           <header>
-            <h1 className="brand">Vége! 🏆</h1>
+            <h1 className="brand" {...secretTapProps}>
+              Vége! 🏆
+            </h1>
           </header>
           <div className="card">
             <div className="scoreboard">
@@ -323,6 +334,7 @@ export function WaveRoom() {
         </div>
         {modal}
         {editModal}
+        {alertUi}
       </>
     );
   }
@@ -330,7 +342,7 @@ export function WaveRoom() {
   return (
     <>
     <div className="page">
-      <header className="game-header">
+      <header className="game-header" {...secretTapProps}>
         <p className="game-line">
           <span className="game-meta">
             {game.round}. kör · kulcsszót ad: <b>{clueGiver?.name}</b>
@@ -495,6 +507,7 @@ export function WaveRoom() {
     </div>
     {modal}
     {editModal}
+    {alertUi}
     </>
   );
 }

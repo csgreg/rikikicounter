@@ -5,6 +5,7 @@ import { syncState } from "../api/state";
 import { burstConfetti, emojiRain } from "../utils/confetti";
 import { useConfirm } from "../hooks/useConfirm";
 import { useEditPlayer } from "../hooks/useEditPlayer";
+import { useHostAlert } from "../hooks/useHostAlert";
 import { useGame } from "../context/GameContext";
 import type { Player } from "../types";
 import "./Game.css";
@@ -47,6 +48,12 @@ export function Game() {
   const [shake, setShake] = useState(false);
   const { confirm, modal } = useConfirm();
   const { editPlayer, modal: editModal } = useEditPlayer();
+  const { secretTapProps, alertUi } = useHostAlert({
+    socket,
+    roomId,
+    isHost: isBoss,
+    senderName: me?.name || "Host",
+  });
 
   function showToast(text: string) {
     setToast({ text, id: Date.now() });
@@ -208,7 +215,7 @@ export function Game() {
             ✕
           </button>
         )}
-        <header className="game-header">
+        <header className="game-header" {...secretTapProps}>
           <p className="game-line">
             <span
               key={gameOver ? "over" : game.laps}
@@ -424,6 +431,7 @@ export function Game() {
       </div>
       {modal}
       {editModal}
+      {alertUi}
     </>
   );
 }

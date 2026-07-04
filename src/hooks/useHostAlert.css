@@ -1,0 +1,85 @@
+/* ------------------------------------------------------------------
+   Host broadcast alert (useHostAlert hook).
+   Composer builds on the .modal styles from useConfirm.css; the incoming
+   alert is its own louder, full-screen overlay.
+   ------------------------------------------------------------------ */
+
+.announce-composer {
+  text-align: left;
+}
+
+.announce-composer .modal-title {
+  text-align: center;
+}
+
+.announce-input {
+  resize: vertical;
+  min-height: 84px;
+  font-family: inherit;
+}
+
+/* ---------- incoming alert ---------- */
+.announce-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(29, 24, 50, 0.62);
+  animation: backdrop-in 0.16s ease both;
+}
+
+.announce-alert {
+  width: 100%;
+  max-width: 380px;
+  background: var(--yellow);
+  color: var(--ink-fixed);
+  border: var(--bw) solid var(--ink);
+  border-radius: var(--radius);
+  padding: 26px 22px 22px;
+  text-align: center;
+  box-shadow: 9px 9px 0 var(--ink);
+  transform: rotate(-1.5deg);
+  animation: announce-in 0.45s var(--pop) both;
+}
+
+@keyframes announce-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-40px) rotate(4deg) scale(0.7);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(6px) rotate(-2.5deg) scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-1.5deg);
+  }
+}
+
+.announce-from {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.announce-text {
+  margin: 0 0 20px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: break-word;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .announce-backdrop,
+  .announce-alert {
+    animation: none;
+  }
+}
