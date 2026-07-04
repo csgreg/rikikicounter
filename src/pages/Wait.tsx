@@ -1,11 +1,13 @@
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { Redirect } from "react-router-dom";
 import { clearSession, clearSnapshot, getPid } from "../api/session";
 import { syncState } from "../api/state";
 import { useConfirm } from "../hooks/useConfirm";
+import { useEditPlayer } from "../hooks/useEditPlayer";
 import { useGame } from "../context/GameContext";
+import type { Player } from "../types";
 import "./Wait.css";
 
 export function Wait() {
@@ -13,19 +15,24 @@ export function Wait() {
   const history = useHistory();
   const [isCopied, setIsCopied] = useState(false);
   const { confirm, modal } = useConfirm();
+  const { editPlayer, modal: editModal } = useEditPlayer();
 
   const onCopyText = () => {
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 1000);
   };
 
+  // Navigate to the game once the host starts it (in an effect — navigating
+  // during render triggers React's "cannot update during render" warning).
+  useEffect(() => {
+    if (game.gameStarted && !game.game) {
+      game.game = true;
+      history.push("/game");
+    }
+  }, [game, history]);
+
   if (!roomId) {
     return <Redirect to="/" />;
-  }
-
-  if (game.gameStarted && !game.game) {
-    game.game = true;
-    history.push("/game");
   }
 
   async function leave() {
@@ -62,6 +69,17 @@ export function Wait() {
       roomId,
       game,
       players.filter((p) => p.pid !== targetPid)
+    );
+  }
+
+  async function edit(target: Player) {
+    const res = await editPlayer({ name: target.name });
+    if (!res) return;
+    syncState(
+      socket,
+      roomId,
+      game,
+      players.map((p) => (p.pid === target.pid ? { ...p, name: res.name } : p))
     );
   }
 
@@ -106,6 +124,15 @@ export function Wait() {
                   {p.online === false ? (
                     <span className="tag tag-offline">offline</span>
                   ) : null}
+                  {isBoss ? (
+                    <button
+                      className="edit-btn"
+                      title="Szerkesztés"
+                      onClick={() => edit(p)}
+                    >
+                      ✎
+                    </button>
+                  ) : null}
                   {isBoss && me && p.pid !== me.pid ? (
                     <button
                       className="kick-btn"
@@ -134,6 +161,7 @@ export function Wait() {
         </button>
       </div>
       {modal}
+      {editModal}
     </>
   );
 }

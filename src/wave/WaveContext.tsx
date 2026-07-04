@@ -74,6 +74,7 @@ interface WaveContextValue {
   hostFinish: () => void;
   hostRestart: () => void;
   kick: (pid: string) => void;
+  hostEditPlayer: (pid: string, name: string, score?: number) => void;
   leave: () => void;
 }
 
@@ -198,6 +199,15 @@ export function WaveProvider({ children }: { children: ReactNode }) {
     applyAndSync(gameRef.current, remaining);
   }
 
+  function hostEditPlayer(pid: string, name: string, score?: number) {
+    const ps = rosterRef.current.map((p) =>
+      p.pid === pid
+        ? { ...p, name, score: score === undefined ? p.score : score }
+        : p
+    );
+    applyAndSync(gameRef.current, ps);
+  }
+
   function hostApplyClue(clue: string) {
     const g = gameRef.current;
     if (g.phase !== "clue") return;
@@ -318,6 +328,87 @@ export function WaveProvider({ children }: { children: ReactNode }) {
     };
   }, [roomId]);
 
+  // Join the room + pull fresh state. Runs on first load (session restore),
+  // after EVERY reconnect (the server forgets socket.io room membership on
+  // disconnect, so broadcasts stop arriving and our state goes stale — typical
+  // after the phone was locked mid-game), and when the tab wakes up. Attached
+  // to every "connect" rather than `once` so a response lost to a connection
+  // flap self-heals on the next connect instead of hanging the app.
+  useEffect(() => {
+    function resync() {
+      const id =
+        roomIdRef.current || localStorage.getItem(WAVE_SESSION_KEY) || "";
+      if (!id) {
+        setRestoring(false);
+        return;
+      }
+      const pid = getPid();
+      socket.emit("join-room", id, (res) => {
+        if (!res || res.status !== "ok") {
+          // Room is gone server-side (e.g. the backend restarted). If we have
+          // a snapshot of this room, offer to resurrect it instead of bailing.
+          const snapshot = loadWaveSnapshot();
+          if (
+            snapshot &&
+            snapshot.roomId === id &&
+            snapshot.players.some((p) => p.pid === pid)
+          ) {
+            setRecover(snapshot);
+          } else {
+            localStorage.removeItem(WAVE_SESSION_KEY);
+            clearWaveSnapshot();
+          }
+          setRestoring(false);
+          return;
+        }
+        socket.emit("get-state", id, (stateRes) => {
+          try {
+            if (!stateRes.state) throw new Error("no state");
+            const obj = JSON.parse(JSON.parse(stateRes.state)) as WRoom;
+            const idx = obj.players.findIndex((p) => p.pid === pid);
+            if (idx === -1) {
+              // Our seat is gone (kicked while we were away).
+              localStorage.removeItem(WAVE_SESSION_KEY);
+              clearWaveSnapshot();
+              setKicked(true);
+              setRestoring(false);
+              return;
+            }
+            // Our socket.id changed on reconnect — update it + mark online.
+            obj.players[idx].socketid = socket.id;
+            obj.players[idx].online = true;
+            gameRef.current = obj.game;
+            rosterRef.current = obj.players;
+            setRoomId(id);
+            setGame(obj.game);
+            setPlayers(obj.players);
+            saveWaveSnapshot({ roomId: id, game: obj.game, players: obj.players });
+            socket.emit("sync-state", id, payload(obj.game, obj.players), false, () => {});
+          } catch {
+            localStorage.removeItem(WAVE_SESSION_KEY);
+          }
+          setRestoring(false);
+        });
+      });
+    }
+
+    const onVisible = () => {
+      // If we're disconnected, socket.ts already kicks a reconnect on wake
+      // and the resulting "connect" event triggers resync.
+      if (document.visibilityState === "visible" && socket.connected) resync();
+    };
+
+    socket.on("connect", resync);
+    document.addEventListener("visibilitychange", onVisible);
+    if (socket.connected) resync();
+    return () => {
+      socket.off("connect", resync);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+    // handlers read everything from refs; intentionally run once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // ----- host applies client actions (single writer => no clobber) -----
   useEffect(() => {
     function onAction(args: { roomId: string; action: string }) {
@@ -337,67 +428,6 @@ export function WaveProvider({ children }: { children: ReactNode }) {
     };
     // handlers read everything from refs; intentionally run once
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // ----- restore -----
-  useEffect(() => {
-    const saved = localStorage.getItem(WAVE_SESSION_KEY);
-    if (!saved) {
-      setRestoring(false);
-      return;
-    }
-    const pid = getPid();
-    const restore = () => {
-      socket.emit("join-room", saved, (res) => {
-        if (!res || res.status !== "ok") {
-          // Room is gone server-side (e.g. the backend restarted). If we have a
-          // snapshot of this room, offer to resurrect it instead of bailing.
-          const snapshot = loadWaveSnapshot();
-          if (
-            snapshot &&
-            snapshot.roomId === saved &&
-            snapshot.players.some((p) => p.pid === pid)
-          ) {
-            setRecover(snapshot);
-          } else {
-            localStorage.removeItem(WAVE_SESSION_KEY);
-            clearWaveSnapshot();
-          }
-          setRestoring(false);
-          return;
-        }
-        setRoomId(saved);
-        socket.emit("get-state", saved, (stateRes) => {
-          try {
-            if (!stateRes.state) throw new Error("no state");
-            const obj = JSON.parse(JSON.parse(stateRes.state)) as WRoom;
-            const idx = obj.players.findIndex((p) => p.pid === pid);
-            if (idx === -1) {
-              // Our seat is gone (kicked while we were away).
-              localStorage.removeItem(WAVE_SESSION_KEY);
-              clearWaveSnapshot();
-              setKicked(true);
-              setRestoring(false);
-              return;
-            }
-            obj.players[idx].socketid = socket.id;
-            obj.players[idx].online = true;
-            setGame(obj.game);
-            setPlayers(obj.players);
-            saveWaveSnapshot({ roomId: saved, game: obj.game, players: obj.players });
-            socket.emit("sync-state", saved, payload(obj.game, obj.players), false, () => {});
-          } catch {
-            localStorage.removeItem(WAVE_SESSION_KEY);
-          }
-          setRestoring(false);
-        });
-      });
-    };
-    if (socket.connected) restore();
-    else socket.once("connect", restore);
-    return () => {
-      socket.off("connect", restore);
-    };
   }, []);
 
   const me = players.find((p) => p.pid === getPid()) ?? null;
@@ -453,6 +483,7 @@ export function WaveProvider({ children }: { children: ReactNode }) {
   function dismissRecover() {
     localStorage.removeItem(WAVE_SESSION_KEY);
     clearWaveSnapshot();
+    setRoomId("");
     setRecover(null);
   }
 
@@ -479,6 +510,7 @@ export function WaveProvider({ children }: { children: ReactNode }) {
     hostFinish,
     hostRestart,
     kick,
+    hostEditPlayer,
     leave,
   };
 

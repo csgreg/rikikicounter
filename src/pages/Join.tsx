@@ -30,11 +30,15 @@ export function Join() {
 
         // Rejoining the same room (same browser): update in place, don't dupe.
         const existing = obj.players.find((p) => p.pid === pid);
+        const midGame = obj.game.gameStarted;
         if (existing) {
           existing.socketid = socket.id;
           existing.online = true;
           existing.name = joinName;
         } else {
+          // Joining (or rejoining after a "leave" removed the seat) is allowed
+          // mid-game too — the newcomer sits out the round in progress so the
+          // others' tip/result phases aren't blocked on them.
           obj.players.push({
             id: obj.players.length + 1,
             pid,
@@ -42,10 +46,11 @@ export function Join() {
             socketid: socket.id,
             point: 0,
             tip: 0,
-            tipLocked: false,
+            tipLocked: midGame,
             hit: 0,
-            hitLocked: false,
-            boss: false,
+            hitLocked: midGame,
+            // A room can end up host-less (the host left last) — adopt it.
+            boss: !obj.players.some((p) => p.boss),
             online: true,
           });
           obj.game.players += 1;
@@ -55,7 +60,7 @@ export function Join() {
         setGame(obj.game);
 
         syncState(socket, joinCode, obj.game, obj.players);
-        history.push("/wait");
+        history.push(midGame ? "/game" : "/wait");
       });
     });
   }

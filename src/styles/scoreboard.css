@@ -186,6 +186,32 @@
   box-shadow: 0 0 0 var(--ink);
 }
 
+/* host-only "edit player" affordance, sibling of .kick-btn */
+.edit-btn {
+  border: 2px solid var(--ink);
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 3px 7px;
+  border-radius: 7px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: transform 0.1s ease;
+}
+
+.edit-btn:hover {
+  background: var(--yellow);
+  color: var(--ink-fixed);
+  transform: rotate(8deg) scale(1.1);
+}
+
+.edit-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
 /* ---------- Winner row (final standings) ---------- */
 .score-row.winner {
   background: linear-gradient(

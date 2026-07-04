@@ -2,6 +2,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -72,6 +73,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [kicked, setKicked] = useState(false);
   const [recover, setRecover] = useState<Snapshot | null>(null);
 
+  const roomIdRef = useRef(roomId);
+  roomIdRef.current = roomId;
+
   // Track the live socket connection (false during cold starts / drops).
   useEffect(() => {
     const onConnect = () => setConnected(true);
@@ -115,25 +119,28 @@ export function GameProvider({ children }: { children: ReactNode }) {
     };
   }, [roomId]);
 
-  // On load / refresh: if we have a saved session, rejoin and restore.
+  // Join the room + pull fresh state. Runs on first load (session restore),
+  // after EVERY reconnect (the server forgets socket.io room membership on
+  // disconnect, so broadcasts stop arriving and our state goes stale — typical
+  // after the phone was locked mid-game), and when the tab wakes up. Attached
+  // to every "connect" rather than `once` so a response lost to a connection
+  // flap self-heals on the next connect instead of hanging the app.
   useEffect(() => {
-    const session = loadSession();
-    if (!session || !session.roomId) {
-      setRestoring(false);
-      return;
-    }
-    const pid = getPid();
-    const savedRoomId = session.roomId;
-
-    function restore() {
-      socket.emit("join-room", savedRoomId, (res) => {
+    function resync() {
+      const id = roomIdRef.current || loadSession()?.roomId || "";
+      if (!id) {
+        setRestoring(false);
+        return;
+      }
+      const pid = getPid();
+      socket.emit("join-room", id, (res) => {
         if (!res || res.status !== "ok") {
           // Room is gone server-side (e.g. the backend restarted). If we have
           // a snapshot of this room, offer to resurrect it instead of bailing.
           const snap = loadSnapshot();
           if (
             snap &&
-            snap.roomId === savedRoomId &&
+            snap.roomId === id &&
             snap.players.some((p) => p.pid === pid)
           ) {
             setRecover(snap);
@@ -144,9 +151,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
           setRestoring(false);
           return;
         }
-        setRoomId(savedRoomId);
-
-        socket.emit("get-state", savedRoomId, (stateRes) => {
+        socket.emit("get-state", id, (stateRes) => {
           try {
             if (!stateRes.state) throw new Error("missing state");
             const obj = parseFetchedState(stateRes.state);
@@ -162,11 +167,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
             // Our socket.id changed on reconnect — update it + mark online.
             obj.players[idx].socketid = socket.id;
             obj.players[idx].online = true;
+            setRoomId(id);
             setCurrentPlayerNum(idx);
             setGame(obj.game);
             setPlayers(obj.players);
-            saveSnapshot({ roomId: savedRoomId, game: obj.game, players: obj.players });
-            syncState(socket, savedRoomId, obj.game, obj.players);
+            saveSnapshot({ roomId: id, game: obj.game, players: obj.players });
+            syncState(socket, id, obj.game, obj.players);
           } catch {
             clearSession();
           }
@@ -175,13 +181,18 @@ export function GameProvider({ children }: { children: ReactNode }) {
       });
     }
 
-    if (socket.connected) {
-      restore();
-    } else {
-      socket.once("connect", restore);
-    }
+    const onVisible = () => {
+      // If we're disconnected, socket.ts already kicks a reconnect on wake
+      // and the resulting "connect" event triggers resync.
+      if (document.visibilityState === "visible" && socket.connected) resync();
+    };
+
+    socket.on("connect", resync);
+    document.addEventListener("visibilitychange", onVisible);
+    if (socket.connected) resync();
     return () => {
-      socket.off("connect", restore);
+      socket.off("connect", resync);
+      document.removeEventListener("visibilitychange", onVisible);
     };
   }, []);
 
@@ -218,6 +229,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   function dismissRecover() {
     clearSession();
     clearSnapshot();
+    setRoomId("");
     setRecover(null);
   }
 

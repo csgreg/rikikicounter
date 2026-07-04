@@ -4,6 +4,7 @@ import { clearSession, clearSnapshot, getPid } from "../api/session";
 import { syncState } from "../api/state";
 import { burstConfetti, emojiRain } from "../utils/confetti";
 import { useConfirm } from "../hooks/useConfirm";
+import { useEditPlayer } from "../hooks/useEditPlayer";
 import { useGame } from "../context/GameContext";
 import type { Player } from "../types";
 import "./Game.css";
@@ -45,6 +46,7 @@ export function Game() {
   const [scoreFx, setScoreFx] = useState<ScoreFx | null>(null);
   const [shake, setShake] = useState(false);
   const { confirm, modal } = useConfirm();
+  const { editPlayer, modal: editModal } = useEditPlayer();
 
   function showToast(text: string) {
     setToast({ text, id: Date.now() });
@@ -91,6 +93,18 @@ export function Game() {
     clearSession();
     clearSnapshot();
     history.push("/");
+  }
+
+  async function edit(target: Player) {
+    const res = await editPlayer({ name: target.name, points: target.point });
+    if (!res) return;
+    pushPlayers(
+      players.map((p) =>
+        p.pid === target.pid
+          ? { ...p, name: res.name, point: res.points ?? p.point }
+          : p
+      )
+    );
   }
 
   async function kick(targetPid: string, name: string) {
@@ -257,6 +271,15 @@ export function Game() {
                   {allTipped && !allHit && p.hitLocked ? (
                     <span className="tag done">kész</span>
                   ) : null}
+                  {isBoss ? (
+                    <button
+                      className="edit-btn"
+                      title="Szerkesztés"
+                      onClick={() => edit(p)}
+                    >
+                      ✎
+                    </button>
+                  ) : null}
                   {isBoss && me && p.pid !== me.pid ? (
                     <button
                       className="kick-btn"
@@ -400,6 +423,7 @@ export function Game() {
         )}
       </div>
       {modal}
+      {editModal}
     </>
   );
 }

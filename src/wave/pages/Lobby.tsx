@@ -51,10 +51,6 @@ export function WaveLobby() {
       socket.emit("get-state", code, (stateRes) => {
         if (!stateRes.state) return;
         const obj = JSON.parse(JSON.parse(stateRes.state)) as WRoom;
-        if (obj.game.started) {
-          alert("Ez a játék már elkezdődött.");
-          return;
-        }
         setRoomId(code);
         localStorage.setItem(WAVE_SESSION_KEY, code);
         const pid = getPid();
@@ -64,7 +60,18 @@ export function WaveLobby() {
           existing.online = true;
           existing.name = name;
         } else {
-          obj.players.push(newPlayer(false, obj.players.length + 1));
+          // Joining (or rejoining after a "leave" removed the seat) works
+          // mid-game too — the newcomer sits out the round in progress so the
+          // reveal isn't blocked waiting on a guess from them. A room can end
+          // up host-less (the host left last) — the joiner adopts the role.
+          const joiner = newPlayer(
+            !obj.players.some((p) => p.boss),
+            obj.players.length + 1
+          );
+          if (obj.game.started && obj.game.phase !== "lobby") {
+            joiner.guessed = true;
+          }
+          obj.players.push(joiner);
         }
         setGame(obj.game);
         setPlayers(obj.players);

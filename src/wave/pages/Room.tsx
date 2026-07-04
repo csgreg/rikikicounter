@@ -3,6 +3,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router";
 import { useConfirm } from "../../hooks/useConfirm";
+import { useEditPlayer } from "../../hooks/useEditPlayer";
 import { burstConfetti } from "../../utils/confetti";
 import { useWave } from "../WaveContext";
 import type { WPlayer } from "../types";
@@ -109,6 +110,7 @@ export function WaveRoom() {
     hostFinish,
     hostRestart,
     kick,
+    hostEditPlayer,
     leave,
   } = useWave();
   const history = useHistory();
@@ -116,6 +118,7 @@ export function WaveRoom() {
   const [guessVal, setGuessVal] = useState(50);
   const [isCopied, setIsCopied] = useState(false);
   const { confirm, modal } = useConfirm();
+  const { editPlayer, modal: editModal } = useEditPlayer();
 
   const gameOver = !!game.finished;
 
@@ -162,6 +165,14 @@ export function WaveRoom() {
     });
     if (!ok) return;
     kick(pid);
+  }
+
+  async function editPlayerRow(p: WPlayer) {
+    const res = await editPlayer(
+      game.started ? { name: p.name, points: p.score } : { name: p.name }
+    );
+    if (!res) return;
+    hostEditPlayer(p.pid, res.name, res.points);
   }
 
   async function endGame() {
@@ -219,6 +230,15 @@ export function WaveRoom() {
                     <span className={`dot ${p.online ? "on" : "off"}`} />
                     {p.name}
                     {p.boss ? <span className="tag">host</span> : null}
+                    {isHost ? (
+                      <button
+                        className="edit-btn"
+                        title="Szerkesztés"
+                        onClick={() => editPlayerRow(p)}
+                      >
+                        ✎
+                      </button>
+                    ) : null}
                     {isHost && me && p.pid !== me.pid ? (
                       <button
                         className="kick-btn"
@@ -252,6 +272,7 @@ export function WaveRoom() {
           </button>
         </div>
         {modal}
+        {editModal}
       </>
     );
   }
@@ -301,6 +322,7 @@ export function WaveRoom() {
           </button>
         </div>
         {modal}
+        {editModal}
       </>
     );
   }
@@ -445,6 +467,15 @@ export function WaveRoom() {
                 {p.pid === game.clueGiverPid ? (
                   <span className="tag">kulcsszó</span>
                 ) : null}
+                {isHost ? (
+                  <button
+                    className="edit-btn"
+                    title="Szerkesztés"
+                    onClick={() => editPlayerRow(p)}
+                  >
+                    ✎
+                  </button>
+                ) : null}
               </span>
               <span className="points">{p.score}</span>
             </div>
@@ -463,6 +494,7 @@ export function WaveRoom() {
       </button>
     </div>
     {modal}
+    {editModal}
     </>
   );
 }

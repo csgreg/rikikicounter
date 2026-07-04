@@ -1,0 +1,24 @@
+/* ------------------------------------------------------------------
+   Host "edit player" dialog (useEditPlayer hook).
+   Builds on the .modal styles from useConfirm.css.
+   ------------------------------------------------------------------ */
+
+.edit-modal {
+  text-align: left;
+}
+
+.edit-modal .modal-title {
+  text-align: center;
+}
+
+.edit-modal .field {
+  margin-bottom: 14px;
+}
+
+.edit-modal .label {
+  margin: 0 0 6px;
+}
+
+.edit-modal .modal-actions {
+  margin-top: 18px;
+}
