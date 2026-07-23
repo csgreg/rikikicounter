@@ -40,6 +40,7 @@ interface WaveContextValue {
   recoverGame: () => void;
   dismissRecover: () => void;
   cancelRestore: () => void;
+  saveSession: (roomId: string) => void;
   syncExplicit: (roomId: string, game: WGame, players: WPlayer[]) => void;
   submitClue: (clue: string) => void;
   submitGuess: (value: number) => void;
@@ -338,6 +339,7 @@ export function WaveProvider({ children }: { children: ReactNode }) {
     recoverGame,
     dismissRecover,
     cancelRestore,
+    saveSession: sessionStore.saveSession,
     syncExplicit,
     submitClue,
     submitGuess,
@@ -353,4 +355,4 @@ export function WaveProvider({ children }: { children: ReactNode }) {
   return <WaveContext.Provider value={value}>{children}</WaveContext.Provider>;
 }
 
-export { WAVE_SESSION_KEY, EMPTY_GAME };
+export { EMPTY_GAME };

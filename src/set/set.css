@@ -1,0 +1,63 @@
+/* A distinct palette for /set — same neobrutalist language, teal identity.
+   Overriding the design tokens recolors every base component automatically.
+   --teal/--teal-dk are left at their global defaults (used as-is by
+   .game-card--set / .gh-chip--set outside this scope too) — only the
+   primary-button slot (--yellow) is repointed at the same hex, so the whole
+   app reads as one teal-branded game without a second color to maintain. */
+.set-app {
+  --bg: #d7f5ef;
+  --panel: #ffffff;
+  --panel-2: #eafcf7;
+  --ink: #123a34;
+  --muted: #5d8a82;
+
+  --yellow: #2ec4b6;
+  --yellow-dk: #0e8d80;
+  --coral: #ff8a3d;
+  --coral-dk: #c65f1d;
+
+  --dot: rgba(18, 58, 52, 0.07);
+
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--dot) 1.4px, transparent 1.4px);
+  background-size: 18px 18px;
+}
+
+.set-toast {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1100;
+  padding: 10px 20px;
+  border: var(--bw) solid var(--ink);
+  border-radius: 12px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.1rem;
+  box-shadow: 4px 4px 0 rgba(29, 24, 50, 0.4);
+  animation: set-toast-in 0.3s var(--pop) both;
+}
+
+.set-toast--ok {
+  background: var(--yellow);
+  color: var(--ink-fixed);
+}
+
+.set-toast--bad {
+  background: var(--coral);
+  color: var(--paper-fixed);
+}
+
+@keyframes set-toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -12px) scale(0.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .set-toast {
+    animation: none;
+  }
+}

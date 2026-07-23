@@ -8,7 +8,7 @@
 
 @media (min-width: 660px) {
   .menu-page {
-    max-width: 820px;
+    max-width: 1180px;
   }
 }
 
@@ -93,7 +93,7 @@
 
 @media (min-width: 660px) {
   .menu-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 26px;
     align-items: stretch;
   }
@@ -153,6 +153,15 @@
   );
 }
 
+.menu-card--set {
+  background: var(--teal);
+  color: var(--ink-fixed);
+  box-shadow: 8px 8px 0 var(--teal-dk);
+  transform: rotate(-0.8deg);
+  animation: pop-set 0.55s var(--pop) backwards;
+  animation-delay: 0.42s;
+}
+
 .menu-card:hover {
   transform: rotate(0deg) translate(-3px, -5px);
 }
@@ -165,6 +174,10 @@
   box-shadow: 12px 14px 0 var(--violet-dk);
 }
 
+.menu-card--set:hover {
+  box-shadow: 12px 14px 0 var(--teal-dk);
+}
+
 .menu-card:active {
   transform: rotate(0deg) translate(3px, 3px);
 }
@@ -175,6 +188,10 @@
 
 .menu-card--wave:active {
   box-shadow: 3px 3px 0 var(--violet-dk);
+}
+
+.menu-card--set:active {
+  box-shadow: 3px 3px 0 var(--teal-dk);
 }
 
 /* spinning dashed badge in the corner */
@@ -291,6 +308,59 @@
   animation-duration: 1.5s;
 }
 
+.menu-deco--set {
+  display: flex;
+  gap: 7px;
+  line-height: 1;
+}
+
+.mset {
+  display: inline-block;
+  width: 26px;
+  height: 34px;
+  background: var(--paper-fixed);
+  border: var(--bw) solid var(--ink-fixed);
+  border-radius: 7px;
+  box-shadow: 2px 2px 0 rgba(29, 24, 50, 0.35);
+  transform-origin: bottom center;
+  transition: transform 0.2s var(--pop);
+  position: relative;
+}
+
+.mset::before {
+  content: "";
+  position: absolute;
+  inset: 6px 5px;
+  border: 2.5px solid #2e7d32;
+}
+
+.mset-oval::before {
+  border-radius: 999px;
+  background: #2e7d32;
+}
+
+.mset-diamond::before {
+  border-color: #7b1fa2;
+  transform: rotate(45deg) scale(0.72);
+}
+
+.mset-squiggle::before {
+  border-color: #d32f2f;
+  border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%;
+}
+
+.menu-card--set:hover .mset:nth-child(1) {
+  transform: rotate(-10deg) translateY(-3px);
+}
+
+.menu-card--set:hover .mset:nth-child(2) {
+  transform: translateY(-5px);
+}
+
+.menu-card--set:hover .mset:nth-child(3) {
+  transform: rotate(10deg) translateY(-3px);
+}
+
 @keyframes needle-sweep {
   0% {
     left: 10%;
@@ -385,6 +455,17 @@
   }
 }
 
+@keyframes pop-set {
+  from {
+    opacity: 0;
+    transform: rotate(-0.8deg) translateY(24px) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-0.8deg);
+  }
+}
+
 .menu-page .ticker {
   animation: menu-hero-in 0.5s var(--pop) backwards;
   animation-delay: 0.42s;
@@ -395,6 +476,7 @@
   .mh-word,
   .menu-card--rikiki,
   .menu-card--wave,
+  .menu-card--set,
   .menu-needle,
   .menu-ring,
   .menu-ring span,

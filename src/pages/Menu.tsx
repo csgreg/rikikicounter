@@ -2,7 +2,17 @@ import { Link } from "react-router-dom";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import "./Menu.css";
 
-const TICKER = ["Rikiki", "♠", "Wavelength", "♥", "játékok", "♣", "Jó szórakozást!", "♦"];
+const TICKER = [
+  "Rikiki",
+  "♠",
+  "Wavelength",
+  "♥",
+  "Set",
+  "♣",
+  "játékok",
+  "♦",
+  "Jó szórakozást!",
+];
 
 export function Menu() {
   useDocumentTitle("Parti játékok – Rikiki & Hullámhossz | therikiki.hu");
@@ -47,6 +57,21 @@ export function Menu() {
           <span className="menu-title">Hullámhossz</span>
           <span className="menu-desc">
             Találd el a rejtett pontot a skálán — egyetlen kulcsszóból.
+          </span>
+          <span className="menu-cta">
+            Játék <span className="menu-arrow">→</span>
+          </span>
+        </Link>
+
+        <Link to="/set" className="menu-card menu-card--set">
+          <div className="menu-deco menu-deco--set">
+            <span className="mset mset-oval" />
+            <span className="mset mset-diamond" />
+            <span className="mset mset-squiggle" />
+          </div>
+          <span className="menu-title">Set</span>
+          <span className="menu-desc">
+            Találd meg a hármast: kártyák, ahol minden tulajdonság egyezik vagy mind más.
           </span>
           <span className="menu-cta">
             Játék <span className="menu-arrow">→</span>

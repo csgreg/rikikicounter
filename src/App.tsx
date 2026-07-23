@@ -8,6 +8,7 @@ import { Game } from "./pages/Game";
 import { Rules } from "./pages/Rules";
 import { Menu } from "./pages/Menu";
 import { WaveApp } from "./wave/WaveApp";
+import { SetApp } from "./set/SetApp";
 import { getPid } from "./api/session";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
@@ -174,6 +175,9 @@ export default function App() {
       <Switch>
         <Route path="/wave">
           <WaveApp />
+        </Route>
+        <Route path="/set">
+          <SetApp />
         </Route>
         <Route exact path="/">
           <Menu />

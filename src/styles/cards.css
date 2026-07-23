@@ -107,6 +107,12 @@
   );
 }
 
+.game-card--set {
+  background: var(--teal);
+  color: var(--ink-fixed);
+  box-shadow: 7px 7px 0 var(--teal-dk);
+}
+
 /* heading colour per card background */
 .game-card h2 {
   color: var(--ink-fixed);

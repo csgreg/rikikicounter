@@ -86,6 +86,12 @@
   box-shadow: 5px 5px 0 #2c1a80;
 }
 
+.gh-chip--set {
+  background: var(--teal);
+  color: var(--ink-fixed);
+  box-shadow: 5px 5px 0 var(--teal-dk);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .game-hero,
   .gh-chip {

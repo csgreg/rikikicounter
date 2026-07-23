@@ -4,16 +4,16 @@ import { Link } from "react-router-dom";
 import { socket } from "../../api/socket";
 import { getPid } from "../../api/session";
 import { resolveSeat } from "../../shared/seat";
-import { useWave, EMPTY_GAME } from "../WaveContext";
-import type { WPlayer, WRoom } from "../types";
+import { useSet, EMPTY_GAME } from "../SetContext";
+import type { SetPlayer, SetRoom } from "../types";
 
-export function WaveLobby() {
-  const { setRoomId, setGame, setPlayers, syncExplicit, saveSession } = useWave();
+export function SetLobby() {
+  const { setRoomId, setGame, setPlayers, syncExplicit, saveSession } = useSet();
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const history = useHistory();
 
-  function newPlayer(boss: boolean, id: number): WPlayer {
+  function newPlayer(boss: boolean, id: number): SetPlayer {
     return {
       id,
       pid: getPid(),
@@ -22,14 +22,12 @@ export function WaveLobby() {
       online: true,
       boss,
       score: 0,
-      guess: null,
-      guessed: false,
     };
   }
 
   function handleCreate() {
     if (!name.trim()) return;
-    socket.emit("create-room", 12, (res) => {
+    socket.emit("create-room", 8, (res) => {
       const id = res.roomId;
       saveSession(id);
       setRoomId(id);
@@ -38,7 +36,7 @@ export function WaveLobby() {
       setGame(game);
       setPlayers(players);
       syncExplicit(id, game, players);
-      history.push("/wave/room");
+      history.push("/set/board");
     });
   }
 
@@ -51,16 +49,15 @@ export function WaveLobby() {
       }
       socket.emit("get-state", code, (stateRes) => {
         if (!stateRes.state) return;
-        const obj = JSON.parse(JSON.parse(stateRes.state)) as WRoom;
+        const obj = JSON.parse(JSON.parse(stateRes.state)) as SetRoom;
         setRoomId(code);
         saveSession(code);
         const pid = getPid();
 
-        // Rejoining the same room (same browser): update in place, don't dupe.
-        // Joining (or rejoining after a "leave" removed the seat) works
-        // mid-game too — the newcomer sits out the round in progress so the
-        // reveal isn't blocked waiting on a guess from them. A room can end
-        // up host-less (the host left last) — the newcomer adopts the role.
+        // Rejoining the same room (same browser): update in place, don't
+        // dupe. Joining mid-game just drops the newcomer into the next
+        // claim — there's no round boundary to sit out. A room can end up
+        // host-less (the host left last) — the newcomer adopts the role.
         resolveSeat(
           obj.players,
           pid,
@@ -69,18 +66,12 @@ export function WaveLobby() {
             existing.online = true;
             existing.name = name;
           },
-          (isHostAdopt) => {
-            const joiner = newPlayer(isHostAdopt, obj.players.length + 1);
-            if (obj.game.started && obj.game.phase !== "lobby") {
-              joiner.guessed = true;
-            }
-            return joiner;
-          }
+          (isHostAdopt) => newPlayer(isHostAdopt, obj.players.length + 1)
         );
         setGame(obj.game);
         setPlayers(obj.players);
         syncExplicit(code, obj.game, obj.players);
-        history.push("/wave/room");
+        history.push("/set/board");
       });
     });
   }
@@ -88,20 +79,17 @@ export function WaveLobby() {
   return (
     <div className="page">
       <header className="game-hero">
-        <h1 className="game-hero-title" aria-label="Hullámhossz">
-          <span className="gh-chip gh-chip--violet gh-chip--a" aria-hidden="true">
-            Hullám
-          </span>
-          <span className="gh-chip gh-chip--violet-dk gh-chip--b" aria-hidden="true">
-            hossz
+        <h1 className="game-hero-title" aria-label="Set">
+          <span className="gh-chip gh-chip--set gh-chip--a" aria-hidden="true">
+            Set
           </span>
         </h1>
         <p className="tagline">
-          Találd el a rejtett pontot a skálán — egyetlen kulcsszóból!
+          Találd meg a hármast: minden tulajdonság vagy mind egyezik, vagy mind más!
         </p>
       </header>
 
-      <div className="card game-card game-card--violet">
+      <div className="card game-card game-card--set">
         <h2>Új játék</h2>
         <div className="field">
           <input
@@ -118,7 +106,7 @@ export function WaveLobby() {
 
       <div className="divider">vagy</div>
 
-      <div className="card game-card game-card--violet">
+      <div className="card game-card game-card--set">
         <h2>Csatlakozás</h2>
         <div className="field">
           <input

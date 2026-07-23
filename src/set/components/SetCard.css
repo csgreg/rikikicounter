@@ -1,0 +1,61 @@
+.set-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 10px 6px;
+  background: var(--paper-fixed);
+  border: var(--bw) solid var(--ink);
+  border-radius: var(--radius-sm);
+  box-shadow: 3px 3px 0 rgba(29, 24, 50, 0.35);
+  cursor: pointer;
+  font: inherit;
+  transition: transform 0.12s var(--pop), box-shadow 0.12s var(--pop), border-color 0.12s ease;
+}
+
+.set-card:hover:not(:disabled) {
+  transform: translate(-1px, -2px);
+  box-shadow: 5px 6px 0 rgba(29, 24, 50, 0.4);
+}
+
+.set-card:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 rgba(29, 24, 50, 0.4);
+}
+
+.set-card--selected {
+  border-color: var(--yellow-dk);
+  box-shadow: 4px 5px 0 var(--yellow-dk);
+  transform: translate(-1px, -2px);
+}
+
+.set-card:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.set-shape {
+  width: 100%;
+  max-width: 60px;
+  height: auto;
+  display: block;
+}
+
+.set-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+@media (min-width: 460px) {
+  .set-board {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .set-card {
+    transition: none;
+  }
+}
