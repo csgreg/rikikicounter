@@ -3,6 +3,7 @@ import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { socket } from "../../api/socket";
 import { getPid } from "../../api/session";
+import { resolveSeat } from "../../shared/seat";
 import { useWave, WAVE_SESSION_KEY, EMPTY_GAME } from "../WaveContext";
 import type { WPlayer, WRoom } from "../types";
 
@@ -54,25 +55,28 @@ export function WaveLobby() {
         setRoomId(code);
         localStorage.setItem(WAVE_SESSION_KEY, code);
         const pid = getPid();
-        const existing = obj.players.find((p) => p.pid === pid);
-        if (existing) {
-          existing.socketid = socket.id;
-          existing.online = true;
-          existing.name = name;
-        } else {
-          // Joining (or rejoining after a "leave" removed the seat) works
-          // mid-game too — the newcomer sits out the round in progress so the
-          // reveal isn't blocked waiting on a guess from them. A room can end
-          // up host-less (the host left last) — the joiner adopts the role.
-          const joiner = newPlayer(
-            !obj.players.some((p) => p.boss),
-            obj.players.length + 1
-          );
-          if (obj.game.started && obj.game.phase !== "lobby") {
-            joiner.guessed = true;
+
+        // Rejoining the same room (same browser): update in place, don't dupe.
+        // Joining (or rejoining after a "leave" removed the seat) works
+        // mid-game too — the newcomer sits out the round in progress so the
+        // reveal isn't blocked waiting on a guess from them. A room can end
+        // up host-less (the host left last) — the newcomer adopts the role.
+        resolveSeat(
+          obj.players,
+          pid,
+          (existing) => {
+            existing.socketid = socket.id;
+            existing.online = true;
+            existing.name = name;
+          },
+          (isHostAdopt) => {
+            const joiner = newPlayer(isHostAdopt, obj.players.length + 1);
+            if (obj.game.started && obj.game.phase !== "lobby") {
+              joiner.guessed = true;
+            }
+            return joiner;
           }
-          obj.players.push(joiner);
-        }
+        );
         setGame(obj.game);
         setPlayers(obj.players);
         syncExplicit(code, obj.game, obj.players);

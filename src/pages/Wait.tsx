@@ -2,7 +2,6 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { Redirect } from "react-router-dom";
-import { clearSession, clearSnapshot, getPid } from "../api/session";
 import { syncState } from "../api/state";
 import { useConfirm } from "../hooks/useConfirm";
 import { useEditPlayer } from "../hooks/useEditPlayer";
@@ -12,7 +11,8 @@ import type { Player } from "../types";
 import "./Wait.css";
 
 export function Wait() {
-  const { socket, roomId, players, game, me, isBoss } = useGame();
+  const { socket, roomId, players, game, me, isBoss, leave: leaveRoom } =
+    useGame();
   const history = useHistory();
   const [isCopied, setIsCopied] = useState(false);
   const { confirm, modal } = useConfirm();
@@ -50,16 +50,7 @@ export function Wait() {
       danger: true,
     });
     if (!ok) return;
-    const pid = getPid();
-    const remaining = players.filter((p) => p.pid !== pid);
-    // Hand over the host role if we were the host.
-    if (me && me.boss && remaining.length > 0 && !remaining.some((p) => p.boss)) {
-      const heir = remaining.find((p) => p.online !== false) || remaining[0];
-      heir.boss = true;
-    }
-    syncState(socket, roomId, game, remaining);
-    clearSession();
-    clearSnapshot();
+    leaveRoom();
     history.push("/");
   }
 

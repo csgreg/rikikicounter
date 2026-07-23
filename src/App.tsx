@@ -105,7 +105,7 @@ function Home() {
 }
 
 function AppShell() {
-  const { connected, restoring, kicked, recover } = useGame();
+  const { connected, restoring, kicked, recover, cancelRestore } = useGame();
 
   if (kicked) {
     return <KickedScreen />;
@@ -128,6 +128,9 @@ function AppShell() {
               <span>Rikiki</span>
             </h1>
             <p className="hint">Visszacsatlakozás a szobához…</p>
+            <button className="btn btn-ghost" onClick={cancelRestore}>
+              Mégse, vissza a főoldalra
+            </button>
           </div>
         </div>
       </>

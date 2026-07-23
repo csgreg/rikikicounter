@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
-import { clearSession, clearSnapshot, getPid } from "../api/session";
 import { syncState } from "../api/state";
 import { burstConfetti, emojiRain } from "../utils/confetti";
 import { useConfirm } from "../hooks/useConfirm";
@@ -38,8 +37,16 @@ interface ScoreFx {
 }
 
 export function Game() {
-  const { socket, roomId, players, game, currentPlayerNum, me, isBoss } =
-    useGame();
+  const {
+    socket,
+    roomId,
+    players,
+    game,
+    currentPlayerNum,
+    me,
+    isBoss,
+    leave: leaveRoom,
+  } = useGame();
   const history = useHistory();
   const [tip, setTip] = useState(0);
   const [hit, setHit] = useState(0);
@@ -90,15 +97,7 @@ export function Game() {
       danger: true,
     });
     if (!ok) return;
-    const pid = getPid();
-    const remaining = players.filter((p) => p.pid !== pid);
-    if (me && me.boss && remaining.length > 0 && !remaining.some((p) => p.boss)) {
-      const heir = remaining.find((p) => p.online !== false) || remaining[0];
-      heir.boss = true;
-    }
-    pushPlayers(remaining);
-    clearSession();
-    clearSnapshot();
+    leaveRoom();
     history.push("/");
   }
 
@@ -191,8 +190,9 @@ export function Game() {
   }
 
   function goHome() {
-    clearSession();
-    clearSnapshot();
+    // The game already ended for everyone; just stop being a room member
+    // (no boss handoff needed — leaveRoom's push is a harmless no-op here).
+    leaveRoom();
     history.push("/");
   }
 

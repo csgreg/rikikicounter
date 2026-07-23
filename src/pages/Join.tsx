@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useHistory } from "react-router";
 import { getPid, saveSession } from "../api/session";
 import { parseFetchedState, syncState } from "../api/state";
+import { resolveSeat } from "../shared/seat";
 import { useGame } from "../context/GameContext";
 import "./Join.css";
 
@@ -27,19 +28,22 @@ export function Join() {
         if (!stateResponse.state) return;
         const obj = parseFetchedState(stateResponse.state);
         const pid = getPid();
+        const midGame = obj.game.gameStarted;
 
         // Rejoining the same room (same browser): update in place, don't dupe.
-        const existing = obj.players.find((p) => p.pid === pid);
-        const midGame = obj.game.gameStarted;
-        if (existing) {
-          existing.socketid = socket.id;
-          existing.online = true;
-          existing.name = joinName;
-        } else {
-          // Joining (or rejoining after a "leave" removed the seat) is allowed
-          // mid-game too — the newcomer sits out the round in progress so the
-          // others' tip/result phases aren't blocked on them.
-          obj.players.push({
+        // Joining (or rejoining after a "leave" removed the seat) is allowed
+        // mid-game too — the newcomer sits out the round in progress so the
+        // others' tip/result phases aren't blocked on them. A room can end up
+        // host-less (the host left last) — the newcomer adopts it.
+        const { isNew } = resolveSeat(
+          obj.players,
+          pid,
+          (existing) => {
+            existing.socketid = socket.id;
+            existing.online = true;
+            existing.name = joinName;
+          },
+          (isHostAdopt) => ({
             id: obj.players.length + 1,
             pid,
             name: joinName,
@@ -49,12 +53,11 @@ export function Join() {
             tipLocked: midGame,
             hit: 0,
             hitLocked: midGame,
-            // A room can end up host-less (the host left last) — adopt it.
-            boss: !obj.players.some((p) => p.boss),
+            boss: isHostAdopt,
             online: true,
-          });
-          obj.game.players += 1;
-        }
+          })
+        );
+        if (isNew) obj.game.players += 1;
 
         setPlayers(obj.players);
         setGame(obj.game);

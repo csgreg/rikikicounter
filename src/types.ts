@@ -63,6 +63,7 @@ export interface ServerToClientEvents {
 export interface ClientToServerEvents {
   "create-room": (size: number, ack: (res: CreateRoomAck) => void) => void;
   "join-room": (uuid: string, ack: (res: RoomAck) => void) => void;
+  "leave-room": (uuid: string, ack: (res: RoomAck) => void) => void;
   "get-state": (uuid: string, ack: (res: RoomAck) => void) => void;
   "sync-state": (
     uuid: string,

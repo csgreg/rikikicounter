@@ -1,12 +1,15 @@
 import type { GameMeta, Player, RoomState } from "../types";
 import type { TypedSocket } from "./socket";
 import { saveSnapshot } from "./session";
+import {
+  buildStatePayload as buildStatePayloadGeneric,
+  parseBroadcastState as parseBroadcastStateGeneric,
+  parseFetchedState as parseFetchedStateGeneric,
+} from "../shared/state";
 
 // Build the exact payload string the backend expects for sync-state.
 export function buildStatePayload(game: GameMeta, players: Player[]): string {
-  return `{"game": ${JSON.stringify(game)}, "players": ${JSON.stringify(
-    players
-  )} }`;
+  return buildStatePayloadGeneric(game, players);
 }
 
 // Push the current room state to the server (and let it broadcast it).
@@ -24,10 +27,10 @@ export function syncState(
 
 // "state-changed" broadcasts are single-encoded.
 export function parseBroadcastState(state: string): RoomState {
-  return JSON.parse(state) as RoomState;
+  return parseBroadcastStateGeneric<GameMeta, Player>(state);
 }
 
 // "get-state" returns the DB value, which is double-encoded.
 export function parseFetchedState(state: string): RoomState {
-  return JSON.parse(JSON.parse(state)) as RoomState;
+  return parseFetchedStateGeneric<GameMeta, Player>(state);
 }

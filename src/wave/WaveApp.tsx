@@ -49,7 +49,7 @@ function RecoverScreen() {
 
 function WaveShell() {
   useDocumentTitle("Hullámhossz – parti játék | therikiki.hu");
-  const { connected, restoring, kicked, recover } = useWave();
+  const { connected, restoring, kicked, recover, cancelRestore } = useWave();
 
   if (kicked) {
     return <KickedScreen />;
@@ -66,6 +66,9 @@ function WaveShell() {
         <div className="page">
           <h1 className="brand">Hullámhossz</h1>
           <p className="hint">Visszacsatlakozás a szobához…</p>
+          <button className="btn btn-ghost" onClick={cancelRestore}>
+            Mégse, vissza a Hullámhosszhoz
+          </button>
         </div>
       </div>
     );
