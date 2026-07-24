@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   gap: 3px;
+  height: 140px;
   padding: 10px 6px;
   background: var(--paper-fixed);
   border: var(--bw) solid var(--ink);

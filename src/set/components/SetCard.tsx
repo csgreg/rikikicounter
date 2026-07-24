@@ -1,13 +1,14 @@
 import type { SCard, SColor, SShading, SShape } from "../types";
 import "./SetCard.css";
 
-// Fixed hex values, not routed through the app's theme tokens — these are
-// the game's own fixed rules (like Rikiki's hardcoded suit colors), not the
-// app's chrome, so they stay constant regardless of which game is "on-brand".
+// Fixed hex values, not routed through the app's theme tokens (so they stay
+// constant regardless of which game is "on-brand") — but picked to sit
+// comfortably alongside Set's own teal identity rather than the classic
+// red/green/purple, which clashed with it: warm orange, dark teal, violet.
 const COLOR_HEX: Record<SColor, string> = {
-  red: "#d32f2f",
-  green: "#2e7d32",
-  purple: "#7b1fa2",
+  red: "#d2660f",
+  green: "#0e8d80",
+  purple: "#7c5cff",
 };
 
 const SHAPE_PATHS: Record<SShape, string> = {

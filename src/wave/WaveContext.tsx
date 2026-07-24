@@ -5,7 +5,7 @@ import { useRoomConnection } from "../shared/useRoomConnection";
 import type { RoomSnapshot } from "../shared/session";
 import { buildStatePayload } from "../shared/state";
 import { pickSpectrum, randomTarget } from "./spectra";
-import { scoreFor, type WAction, type WGame, type WPlayer, type WRoom } from "./types";
+import { scoreFor, type WAction, type WGame, type WPlayer } from "./types";
 
 const WAVE_SESSION_KEY = "rikiki_wave_room";
 const WAVE_SNAPSHOT_KEY = "rikiki_wave_snapshot";
