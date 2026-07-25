@@ -9,7 +9,8 @@ import {
   assignRoles,
   checkWinner,
   computeSuspicionRanking,
-  pickEvidence,
+  pickEvidenceIndices,
+  pickNamedClue,
   resetRoundFields,
   tallyLynch,
   tallyMajority,
@@ -33,7 +34,8 @@ const EMPTY_GAME: FGame = {
   winner: null,
   nightKillPid: null,
   seerResult: null,
-  evidence: [],
+  evidenceIndices: [],
+  namedClue: null,
   suspicionRanking: null,
   lynchedPid: null,
 };
@@ -140,7 +142,8 @@ export function FalkaProvider({ children }: { children: ReactNode }) {
         winner: null,
         nightKillPid: null,
         seerResult: null,
-        evidence: [],
+        evidenceIndices: [],
+        namedClue: null,
         suspicionRanking: null,
         lynchedPid: null,
       },
@@ -225,6 +228,12 @@ export function FalkaProvider({ children }: { children: ReactNode }) {
     }
 
     const winner = checkWinner(ps);
+    const evidencePoolSize = (t("falka.evidence", { returnObjects: true }) as string[]).length;
+    const namedTemplateCount = (t("falka.namedEvidence", { returnObjects: true }) as string[]).length;
+    const namedClue = pickNamedClue(
+      ps.filter((p) => p.alive),
+      namedTemplateCount
+    );
 
     applyAndSync(
       {
@@ -233,7 +242,8 @@ export function FalkaProvider({ children }: { children: ReactNode }) {
         phaseDeadline: null,
         nightKillPid: killPid,
         seerResult,
-        evidence: pickEvidence(t("falka.evidence", { returnObjects: true }) as string[], 3),
+        evidenceIndices: pickEvidenceIndices(evidencePoolSize, 2),
+        namedClue,
         winner: winner ?? g.winner,
       },
       ps
@@ -339,7 +349,8 @@ export function FalkaProvider({ children }: { children: ReactNode }) {
         phaseDeadline: Date.now() + NIGHT_MS,
         nightKillPid: null,
         seerResult: null,
-        evidence: [],
+        evidenceIndices: [],
+        namedClue: null,
         lynchedPid: null,
       },
       ps

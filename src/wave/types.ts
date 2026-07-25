@@ -18,8 +18,10 @@ export interface WGame {
   round: number;
   started: boolean;
   clueGiverPid: string | null;
-  left: string;
-  right: string;
+  // Index into wave.spectra (i18n locale), not resolved text — so every
+  // client renders the prompt in their OWN chosen language, live, instead of
+  // whatever language the host happened to have active when the round began.
+  spectrumIndex: number;
   target: number; // 0..100, secret until reveal
   clue: string;
   finished?: boolean; // host ended the game -> show final standings

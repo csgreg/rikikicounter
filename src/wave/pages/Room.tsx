@@ -122,6 +122,10 @@ export function WaveRoom() {
   const [clue, setClue] = useState("");
   const [guessVal, setGuessVal] = useState(50);
   const [isCopied, setIsCopied] = useState(false);
+  // Resolved from the current language's pool at render time, not baked into
+  // synced state — so every player sees the prompt in their own language.
+  const spectra = t("wave.spectra", { returnObjects: true }) as Array<[string, string]>;
+  const [left, right] = spectra[game.spectrumIndex] ?? ["", ""];
   const { confirm, modal } = useConfirm();
   const { editPlayer, modal: editModal } = useEditPlayer();
   const { secretTapProps, alertUi } = useHostAlert({
@@ -372,8 +376,8 @@ export function WaveRoom() {
             <h2>{t("wave.clueGiverTitle")}</h2>
             <p className="hint">{t("wave.clueGiverHint")}</p>
             <SpectrumBar
-              left={game.left}
-              right={game.right}
+              left={left}
+              right={right}
               target={game.target}
               showTarget
             />
@@ -397,8 +401,8 @@ export function WaveRoom() {
           <div className="card">
             <h2>{t("wave.waitingClueTitle", { name: clueGiver?.name })}</h2>
             <SpectrumBar
-              left={game.left}
-              right={game.right}
+              left={left}
+              right={right}
               target={0}
               showTarget={false}
             />
@@ -412,8 +416,8 @@ export function WaveRoom() {
           <p className="label">{t("wave.guessLabel")}</p>
           <p className="wave-clue">„{game.clue}"</p>
           <SpectrumBar
-            left={game.left}
-            right={game.right}
+            left={left}
+            right={right}
             target={0}
             showTarget={false}
             interactive={!amClueGiver && !me?.guessed}
@@ -444,8 +448,8 @@ export function WaveRoom() {
         <div className="card">
           <p className="label">{t("wave.revealLabel", { clue: game.clue })}</p>
           <SpectrumBar
-            left={game.left}
-            right={game.right}
+            left={left}
+            right={right}
             target={game.target}
             showTarget
             guesses={players.filter((p) => p.pid !== game.clueGiverPid)}

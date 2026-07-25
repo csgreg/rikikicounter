@@ -407,6 +407,14 @@ export function FalkaRoom() {
       me?.role === "seer" && game.seerResult && game.seerResult.forPid === me.pid
         ? game.seerResult
         : null;
+    const evidencePool = t("falka.evidence", { returnObjects: true }) as string[];
+    const namedTemplates = t("falka.namedEvidence", { returnObjects: true }) as string[];
+    const namedClueText = game.namedClue
+      ? namedTemplates[game.namedClue.templateIndex]?.replace(
+          "{{name}}",
+          findPlayer(game.namedClue.pid)?.name ?? ""
+        )
+      : null;
     return (
       <>
         <div className="page">
@@ -434,8 +442,9 @@ export function FalkaRoom() {
           <div className="card">
             <p className="label">{t("falka.dawn.evidenceLabel")}</p>
             <ul className="falka-evidence">
-              {game.evidence.map((line, i) => (
-                <li key={i}>{line}</li>
+              {namedClueText ? <li className="falka-evidence-lead">{namedClueText}</li> : null}
+              {game.evidenceIndices.map((idx, i) => (
+                <li key={i}>{evidencePool[idx]}</li>
               ))}
             </ul>
           </div>

@@ -1,17 +1,16 @@
 // Opposing-concept pairs for the spectrum (left ↔ right) live in the i18n
 // locale files (wave.spectra) so they translate along with everything else.
-// pick a pair that isn't the given one (by left label)
-export function pickSpectrum(
-  pairs: Array<[string, string]>,
-  prevLeft?: string
-): [string, string] {
-  let pair = pairs[Math.floor(Math.random() * pairs.length)];
-  if (prevLeft && pairs.length > 1) {
-    while (pair[0] === prevLeft) {
-      pair = pairs[Math.floor(Math.random() * pairs.length)];
+// Returns an INDEX (not resolved text) so every client can look the pair up
+// in their own current language at render time.
+// pick an index that isn't the given one
+export function pickSpectrumIndex(poolSize: number, prevIndex?: number): number {
+  let index = Math.floor(Math.random() * poolSize);
+  if (prevIndex != null && poolSize > 1) {
+    while (index === prevIndex) {
+      index = Math.floor(Math.random() * poolSize);
     }
   }
-  return pair;
+  return index;
 }
 
 // secret target, kept away from the very edges

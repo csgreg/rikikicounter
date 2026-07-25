@@ -42,6 +42,16 @@ export interface SeerResult {
   isWolf: boolean;
 }
 
+// A single "lead" clue that actually points at somebody — templateIndex
+// selects the wording (falka.namedEvidence) and pid names the suspect. Kept
+// as indices/pid rather than resolved text so every client renders it in
+// their OWN chosen language, live, instead of whatever language the host
+// happened to have active when the night resolved.
+export interface NamedClue {
+  templateIndex: number;
+  pid: string;
+}
+
 export interface FGame {
   started: boolean;
   finished: boolean;
@@ -51,7 +61,8 @@ export interface FGame {
   winner: "wolves" | "village" | null;
   nightKillPid: string | null;
   seerResult: SeerResult | null;
-  evidence: string[];
+  evidenceIndices: number[]; // indices into falka.evidence (generic atmosphere pool)
+  namedClue: NamedClue | null;
   suspicionRanking: SuspicionEntry[] | null;
   lynchedPid: string | null;
 }

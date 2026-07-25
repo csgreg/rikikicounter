@@ -1,22 +1,32 @@
-/* A distinct palette for /falka — same neobrutalist language, blood-moon
-   identity. Overriding the design tokens recolors every base component
-   automatically (same technique as /wave and /set — see the tokens.css
-   contract comment). --yellow is repointed to the same crimson as the
-   dedicated --falka card/chip variants, so the whole app reads as one
-   red-branded game without a second color to maintain. */
+/* A distinct palette for /falka — same neobrutalist language, but genuinely
+   dark this time (a night/wolf game reads wrong on a bright page). Flipping
+   --ink to a light tone works because every shared component (cards, inputs,
+   modals, buttons) already draws its border/text/shadow purely from tokens
+   — see the tokens.css contract comment — so the whole game inverts to a
+   dark surface + light ink cleanly, the same mechanism /wave and /set use
+   to re-theme, just pushed all the way to dark mode. --yellow stays repointed
+   to crimson so the whole app still reads as one red-branded game. */
 .falka-app {
-  --bg: #f3d9d5;
-  --panel: #fff6f4;
-  --panel-2: #f9e2de;
-  --ink: #2a1210;
-  --muted: #8a5c56;
+  --bg: #140a0b;
+  --panel: #241315;
+  --panel-2: #2e1719;
+  --ink: #f5e6e2;
+  --muted: #c99a95;
 
   --yellow: var(--crimson);
   --yellow-dk: var(--crimson-dk);
   --coral: #ff8a3d;
   --coral-dk: #c65f1d;
 
-  --dot: rgba(42, 18, 16, 0.08);
+  --dot: rgba(255, 255, 255, 0.05);
+
+  /* `color` inherits by computed value, not as a live variable reference —
+     body's own `color: var(--ink)` resolves once against the root (dark)
+     --ink and that concrete value cascades down. Any element here that
+     doesn't set its own explicit color would keep that stale dark tone
+     instead of picking up the light --ink above, so it's restated here,
+     at the same element as the override, to actually take effect. */
+  color: var(--ink);
 
   background-color: var(--bg);
   background-image: radial-gradient(var(--dot) 1.4px, transparent 1.4px);
@@ -51,6 +61,11 @@
 
 .falka-evidence li {
   font-size: 0.92rem;
+}
+
+.falka-evidence-lead {
+  font-weight: 700;
+  color: #ff6b60;
 }
 
 /* ---------- Tappable target lists (wolf kill / seer check / lynch) ---------- */

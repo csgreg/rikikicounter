@@ -78,7 +78,7 @@
     },
     "falka": {
       "title": "Falka",
-      "desc": "Farkasok bújnak a falu között — leleplezed őket, vagy te vagy az egyik?"
+      "desc": "Farkasok bújnak a faluban — leleplezed őket, vagy te vagy az egyik?"
     },
     "ticker": ["Rikiki", "♠", "Wavelength", "♥", "Set", "♣", "Falka", "♦", "játékok", "♠", "Jó szórakozást!"],
     "footer": "Készült nektek tőlem · therikiki.hu",
@@ -118,13 +118,13 @@
       "taunt": ["Naaa neee 💀", "Ezt benézted 🤡", "Hát ez fájt 😬", "RIP, mínusz 🪦", "Ajjaj… 📉"],
       "gameOver": "Játék vége",
       "roundProgress": "{{round}}/{{total}}. kör · {{cards}} lap / játékos",
-      "final": "Vége! 🏆",
+      "final": "Vége!",
       "backToHome": "Vissza a főoldalra",
-      "tippingTitle": "Tippelés 🎯",
+      "tippingTitle": "Tippelés",
       "tipPlaceholder": "Tipp",
       "tipSubmit": "Tipp rögzítése",
       "waitingTips": "Várakozás a többiekre… ({{done}}/{{total}} rögzített)",
-      "resultsTitle": "Tippek 👀",
+      "resultsTitle": "Tippek",
       "hitPlaceholder": "Hány ütés sikerült?",
       "hitSubmit": "Eredmény rögzítése",
       "waitingHits": "Várakozás a többiekre… ({{done}}/{{total}} rögzített)",
@@ -175,11 +175,11 @@
     },
     "minPlayersHint": "Legalább 2 játékos kell.",
     "roundLine": "{{round}}. kör · kulcsszót ad: <b>{{name}}</b>",
-    "clueGiverTitle": "Te adod a kulcsszót 🤫",
+    "clueGiverTitle": "Te adod a kulcsszót",
     "clueGiverHint": "A nyíl a titkos cél — adj EGY szót/kifejezést, ami ide illik a skálán. (A többiek nem látják a nyilat.)",
     "cluePlaceholder": "A kulcsszavad…",
     "clueSubmit": "Kulcsszó elküldése",
-    "waitingClueTitle": "{{name}} gondolkodik… 🤔",
+    "waitingClueTitle": "{{name}} gondolkodik…",
     "waitingClueHint": "Mindjárt jön a kulcsszó.",
     "guessLabel": "A kulcsszó",
     "waitingGuesses": "Várakozás a tippekre… ({{done}}/{{total}})",
@@ -190,7 +190,7 @@
     "clueGiverTag": "kulcsszó",
     "nextRound": "Következő kör",
     "standings": "Állás",
-    "final": "Vége! 🏆",
+    "final": "Vége!",
     "finishGame": "Játék befejezése",
     "confirmFinishTitle": "Játék befejezése",
     "confirmFinishMessage": "Biztosan befejezed a játékot mindenkinek?",
@@ -235,12 +235,12 @@
     },
     "boardMeta": "{{board}} lap az asztalon · {{deck}} a pakliban",
     "standings": "Állás",
-    "final": "Vége! 🏆"
+    "final": "Vége!"
   },
   "falka": {
     "documentTitle": "Falka – parti játék | therikiki.hu",
     "heroTitle": "Falka",
-    "tagline": "Farkasok bújnak meg a falu között — te leleplezed őket, vagy te vagy az egyik? 5-6 játékosra tervezve.",
+    "tagline": "Farkasok bújnak meg a faluban — leleplezed őket, vagy te vagy az egyik? 5-6 játékosra tervezve.",
     "backTo": "Vissza a Falkához",
     "lobby": {
       "createTitle": "Új játék",
@@ -263,8 +263,8 @@
       "villager": "Nincs éjszakai képességed. Figyeld a nyomokat, és szavazz bölcsen nappal."
     },
     "trueRoleWildcard": "Falubeli (Bűnbak)",
-    "gameOverWolves": "A farkasok győztek! 🐺",
-    "gameOverVillage": "A falu győzött! 🏮",
+    "gameOverWolves": "A farkasok győztek!",
+    "gameOverVillage": "A falu győzött!",
     "identitiesLabel": "Kilétek",
     "night": {
       "roundLabel": "{{round}}. éjszaka",
@@ -287,7 +287,7 @@
       "noVictim": "Ma éjjel senki sem tűnt el.",
       "evidenceLabel": "Nyomok",
       "seerResultLabel": "A vizsgálatod",
-      "seerResultWolf": "farkas! 🐺",
+      "seerResultWolf": "farkas!",
       "seerResultNotWolf": "nem farkas.",
       "continueToDay": "Tovább a nappalhoz",
       "continueToResults": "Eredmény"
@@ -329,6 +329,14 @@
       "A holdfényben állítólag két árnyék mozgott együtt.",
       "A piactéren egy felborult kosarat találtak reggelre.",
       "Valaki fényt látott égni az öreg csűrben, jóval éjfél után."
+    ],
+    "namedEvidence": [
+      "Valaki neszezést hallott {{name}} háza felől az éjjel.",
+      "{{name}} lábnyomait vélték felfedezni a kúthoz vezető ösvényen.",
+      "Egy szomszéd azt állítja, {{name}} kint járt-kelt jóval éjfél után.",
+      "{{name}} kabátján állítólag friss sárfoltokat láttak reggel.",
+      "Valaki azt mondja, {{name}} szokatlanul ideges volt ma reggel.",
+      "Állítólag {{name}} egyedül kóborolt röviddel az eltűnés előtt."
     ]
   }
 }

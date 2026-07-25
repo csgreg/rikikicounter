@@ -118,13 +118,13 @@
       "taunt": ["Ouch 💀", "Well that backfired 🤡", "That hurt 😬", "RIP, minus points 🪦", "Uh oh… 📉"],
       "gameOver": "Game over",
       "roundProgress": "Round {{round}}/{{total}} · {{cards}} cards / player",
-      "final": "Done! 🏆",
+      "final": "Done!",
       "backToHome": "Back to home",
-      "tippingTitle": "Guessing 🎯",
+      "tippingTitle": "Guessing",
       "tipPlaceholder": "Guess",
       "tipSubmit": "Lock in guess",
       "waitingTips": "Waiting for the others… ({{done}}/{{total}} locked in)",
-      "resultsTitle": "Guesses 👀",
+      "resultsTitle": "Guesses",
       "hitPlaceholder": "How many tricks did you win?",
       "hitSubmit": "Lock in result",
       "waitingHits": "Waiting for the others… ({{done}}/{{total}} locked in)",
@@ -175,11 +175,11 @@
     },
     "minPlayersHint": "At least 2 players needed.",
     "roundLine": "Round {{round}} · clue giver: <b>{{name}}</b>",
-    "clueGiverTitle": "You're giving the clue 🤫",
+    "clueGiverTitle": "You're giving the clue",
     "clueGiverHint": "The arrow marks the secret target — give ONE word or phrase that fits that spot on the scale. (The others can't see the arrow.)",
     "cluePlaceholder": "Your clue…",
     "clueSubmit": "Send clue",
-    "waitingClueTitle": "{{name}} is thinking… 🤔",
+    "waitingClueTitle": "{{name}} is thinking…",
     "waitingClueHint": "The clue is coming up.",
     "guessLabel": "The clue",
     "waitingGuesses": "Waiting for guesses… ({{done}}/{{total}})",
@@ -190,7 +190,7 @@
     "clueGiverTag": "clue giver",
     "nextRound": "Next round",
     "standings": "Standings",
-    "final": "Done! 🏆",
+    "final": "Done!",
     "finishGame": "End game",
     "confirmFinishTitle": "End game",
     "confirmFinishMessage": "Are you sure you want to end the game for everyone?",
@@ -235,7 +235,7 @@
     },
     "boardMeta": "{{board}} cards on the table · {{deck}} in the deck",
     "standings": "Standings",
-    "final": "Done! 🏆"
+    "final": "Done!"
   },
   "falka": {
     "documentTitle": "Falka – party game | therikiki.hu",
@@ -263,8 +263,8 @@
       "villager": "You have no night power. Watch the clues, and vote wisely by day."
     },
     "trueRoleWildcard": "Villager (Scapegoat)",
-    "gameOverWolves": "The wolves win! 🐺",
-    "gameOverVillage": "The village wins! 🏮",
+    "gameOverWolves": "The wolves win!",
+    "gameOverVillage": "The village wins!",
     "identitiesLabel": "Identities",
     "night": {
       "roundLabel": "Night {{round}}",
@@ -287,7 +287,7 @@
       "noVictim": "No one vanished last night.",
       "evidenceLabel": "Clues",
       "seerResultLabel": "Your investigation",
-      "seerResultWolf": "is a wolf! 🐺",
+      "seerResultWolf": "is a wolf!",
       "seerResultNotWolf": "is not a wolf.",
       "continueToDay": "Continue to day",
       "continueToResults": "Results"
@@ -329,6 +329,14 @@
       "Two shadows were said to be moving together in the moonlight.",
       "An overturned basket was found in the market square by morning.",
       "Someone saw a light burning in the old barn, well after midnight."
+    ],
+    "namedEvidence": [
+      "Someone heard rustling coming from {{name}}'s house last night.",
+      "{{name}}'s footprints seemed to be on the path to the well.",
+      "A neighbor claims {{name}} was out and about well after midnight.",
+      "Fresh mud stains were reportedly seen on {{name}}'s coat this morning.",
+      "Someone says {{name}} seemed unusually nervous this morning.",
+      "{{name}} was reportedly seen wandering alone shortly before the disappearance."
     ]
   }
 }

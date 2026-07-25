@@ -5,7 +5,7 @@ import { getPid } from "../api/session";
 import { useRoomConnection } from "../shared/useRoomConnection";
 import type { RoomSnapshot } from "../shared/session";
 import { buildStatePayload } from "../shared/state";
-import { pickSpectrum, randomTarget } from "./spectra";
+import { pickSpectrumIndex, randomTarget } from "./spectra";
 import { scoreFor, type WAction, type WGame, type WPlayer } from "./types";
 
 const WAVE_SESSION_KEY = "rikiki_wave_room";
@@ -16,8 +16,7 @@ const EMPTY_GAME: WGame = {
   round: 0,
   started: false,
   clueGiverPid: null,
-  left: "",
-  right: "",
+  spectrumIndex: 0,
   target: 0,
   clue: "",
   finished: false,
@@ -118,9 +117,9 @@ export function WaveProvider({ children }: { children: ReactNode }) {
     syncNow(g, p);
   }
 
-  function buildRound(prevLeft: string | undefined, giverPid: string | null, round: number) {
-    const pairs = t("wave.spectra", { returnObjects: true }) as Array<[string, string]>;
-    const [left, right] = pickSpectrum(pairs, prevLeft);
+  function buildRound(prevIndex: number | undefined, giverPid: string | null, round: number) {
+    const poolSize = (t("wave.spectra", { returnObjects: true }) as Array<[string, string]>).length;
+    const spectrumIndex = pickSpectrumIndex(poolSize, prevIndex);
     const reset = rosterRef.current.map((p) => ({
       ...p,
       guess: null,
@@ -132,8 +131,7 @@ export function WaveProvider({ children }: { children: ReactNode }) {
       round,
       started: true,
       clueGiverPid: giverPid,
-      left,
-      right,
+      spectrumIndex,
       target: randomTarget(),
       clue: "",
     };
@@ -153,7 +151,7 @@ export function WaveProvider({ children }: { children: ReactNode }) {
     const order = ps.map((p) => p.pid);
     const idx = order.indexOf(gameRef.current.clueGiverPid || "");
     const nextGiver = order[(idx + 1) % order.length] ?? order[0];
-    const { g, p } = buildRound(gameRef.current.left, nextGiver, gameRef.current.round + 1);
+    const { g, p } = buildRound(gameRef.current.spectrumIndex, nextGiver, gameRef.current.round + 1);
     applyAndSync(g, p);
   }
 

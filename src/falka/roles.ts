@@ -1,4 +1,4 @@
-import type { FPlayer, FRole, SuspicionEntry } from "./types";
+import type { FPlayer, FRole, NamedClue, SuspicionEntry } from "./types";
 
 // Exact role tables for the two supported room sizes — small enough that a
 // generic "N wolves per M players" formula would need as much explaining as
@@ -49,14 +49,32 @@ export function resetRoundFields(players: FPlayer[]): FPlayer[] {
   }));
 }
 
-// Flavor-only evidence lines shown at dawn — some line up with the night's
-// real events, some are decoys. They exist to give the table something
-// concrete to argue over instead of pure vibes; they're deliberately not
-// wired to true roles, so reading too much into any one line is itself part
-// of the bluff. The pool itself lives in the i18n locale files (falka.evidence)
-// so it translates along with everything else.
-export function pickEvidence(pool: string[], count = 3): string[] {
-  return shuffle(pool).slice(0, count);
+// Atmosphere lines shown at dawn alongside the named clue — pure flavor,
+// no signal. Indices into the pool (not resolved text) so every client
+// renders them in their own chosen language. The pool itself lives in the
+// i18n locale files (falka.evidence).
+export function pickEvidenceIndices(poolSize: number, count = 2): number[] {
+  const indices = Array.from({ length: poolSize }, (_, i) => i);
+  return shuffle(indices).slice(0, count);
+}
+
+// The one "lead" clue that actually points at somebody — a real, if noisy,
+// signal to reason about (unlike the atmosphere lines). Wolves are twice as
+// likely to be named as anyone else, so following it is better than a
+// coinflip but far from certain; the victim is excluded since they're
+// already revealed dead. Returns null if nobody's left to name (e.g. only
+// the victim was alive besides the seer, edge case at 5 players).
+export function pickNamedClue(
+  candidates: FPlayer[],
+  templateCount: number
+): NamedClue | null {
+  if (candidates.length === 0) return null;
+  const weighted = candidates.flatMap((p) => (p.role === "wolf" ? [p, p] : [p]));
+  const suspect = weighted[Math.floor(Math.random() * weighted.length)];
+  return {
+    templateIndex: Math.floor(Math.random() * templateCount),
+    pid: suspect.pid,
+  };
 }
 
 // Plurality with random tie-break — used for the wolves' kill target, where a

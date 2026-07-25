@@ -43,6 +43,16 @@
   opacity: 0.6;
 }
 
+.flag-icon {
+  width: 20px;
+  height: 14px;
+  flex: 0 0 auto;
+  display: block;
+  border-radius: 2px;
+  border: 1.5px solid var(--ink-fixed);
+  box-shadow: 1px 1px 0 rgba(29, 24, 50, 0.35);
+}
+
 .lang-switcher-menu {
   position: absolute;
   top: calc(100% + 8px);
