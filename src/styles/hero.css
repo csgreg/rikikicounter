@@ -92,6 +92,12 @@
   box-shadow: 5px 5px 0 var(--teal-dk);
 }
 
+.gh-chip--falka {
+  background: var(--crimson);
+  color: #fff;
+  box-shadow: 5px 5px 0 var(--crimson-dk);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .game-hero,
   .gh-chip {

@@ -12,6 +12,12 @@
   }
 }
 
+.menu-topbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
 .menu-hero {
   text-align: center;
   margin: 48px 0 4px;
@@ -93,9 +99,15 @@
 
 @media (min-width: 660px) {
   .menu-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 26px;
     align-items: stretch;
+  }
+}
+
+@media (min-width: 1080px) {
+  .menu-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
@@ -162,6 +174,22 @@
   animation-delay: 0.42s;
 }
 
+.menu-card--falka {
+  background: var(--crimson);
+  color: #fff;
+  box-shadow: 8px 8px 0 var(--crimson-dk);
+  transform: rotate(1.1deg);
+  animation: pop-falka 0.55s var(--pop) backwards;
+  animation-delay: 0.54s;
+}
+
+.menu-card--falka::after {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.14) 1.5px,
+    transparent 1.5px
+  );
+}
+
 .menu-card:hover {
   transform: rotate(0deg) translate(-3px, -5px);
 }
@@ -178,6 +206,10 @@
   box-shadow: 12px 14px 0 var(--teal-dk);
 }
 
+.menu-card--falka:hover {
+  box-shadow: 12px 14px 0 var(--crimson-dk);
+}
+
 .menu-card:active {
   transform: rotate(0deg) translate(3px, 3px);
 }
@@ -192,6 +224,10 @@
 
 .menu-card--set:active {
   box-shadow: 3px 3px 0 var(--teal-dk);
+}
+
+.menu-card--falka:active {
+  box-shadow: 3px 3px 0 var(--crimson-dk);
 }
 
 /* spinning dashed badge in the corner */
@@ -323,8 +359,58 @@
   border-radius: 7px;
   box-shadow: 2px 2px 0 rgba(29, 24, 50, 0.35);
   transform-origin: bottom center;
-  transition: transform 0.2s var(--pop);
+  transition: transform 0.2s var(--pop), box-shadow 0.2s var(--pop);
   position: relative;
+  will-change: transform;
+}
+
+.mset-oval {
+  animation: mset-float-1 3.1s ease-in-out infinite;
+}
+
+.mset-diamond {
+  animation: mset-float-2 2.7s ease-in-out infinite;
+  animation-delay: 0.25s;
+}
+
+.mset-squiggle {
+  animation: mset-float-3 3.4s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+
+@keyframes mset-float-1 {
+  0%,
+  100% {
+    transform: rotate(-5deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-9deg) translateY(-7px);
+  }
+}
+
+@keyframes mset-float-2 {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(4deg);
+  }
+}
+
+@keyframes mset-float-3 {
+  0%,
+  100% {
+    transform: rotate(5deg) translateY(0);
+  }
+  50% {
+    transform: rotate(9deg) translateY(-6px);
+  }
+}
+
+.menu-card--set:hover .mset {
+  animation: none;
+  box-shadow: 3px 4px 0 rgba(29, 24, 50, 0.4);
 }
 
 .mset::before {
@@ -371,6 +457,88 @@
   100% {
     left: 10%;
   }
+}
+
+.menu-deco--falka {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1;
+}
+
+.mfalka-moon {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  background: var(--paper-fixed);
+  border: var(--bw) solid var(--ink-fixed);
+  border-radius: 50%;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  animation: mfalka-float 3.8s ease-in-out infinite;
+}
+
+/* a same-colour circle "bites" into the paper moon to carve a crescent */
+.mfalka-moon::before {
+  content: "";
+  position: absolute;
+  top: -12%;
+  right: -32%;
+  width: 100%;
+  height: 124%;
+  background: var(--crimson);
+  border-radius: 50%;
+}
+
+.mfalka-eye {
+  width: 10px;
+  height: 14px;
+  flex: 0 0 auto;
+  background: #ffce54;
+  border: 2px solid var(--ink-fixed);
+  border-radius: 50%;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
+  animation: mfalka-blink 4.2s ease-in-out infinite;
+}
+
+.mfalka-eye:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+@keyframes mfalka-float {
+  0%,
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-6deg) translateY(-6px);
+  }
+}
+
+@keyframes mfalka-blink {
+  0%,
+  88%,
+  100% {
+    transform: scaleY(1);
+  }
+  92% {
+    transform: scaleY(0.15);
+  }
+}
+
+.menu-card--falka:hover .mfalka-moon,
+.menu-card--falka:hover .mfalka-eye {
+  animation: none;
+}
+
+.menu-card--falka:hover .mfalka-moon {
+  transform: rotate(-10deg) translateY(-4px);
+}
+
+.menu-card--falka:hover .mfalka-eye {
+  transform: scaleY(1.3);
+  background: #ffe08a;
 }
 
 /* ---------- Card text ---------- */
@@ -466,7 +634,19 @@
   }
 }
 
+@keyframes pop-falka {
+  from {
+    opacity: 0;
+    transform: rotate(1.1deg) translateY(24px) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(1.1deg);
+  }
+}
+
 .menu-page .ticker {
+  margin-top: 14px;
   animation: menu-hero-in 0.5s var(--pop) backwards;
   animation-delay: 0.42s;
 }
@@ -477,9 +657,13 @@
   .menu-card--rikiki,
   .menu-card--wave,
   .menu-card--set,
+  .menu-card--falka,
   .menu-needle,
   .menu-ring,
   .menu-ring span,
+  .mset,
+  .mfalka-moon,
+  .mfalka-eye,
   .menu-page .ticker {
     animation: none;
   }

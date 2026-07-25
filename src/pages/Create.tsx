@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useHistory } from "react-router";
+import { useTranslation } from "react-i18next";
 import { getPid, saveSession } from "../api/session";
 import { syncState } from "../api/state";
 import { useGame } from "../context/GameContext";
@@ -9,6 +10,7 @@ import "./Create.css";
 const MAX_PLAYERS = 6;
 
 export function Create() {
+  const { t } = useTranslation();
   const { socket, setRoomId, setPlayers, setGame } = useGame();
   const [playerName, setPlayerName] = useState("");
   const history = useHistory();
@@ -53,18 +55,18 @@ export function Create() {
 
   return (
     <div className="card game-card game-card--yellow suit-mark create-card">
-      <h2>Új szoba létrehozása</h2>
+      <h2>{t("rikiki.create.title")}</h2>
       <div className="field">
         <input
           className="input"
           type="text"
-          placeholder="Játékos név"
+          placeholder={t("rikiki.create.namePlaceholder")}
           value={playerName}
           onChange={(event) => setPlayerName(event.target.value)}
         />
       </div>
       <button className="btn btn-light" onClick={handleCreateRoom}>
-        Létrehozás
+        {t("rikiki.create.submit")}
       </button>
     </div>
   );

@@ -1,22 +1,22 @@
 import { Switch, Route } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getPid } from "../api/session";
-import { SetProvider, useSet } from "./SetContext";
-import { SetLobby } from "./pages/Lobby";
-import { SetBoard } from "./pages/Board";
+import { FalkaProvider, useFalka } from "./FalkaContext";
+import { FalkaLobby } from "./pages/Lobby";
+import { FalkaRoom } from "./pages/Room";
 import { ConnectingOverlay } from "../components/ConnectingOverlay";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import "./set.css";
+import "./falka.css";
 
 function KickedScreen() {
   const { t } = useTranslation();
   return (
-    <div className="App set-app">
+    <div className="App falka-app">
       <div className="page">
         <h1 className="brand">{t("common.kickedTitle")}</h1>
         <p className="hint">{t("common.kickedMessage")}</p>
-        <button className="btn" onClick={() => (window.location.href = "/set")}>
-          {t("set.backTo")}
+        <button className="btn" onClick={() => (window.location.href = "/falka")}>
+          {t("falka.backTo")}
         </button>
       </div>
     </div>
@@ -25,10 +25,10 @@ function KickedScreen() {
 
 function RecoverScreen() {
   const { t } = useTranslation();
-  const { recover, recoverGame, dismissRecover } = useSet();
+  const { recover, recoverGame, dismissRecover } = useFalka();
   const isHost = !!recover?.players.find((p) => p.pid === getPid())?.boss;
   return (
-    <div className="App set-app">
+    <div className="App falka-app">
       <div className="page">
         <h1 className="brand">{t("common.recoverTitle")}</h1>
         <p className="hint">
@@ -40,17 +40,17 @@ function RecoverScreen() {
           </button>
         ) : null}
         <button className="btn btn-ghost" onClick={dismissRecover}>
-          {t("set.backTo")}
+          {t("falka.backTo")}
         </button>
       </div>
     </div>
   );
 }
 
-function SetShell() {
+function FalkaShell() {
   const { t } = useTranslation();
-  useDocumentTitle(t("set.documentTitle"));
-  const { connected, restoring, kicked, recover, cancelRestore } = useSet();
+  useDocumentTitle(t("falka.documentTitle"));
+  const { connected, restoring, kicked, recover, cancelRestore } = useFalka();
 
   if (kicked) {
     return <KickedScreen />;
@@ -62,10 +62,10 @@ function SetShell() {
 
   if (restoring) {
     return (
-      <div className="App set-app">
+      <div className="App falka-app">
         {!connected && <ConnectingOverlay />}
         <div className="page">
-          <h1 className="brand">Set</h1>
+          <h1 className="brand">Falka</h1>
           <p className="hint">{t("common.restoringTitle")}</p>
           <button className="btn btn-ghost" onClick={cancelRestore}>
             {t("common.cancelRestore")}
@@ -76,24 +76,24 @@ function SetShell() {
   }
 
   return (
-    <div className="App set-app">
+    <div className="App falka-app">
       {!connected && <ConnectingOverlay />}
       <Switch>
-        <Route exact path="/set">
-          <SetLobby />
+        <Route exact path="/falka">
+          <FalkaLobby />
         </Route>
-        <Route path="/set/board">
-          <SetBoard />
+        <Route path="/falka/room">
+          <FalkaRoom />
         </Route>
       </Switch>
     </div>
   );
 }
 
-export function SetApp() {
+export function FalkaApp() {
   return (
-    <SetProvider>
-      <SetShell />
-    </SetProvider>
+    <FalkaProvider>
+      <FalkaShell />
+    </FalkaProvider>
   );
 }

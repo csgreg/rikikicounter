@@ -1,49 +1,25 @@
 import { Link } from "react-router-dom";
+import { Trans, useTranslation } from "react-i18next";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import "./Rules.css";
 
-const STEPS = [
-  {
-    title: "A lapok",
-    text: "Minden körben más számú lapot osztotok. A lapszám a maximumtól 1-ig csökken, majd vissza a maximumig — és vége a játéknak.",
-  },
-  {
-    title: "Az adu",
-    text: "Minden körnek van egy adu színe (néha épp nincs adu). Az adu bármelyik másik színt elüti.",
-  },
-  {
-    title: "Tippelés",
-    text: "Mindenki megtippeli, hány ütést fog vinni a körben. A tippek csak akkor derülnek ki, ha már MINDENKI rögzített.",
-  },
-  {
-    title: "Ki kezd?",
-    text: "Az első ütést körönként más kezdi (forgásban). Onnantól mindig az hív új ütést, aki az előzőt elvitte.",
-  },
-  {
-    title: "Lapkijátszás",
-    text: "A hívott színre színt kell tenni. Ha nincs olyan színed, bármit tehetsz — adut vagy más színt is. Ütni nem kötelező.",
-  },
-  {
-    title: "Ki viszi az ütést?",
-    text: "A legnagyobb lap. Az adu üt minden más színt; ha nem ment adu, a hívott szín legnagyobbja nyer. Felülütni nem kötelező.",
-  },
-  {
-    title: "Számolás",
-    text: "Beírjátok, ki hány ütést vitt, az app pedig automatikusan vezeti a pontokat körről körre.",
-  },
-];
+interface Step {
+  title: string;
+  text: string;
+}
 
 export function Rules() {
-  useDocumentTitle("Hogyan kell rikikizni? – szabályok | Rikiki Counter");
+  const { t } = useTranslation();
+  useDocumentTitle(t("rikiki.rules.documentTitle"));
+  const steps = t("rikiki.rules.steps", { returnObjects: true }) as Step[];
+
   return (
     <div className="page">
       <header>
         <h1 className="brand">
-          Hogyan kell <span>rikikizni?</span>
+          {t("rikiki.rules.heroTitle1")} <span>{t("rikiki.rules.heroTitle2")}</span>
         </h1>
-        <p className="tagline">
-          A lényeg: találd el pontosan, hány ütést viszel a körben!
-        </p>
+        <p className="tagline">{t("rikiki.rules.tagline")}</p>
       </header>
 
       <div className="suits">
@@ -55,9 +31,9 @@ export function Rules() {
       </div>
 
       <div className="card">
-        <h2>A játék menete</h2>
+        <h2>{t("rikiki.rules.howItWorksTitle")}</h2>
         <ol className="rules-steps">
-          {STEPS.map((s, i) => (
+          {steps.map((s, i) => (
             <li className="rule-step" key={i}>
               <span className="step-num" aria-hidden="true">
                 {i + 1}
@@ -72,27 +48,33 @@ export function Rules() {
       </div>
 
       <div className="card">
-        <h2>Pontozás</h2>
+        <h2>{t("rikiki.rules.scoringTitle")}</h2>
         <div className="score-rule good">
           <div className="step-body">
-            <strong>Eltaláltad a tipped</strong>
-            <p>+10 pont, és még +2 pont minden megnyert ütésért.</p>
+            <strong>{t("rikiki.rules.scoringHitTitle")}</strong>
+            <p>{t("rikiki.rules.scoringHitText")}</p>
           </div>
         </div>
         <div className="score-rule bad">
           <div className="step-body">
-            <strong>Nem találtad el</strong>
-            <p>−4 pont minden ütésnyi eltérésért (tipp ↔ valóság).</p>
+            <strong>{t("rikiki.rules.scoringMissTitle")}</strong>
+            <p>{t("rikiki.rules.scoringMissText")}</p>
           </div>
         </div>
         <p className="rules-eg">
-          <strong>Pl.</strong> tipp 3, hozott 3 → <span className="eg-good">+16</span> · tipp 3,
-          hozott 1 → <span className="eg-bad">−8</span>
+          <Trans
+            i18nKey="rikiki.rules.example"
+            components={{
+              strong: <strong />,
+              good: <span className="eg-good" />,
+              bad: <span className="eg-bad" />,
+            }}
+          />
         </p>
       </div>
 
       <Link to="/rikiki" className="btn">
-        Értem, jöhet a játék!
+        {t("rikiki.rules.cta")}
       </Link>
     </div>
   );

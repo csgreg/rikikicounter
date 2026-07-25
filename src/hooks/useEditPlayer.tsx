@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import "./useConfirm.css";
 import "./useEditPlayer.css";
 
@@ -28,6 +29,7 @@ interface UseEditPlayerResult {
 //   if (res) { ...apply res.name / res.points and sync... }
 //   ...render {modal} somewhere in your JSX.
 export function useEditPlayer(): UseEditPlayerResult {
+  const { t } = useTranslation();
   const [state, setState] = useState<EditState | null>(null);
   const [name, setName] = useState("");
   const [points, setPoints] = useState("");
@@ -83,10 +85,10 @@ export function useEditPlayer(): UseEditPlayerResult {
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="modal-title">Játékos szerkesztése</h3>
+        <h3 className="modal-title">{t("common.editPlayerTitle")}</h3>
         <div className="field">
           <label className="label" htmlFor="edit-player-name">
-            Név
+            {t("common.editPlayerName")}
           </label>
           <input
             id="edit-player-name"
@@ -99,7 +101,7 @@ export function useEditPlayer(): UseEditPlayerResult {
         {state.points !== undefined ? (
           <div className="field">
             <label className="label" htmlFor="edit-player-points">
-              Pont
+              {t("common.editPlayerPoints")}
             </label>
             <input
               id="edit-player-points"
@@ -112,14 +114,14 @@ export function useEditPlayer(): UseEditPlayerResult {
         ) : null}
         <div className="modal-actions">
           <button className="btn btn-ghost" onClick={() => close(false)}>
-            Mégse
+            {t("common.cancel")}
           </button>
           <button
             className="btn"
             disabled={!name.trim()}
             onClick={() => close(true)}
           >
-            Mentés
+            {t("common.save")}
           </button>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { socket } from "../../api/socket";
 import { getPid } from "../../api/session";
 import { resolveSeat } from "../../shared/seat";
@@ -8,6 +9,7 @@ import { useWave, EMPTY_GAME } from "../WaveContext";
 import type { WPlayer, WRoom } from "../types";
 
 export function WaveLobby() {
+  const { t } = useTranslation();
   const { setRoomId, setGame, setPlayers, syncExplicit, saveSession } = useWave();
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
@@ -46,7 +48,7 @@ export function WaveLobby() {
     if (!name.trim() || !code.trim()) return;
     socket.emit("join-room", code, (res) => {
       if (res.status !== "ok") {
-        alert("Nincs ilyen szoba!");
+        alert(t("common.noSuchRoom"));
         return;
       }
       socket.emit("get-state", code, (stateRes) => {
@@ -88,42 +90,40 @@ export function WaveLobby() {
   return (
     <div className="page">
       <header className="game-hero">
-        <h1 className="game-hero-title" aria-label="Hullámhossz">
+        <h1 className="game-hero-title" aria-label={t("home.wave.title")}>
           <span className="gh-chip gh-chip--violet gh-chip--a" aria-hidden="true">
-            Hullám
+            {t("wave.heroTitle1")}
           </span>
           <span className="gh-chip gh-chip--violet-dk gh-chip--b" aria-hidden="true">
-            hossz
+            {t("wave.heroTitle2")}
           </span>
         </h1>
-        <p className="tagline">
-          Találd el a rejtett pontot a skálán — egyetlen kulcsszóból!
-        </p>
+        <p className="tagline">{t("wave.tagline")}</p>
       </header>
 
       <div className="card game-card game-card--violet">
-        <h2>Új játék</h2>
+        <h2>{t("wave.lobby.createTitle")}</h2>
         <div className="field">
           <input
             className="input"
-            placeholder="A neved"
+            placeholder={t("common.yourName")}
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
         <button className="btn btn-light" onClick={handleCreate}>
-          Szoba nyitása
+          {t("wave.lobby.createSubmit")}
         </button>
       </div>
 
-      <div className="divider">vagy</div>
+      <div className="divider">{t("common.or")}</div>
 
       <div className="card game-card game-card--violet">
-        <h2>Csatlakozás</h2>
+        <h2>{t("wave.lobby.joinTitle")}</h2>
         <div className="field">
           <input
             className="input"
-            placeholder="Szobakód"
+            placeholder={t("common.roomCodeField")}
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
@@ -131,22 +131,20 @@ export function WaveLobby() {
         <div className="field">
           <input
             className="input"
-            placeholder="A neved"
+            placeholder={t("common.yourName")}
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
         <button className="btn btn-light" onClick={handleJoin}>
-          Belépek
+          {t("wave.lobby.joinSubmit")}
         </button>
       </div>
 
       <Link to="/" className="btn btn-ghost">
-        ← Menü
+        {t("common.backToMenu")}
       </Link>
-      <footer className="site-footer">
-        Készült nektek tőlem · therikiki.hu
-      </footer>
+      <footer className="site-footer">{t("home.footer")}</footer>
     </div>
   );
 }

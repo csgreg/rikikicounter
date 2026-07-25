@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import "./ConnectingOverlay.css";
 
 // Full-screen overlay shown whenever the socket is not connected.
 // On a free backend the first connection can take ~50s (cold start), so after
 // a few seconds we explain what's happening instead of looking frozen.
 export function ConnectingOverlay() {
+  const { t } = useTranslation();
   const [slow, setSlow] = useState(false);
 
   useEffect(() => {
@@ -21,13 +23,8 @@ export function ConnectingOverlay() {
           <span>♣</span>
           <span className="red">♦</span>
         </div>
-        <p className="overlay-title">Csatlakozás a szerverhez…</p>
-        {slow && (
-          <p className="overlay-sub">
-            A szerver épp felébred, ez akár ~50 másodpercig is
-            tarthat. Köszönjük a türelmet! ☕
-          </p>
-        )}
+        <p className="overlay-title">{t("common.connecting")}</p>
+        {slow && <p className="overlay-sub">{t("common.connectingSlow")}</p>}
       </div>
     </div>
   );

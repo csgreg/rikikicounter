@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { GameProvider, useGame } from "./context/GameContext";
 import { ConnectingOverlay } from "./components/ConnectingOverlay";
 import { Create } from "./pages/Create";
@@ -9,10 +10,12 @@ import { Rules } from "./pages/Rules";
 import { Menu } from "./pages/Menu";
 import { WaveApp } from "./wave/WaveApp";
 import { SetApp } from "./set/SetApp";
+import { FalkaApp } from "./falka/FalkaApp";
 import { getPid } from "./api/session";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
 function KickedScreen() {
+  const { t } = useTranslation();
   return (
     <div className="App">
       <div className="page page-center">
@@ -20,11 +23,11 @@ function KickedScreen() {
           🥾
         </div>
         <h1 className="brand">
-          Kirúgtak a <span>szobából</span>
+          <span>{t("common.kickedTitle")}</span>
         </h1>
-        <p className="hint">A host eltávolított a szobából.</p>
+        <p className="hint">{t("common.kickedMessage")}</p>
         <button className="btn" onClick={() => (window.location.href = "/")}>
-          Vissza a főoldalra
+          {t("rikiki.game.backToHome")}
         </button>
       </div>
     </div>
@@ -32,6 +35,7 @@ function KickedScreen() {
 }
 
 function RecoverScreen() {
+  const { t } = useTranslation();
   const { recover, recoverGame, dismissRecover } = useGame();
   const isHost = !!recover?.players.find((p) => p.pid === getPid())?.boss;
   return (
@@ -41,71 +45,64 @@ function RecoverScreen() {
           🔌
         </div>
         <h1 className="brand">
-          Megszakadt a <span>szoba</span>
+          <span>{t("common.recoverTitle")}</span>
         </h1>
         <p className="hint">
-          Úgy tűnik, a szerver újraindult. {isHost
-            ? "Hostként folytathatod a játékot az eddigi pontokkal — a többiek az új kóddal tudnak visszacsatlakozni."
-            : "Kérd a hosttól az új szobakódot a folytatáshoz."}
+          {isHost ? t("common.recoverMessageHost") : t("common.recoverMessageGuest")}
         </p>
         {isHost ? (
           <button className="btn" onClick={recoverGame}>
-            Játék folytatása
+            {t("common.recoverContinue")}
           </button>
         ) : null}
         <button className="btn btn-ghost" onClick={dismissRecover}>
-          Vissza a főoldalra
+          {t("rikiki.game.backToHome")}
         </button>
       </div>
     </div>
   );
 }
 
-const HOME_TICKER = ["Tippelj!", "♠", "Játsz!", "♥", "Nyerj!", "♣", "Hajrá!", "♦"];
-
 function Home() {
-  useDocumentTitle(
-    "Rikiki Counter – Online pontszámláló a Rikiki kártyajátékhoz"
-  );
+  const { t } = useTranslation();
+  useDocumentTitle(t("rikiki.documentTitle"));
+  const ticker = t("rikiki.ticker", { returnObjects: true }) as string[];
   return (
     <div className="page">
       <header className="game-hero">
         <h1 className="game-hero-title" aria-label="Rikiki Counter">
           <span className="gh-chip gh-chip--yellow gh-chip--a" aria-hidden="true">
-            Rikiki
+            {t("rikiki.heroTitle1")}
           </span>
           <span className="gh-chip gh-chip--yellow-dk gh-chip--b" aria-hidden="true">
-            Counter
+            {t("rikiki.heroTitle2")}
           </span>
         </h1>
-        <p className="tagline">
-          Hozz létre szobát vagy csatlakozz, és a pontokat mi számoljuk.
-        </p>
+        <p className="tagline">{t("rikiki.tagline")}</p>
       </header>
       <div className="ticker" aria-hidden="true">
         <div className="ticker-track">
-          {[...HOME_TICKER, ...HOME_TICKER].map((t, i) => (
-            <span key={i}>{t}</span>
+          {[...ticker, ...ticker].map((tx, i) => (
+            <span key={i}>{tx}</span>
           ))}
         </div>
       </div>
       <Create />
-      <div className="divider">vagy</div>
+      <div className="divider">{t("common.or")}</div>
       <Join />
       <Link to="/rules" className="btn btn-ghost">
-        Hogyan kell rikikizni?
+        {t("rikiki.rulesLink")}
       </Link>
       <Link to="/" className="btn btn-ghost">
-        ← Menü
+        {t("common.backToMenu")}
       </Link>
-      <footer className="site-footer">
-        Készült nektek tőlem · therikiki.hu
-      </footer>
+      <footer className="site-footer">{t("home.footer")}</footer>
     </div>
   );
 }
 
 function AppShell() {
+  const { t } = useTranslation();
   const { connected, restoring, kicked, recover, cancelRestore } = useGame();
 
   if (kicked) {
@@ -128,9 +125,9 @@ function AppShell() {
             <h1 className="brand">
               <span>Rikiki</span>
             </h1>
-            <p className="hint">Visszacsatlakozás a szobához…</p>
+            <p className="hint">{t("common.restoringTitle")}</p>
             <button className="btn btn-ghost" onClick={cancelRestore}>
-              Mégse, vissza a főoldalra
+              {t("common.cancelRestore")}
             </button>
           </div>
         </div>
@@ -178,6 +175,9 @@ export default function App() {
         </Route>
         <Route path="/set">
           <SetApp />
+        </Route>
+        <Route path="/falka">
+          <FalkaApp />
         </Route>
         <Route exact path="/">
           <Menu />

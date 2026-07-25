@@ -27,6 +27,10 @@
   --violet: #7c5cff;
   --violet-dk: #4a2fc2;
 
+  /* the falka app's brand colour (menu card, shared falka variants) */
+  --crimson: #c0272a;
+  --crimson-dk: #7a1418;
+
   /* text/graphics that always sit on a permanently-light accent */
   --ink-fixed: #1d1832;
   --paper-fixed: #fffdf5;

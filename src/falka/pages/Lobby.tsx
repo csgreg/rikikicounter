@@ -5,17 +5,17 @@ import { useTranslation } from "react-i18next";
 import { socket } from "../../api/socket";
 import { getPid } from "../../api/session";
 import { resolveSeat } from "../../shared/seat";
-import { useSet, EMPTY_GAME } from "../SetContext";
-import type { SetPlayer, SetRoom } from "../types";
+import { useFalka, EMPTY_GAME, FALKA_ROOM_SIZE } from "../FalkaContext";
+import type { FPlayer, FRoom } from "../types";
 
-export function SetLobby() {
+export function FalkaLobby() {
   const { t } = useTranslation();
-  const { setRoomId, setGame, setPlayers, syncExplicit, saveSession } = useSet();
+  const { setRoomId, setGame, setPlayers, syncExplicit, saveSession } = useFalka();
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const history = useHistory();
 
-  function newPlayer(boss: boolean, id: number): SetPlayer {
+  function newPlayer(boss: boolean, id: number): FPlayer {
     return {
       id,
       pid: getPid(),
@@ -23,13 +23,18 @@ export function SetLobby() {
       socketid: socket.id,
       online: true,
       boss,
-      score: 0,
+      role: null,
+      alive: true,
+      nightVote: null,
+      seerCheckPid: null,
+      lynchVote: null,
+      suspicionBallot: null,
     };
   }
 
   function handleCreate() {
     if (!name.trim()) return;
-    socket.emit("create-room", 8, (res) => {
+    socket.emit("create-room", FALKA_ROOM_SIZE, (res) => {
       const id = res.roomId;
       saveSession(id);
       setRoomId(id);
@@ -38,7 +43,7 @@ export function SetLobby() {
       setGame(game);
       setPlayers(players);
       syncExplicit(id, game, players);
-      history.push("/set/board");
+      history.push("/falka/room");
     });
   }
 
@@ -51,15 +56,17 @@ export function SetLobby() {
       }
       socket.emit("get-state", code, (stateRes) => {
         if (!stateRes.state) return;
-        const obj = JSON.parse(JSON.parse(stateRes.state)) as SetRoom;
+        const obj = JSON.parse(JSON.parse(stateRes.state)) as FRoom;
         setRoomId(code);
         saveSession(code);
         const pid = getPid();
 
         // Rejoining the same room (same browser): update in place, don't
-        // dupe. Joining mid-game just drops the newcomer into the next
-        // claim — there's no round boundary to sit out. A room can end up
-        // host-less (the host left last) — the newcomer adopts the role.
+        // dupe. Joining mid-game (a role already assigned) drops the
+        // newcomer in as a bystander for the rest of that game — there's no
+        // clean way to hand them a role once the deal has happened. A room
+        // can end up host-less (the host left last) — the newcomer adopts
+        // the role.
         resolveSeat(
           obj.players,
           pid,
@@ -73,7 +80,7 @@ export function SetLobby() {
         setGame(obj.game);
         setPlayers(obj.players);
         syncExplicit(code, obj.game, obj.players);
-        history.push("/set/board");
+        history.push("/falka/room");
       });
     });
   }
@@ -81,16 +88,16 @@ export function SetLobby() {
   return (
     <div className="page">
       <header className="game-hero">
-        <h1 className="game-hero-title" aria-label="Set">
-          <span className="gh-chip gh-chip--set gh-chip--a" aria-hidden="true">
-            Set
+        <h1 className="game-hero-title" aria-label="Falka">
+          <span className="gh-chip gh-chip--falka gh-chip--a" aria-hidden="true">
+            Falka
           </span>
         </h1>
-        <p className="tagline">{t("set.tagline")}</p>
+        <p className="tagline">{t("falka.tagline")}</p>
       </header>
 
-      <div className="card game-card game-card--set">
-        <h2>{t("set.lobby.createTitle")}</h2>
+      <div className="card game-card game-card--falka">
+        <h2>{t("falka.lobby.createTitle")}</h2>
         <div className="field">
           <input
             className="input"
@@ -100,14 +107,14 @@ export function SetLobby() {
           />
         </div>
         <button className="btn btn-light" onClick={handleCreate}>
-          {t("set.lobby.createSubmit")}
+          {t("falka.lobby.createSubmit")}
         </button>
       </div>
 
       <div className="divider">{t("common.or")}</div>
 
-      <div className="card game-card game-card--set">
-        <h2>{t("set.lobby.joinTitle")}</h2>
+      <div className="card game-card game-card--falka">
+        <h2>{t("falka.lobby.joinTitle")}</h2>
         <div className="field">
           <input
             className="input"
@@ -125,7 +132,7 @@ export function SetLobby() {
           />
         </div>
         <button className="btn btn-light" onClick={handleJoin}>
-          {t("set.lobby.joinSubmit")}
+          {t("falka.lobby.joinSubmit")}
         </button>
       </div>
 

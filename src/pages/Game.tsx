@@ -1,25 +1,16 @@
 import { useEffect, useState } from "react";
 import { Redirect, useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { syncState } from "../api/state";
 import { burstConfetti, emojiRain } from "../utils/confetti";
 import { useConfirm } from "../hooks/useConfirm";
 import { useEditPlayer } from "../hooks/useEditPlayer";
 import { useHostAlert } from "../hooks/useHostAlert";
+import { useSupportPromo } from "../hooks/useSupportPromo";
 import { useGame } from "../context/GameContext";
 import type { Player } from "../types";
 import "./Game.css";
 
-const SUITS = ["♠︎", "♥", "♣", "♦", "Nincs adu!"];
-
-const TIP_MSG = ["Tipp leadva ✓", "Bevállaltad 😎", "Le van fixálva 🔒"];
-const PRAISE = ["Telitalálat! 🎯", "Zseni vagy! 🤩", "Ez az! 🔥", "Profi 💪"];
-const TAUNT = [
-  "Naaa neee 💀",
-  "Ezt benézted 🤡",
-  "Hát ez fájt 😬",
-  "RIP, mínusz 🪦",
-  "Ajjaj… 📉",
-];
 const LOSS_EMOJIS = ["💀", "🤡", "😭", "👎", "📉", "🥴"];
 
 function pick<T>(arr: T[]): T {
@@ -37,6 +28,7 @@ interface ScoreFx {
 }
 
 export function Game() {
+  const { t } = useTranslation();
   const {
     socket,
     roomId,
@@ -48,6 +40,16 @@ export function Game() {
     leave: leaveRoom,
   } = useGame();
   const history = useHistory();
+  const SUITS = [
+    t("rikiki.game.suitSpade"),
+    t("rikiki.game.suitHeart"),
+    t("rikiki.game.suitClub"),
+    t("rikiki.game.suitDiamond"),
+    t("rikiki.game.noTrump"),
+  ];
+  const TIP_MSG = t("rikiki.game.tipSubmitted", { returnObjects: true }) as string[];
+  const PRAISE = t("rikiki.game.praise", { returnObjects: true }) as string[];
+  const TAUNT = t("rikiki.game.taunt", { returnObjects: true }) as string[];
   const [tip, setTip] = useState(0);
   const [hit, setHit] = useState(0);
   const [toast, setToast] = useState<Toast | null>(null);
@@ -61,6 +63,7 @@ export function Game() {
     isHost: isBoss,
     senderName: me?.name || "Host",
   });
+  const { triggerSupportPromo, modal: supportModal } = useSupportPromo();
 
   function showToast(text: string) {
     setToast({ text, id: Date.now() });
@@ -78,7 +81,11 @@ export function Game() {
 
   // Celebrate when the game finishes.
   useEffect(() => {
-    if (gameOver) burstConfetti();
+    if (gameOver) {
+      burstConfetti();
+      triggerSupportPromo();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameOver]);
 
   if (!roomId) {
@@ -91,9 +98,9 @@ export function Game() {
 
   async function leave() {
     const ok = await confirm({
-      title: "Kilépés",
-      message: "Biztosan kilépsz a játékból?",
-      confirmText: "Kilépés",
+      title: t("common.confirmExitTitle"),
+      message: t("common.confirmExitMessage"),
+      confirmText: t("common.exit"),
       danger: true,
     });
     if (!ok) return;
@@ -115,9 +122,9 @@ export function Game() {
 
   async function kick(targetPid: string, name: string) {
     const ok = await confirm({
-      title: "Kirúgás",
-      message: `Kirúgod a játékból: ${name}?`,
-      confirmText: "Kirúgás",
+      title: t("common.confirmKickTitle"),
+      message: t("common.confirmKickMessage", { name }),
+      confirmText: t("common.kick"),
       danger: true,
     });
     if (!ok) return;
@@ -180,9 +187,9 @@ export function Game() {
 
   async function finishGame() {
     const ok = await confirm({
-      title: "Játék befejezése",
-      message: "Biztosan befejezed a játékot mindenkinek?",
-      confirmText: "Befejezés",
+      title: t("rikiki.game.confirmFinishTitle"),
+      message: t("rikiki.game.confirmFinishMessage"),
+      confirmText: t("rikiki.game.confirmFinishButton"),
       danger: true,
     });
     if (!ok) return;
@@ -211,7 +218,7 @@ export function Game() {
       ) : null}
       <div className={shake ? "page shake" : "page"}>
         {!gameOver && (
-          <button className="close-x" onClick={leave} title="Kilépés">
+          <button className="close-x" onClick={leave} title={t("common.exit")}>
             ✕
           </button>
         )}
@@ -229,8 +236,12 @@ export function Game() {
             </span>
             <span className="game-meta">
               {gameOver
-                ? "Játék vége"
-                : `${game.laps + 1}/${totalRounds}. kör · ${cardsThisRound} lap / játékos`}
+                ? t("rikiki.game.gameOver")
+                : t("rikiki.game.roundProgress", {
+                    round: game.laps + 1,
+                    total: totalRounds,
+                    cards: cardsThisRound,
+                  })}
             </span>
           </p>
         </header>
@@ -271,17 +282,17 @@ export function Game() {
                     className={`dot ${p.online === false ? "off" : "on"}`}
                   />
                   {p.name}
-                  {p.boss ? <span className="tag tag-host">host</span> : null}
+                  {p.boss ? <span className="tag tag-host">{t("common.host")}</span> : null}
                   {!allTipped && p.tipLocked ? (
-                    <span className="tag done">kész</span>
+                    <span className="tag done">{t("common.done")}</span>
                   ) : null}
                   {allTipped && !allHit && p.hitLocked ? (
-                    <span className="tag done">kész</span>
+                    <span className="tag done">{t("common.done")}</span>
                   ) : null}
                   {isBoss ? (
                     <button
                       className="edit-btn"
-                      title="Szerkesztés"
+                      title={t("common.edit")}
                       onClick={() => edit(p)}
                     >
                       ✎
@@ -290,7 +301,7 @@ export function Game() {
                   {isBoss && me && p.pid !== me.pid ? (
                     <button
                       className="kick-btn"
-                      title="Kirúgás"
+                      title={t("common.kick")}
                       onClick={() => kick(p.pid, p.name)}
                     >
                       ✕
@@ -318,7 +329,7 @@ export function Game() {
         {/* Final standings */}
         {gameOver && (
           <div className="card game-card game-card--yellow suit-mark final-card">
-            <h2>Vége! 🏆</h2>
+            <h2>{t("rikiki.game.final")}</h2>
             <div className="scoreboard">
               {standings.map((p, i) => {
                 const isLast = standings.length > 1 && i === standings.length - 1;
@@ -343,7 +354,7 @@ export function Game() {
               style={{ marginTop: "16px" }}
               onClick={goHome}
             >
-              Vissza a főoldalra
+              {t("rikiki.game.backToHome")}
             </button>
           </div>
         )}
@@ -351,24 +362,24 @@ export function Game() {
         {/* Phase 1: tipping — tips hidden until everyone locked in */}
         {!gameOver && !allTipped && (
           <div className="card game-card game-card--yellow phase-card">
-            <h2>Tippelés 🎯</h2>
+            <h2>{t("rikiki.game.tippingTitle")}</h2>
             {me && !me.tipLocked ? (
               <>
                 <div className="field">
                   <input
                     className="input"
                     type="number"
-                    placeholder="Tipp"
+                    placeholder={t("rikiki.game.tipPlaceholder")}
                     onChange={(e) => setTip(Number(e.target.value))}
                   />
                 </div>
                 <button className="btn btn-light" onClick={confirmTip}>
-                  Tipp rögzítése
+                  {t("rikiki.game.tipSubmit")}
                 </button>
               </>
             ) : (
               <p className="hint">
-                Várakozás a többiekre… ({tippedCount}/{players.length} rögzített)
+                {t("rikiki.game.waitingTips", { done: tippedCount, total: players.length })}
               </p>
             )}
           </div>
@@ -377,7 +388,7 @@ export function Game() {
         {/* Phase 2: results — tips revealed, enter how many you actually won */}
         {!gameOver && allTipped && !allHit && (
           <div className="card game-card game-card--yellow phase-card">
-            <h2>Tippek 👀</h2>
+            <h2>{t("rikiki.game.resultsTitle")}</h2>
             <div className="scoreboard" style={{ marginBottom: "16px" }}>
               {players.map((p) => (
                 <div className="score-row" key={p.id}>
@@ -393,17 +404,17 @@ export function Game() {
                   <input
                     className="input"
                     type="number"
-                    placeholder="Hány ütés sikerült?"
+                    placeholder={t("rikiki.game.hitPlaceholder")}
                     onChange={(e) => setHit(Number(e.target.value))}
                   />
                 </div>
                 <button className="btn btn-light" onClick={confirmHit}>
-                  Eredmény rögzítése
+                  {t("rikiki.game.hitSubmit")}
                 </button>
               </>
             ) : (
               <p className="hint">
-                Várakozás a többiekre… ({hitCount}/{players.length} rögzített)
+                {t("rikiki.game.waitingHits", { done: hitCount, total: players.length })}
               </p>
             )}
           </div>
@@ -412,26 +423,29 @@ export function Game() {
         {/* Phase 3: round done */}
         {!gameOver && allHit && (
           <div className="card game-card game-card--yellow phase-card">
-            <h2>Kör vége</h2>
+            <h2>{t("rikiki.game.roundDoneTitle")}</h2>
             {isBoss ? (
               <button className="btn btn-light" onClick={nextRound}>
-                {game.laps + 1 >= totalRounds ? "Eredmények" : "Következő kör"}
+                {game.laps + 1 >= totalRounds
+                  ? t("rikiki.game.showResults")
+                  : t("rikiki.game.nextRound")}
               </button>
             ) : (
-              <p className="hint">A host indítja a következő kört.</p>
+              <p className="hint">{t("rikiki.game.hostNextRound")}</p>
             )}
           </div>
         )}
 
         {!gameOver && isBoss && (
           <button className="btn btn-ghost" onClick={finishGame}>
-            Játék befejezése
+            {t("rikiki.game.finishGame")}
           </button>
         )}
       </div>
       {modal}
       {editModal}
       {alertUi}
+      {supportModal}
     </>
   );
 }

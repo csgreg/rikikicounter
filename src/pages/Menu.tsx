@@ -1,33 +1,30 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
+import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import "./Menu.css";
 
-const TICKER = [
-  "Rikiki",
-  "♠",
-  "Wavelength",
-  "♥",
-  "Set",
-  "♣",
-  "játékok",
-  "♦",
-  "Jó szórakozást!",
-];
-
 export function Menu() {
-  useDocumentTitle("Parti játékok – Rikiki & Hullámhossz | therikiki.hu");
+  const { t } = useTranslation();
+  useDocumentTitle(t("home.documentTitle"));
+  const ticker = t("home.ticker", { returnObjects: true }) as string[];
+
   return (
     <div className="page menu-page">
+      <div className="menu-topbar">
+        <LanguageSwitcher />
+      </div>
+
       <header className="menu-hero">
-        <h1 className="menu-hero-title" aria-label="Parti játékok">
+        <h1 className="menu-hero-title" aria-label={`${t("home.heroWord1")} ${t("home.heroWord2")}`}>
           <span className="mh-word mh-word--1" aria-hidden="true">
-            Parti
+            {t("home.heroWord1")}
           </span>
           <span className="mh-word mh-word--2" aria-hidden="true">
-            játékok
+            {t("home.heroWord2")}
           </span>
         </h1>
-        <p className="menu-hero-sub">Válaszd ki, mivel játszotok ma este.</p>
+        <p className="menu-hero-sub">{t("home.subtitle")}</p>
       </header>
 
       <div className="menu-grid">
@@ -41,12 +38,10 @@ export function Menu() {
             <span className="ms s-black">♣</span>
             <span className="ms s-red">♦</span>
           </div>
-          <span className="menu-title">Rikiki</span>
-          <span className="menu-desc">
-            Online pontszámláló a Rikiki kártyajátékhoz.
-          </span>
+          <span className="menu-title">{t("home.rikiki.title")}</span>
+          <span className="menu-desc">{t("home.rikiki.desc")}</span>
           <span className="menu-cta">
-            Játék <span className="menu-arrow">→</span>
+            {t("home.play")} <span className="menu-arrow">→</span>
           </span>
         </Link>
 
@@ -54,12 +49,10 @@ export function Menu() {
           <div className="menu-deco menu-deco--wave">
             <span className="menu-needle" />
           </div>
-          <span className="menu-title">Hullámhossz</span>
-          <span className="menu-desc">
-            Találd el a rejtett pontot a skálán — egyetlen kulcsszóból.
-          </span>
+          <span className="menu-title">{t("home.wave.title")}</span>
+          <span className="menu-desc">{t("home.wave.desc")}</span>
           <span className="menu-cta">
-            Játék <span className="menu-arrow">→</span>
+            {t("home.play")} <span className="menu-arrow">→</span>
           </span>
         </Link>
 
@@ -69,27 +62,36 @@ export function Menu() {
             <span className="mset mset-diamond" />
             <span className="mset mset-squiggle" />
           </div>
-          <span className="menu-title">Set</span>
-          <span className="menu-desc">
-            Találd meg a hármast: kártyák, ahol minden tulajdonság egyezik vagy mind más.
-          </span>
+          <span className="menu-title">{t("home.set.title")}</span>
+          <span className="menu-desc">{t("home.set.desc")}</span>
           <span className="menu-cta">
-            Játék <span className="menu-arrow">→</span>
+            {t("home.play")} <span className="menu-arrow">→</span>
+          </span>
+        </Link>
+
+        <Link to="/falka" className="menu-card menu-card--falka">
+          <div className="menu-deco menu-deco--falka">
+            <span className="mfalka-moon" />
+            <span className="mfalka-eye" />
+            <span className="mfalka-eye" />
+          </div>
+          <span className="menu-title">{t("home.falka.title")}</span>
+          <span className="menu-desc">{t("home.falka.desc")}</span>
+          <span className="menu-cta">
+            {t("home.play")} <span className="menu-arrow">→</span>
           </span>
         </Link>
       </div>
 
       <div className="ticker" aria-hidden="true">
         <div className="ticker-track">
-          {[...TICKER, ...TICKER].map((t, i) => (
-            <span key={i}>{t}</span>
+          {[...ticker, ...ticker].map((tx, i) => (
+            <span key={i}>{tx}</span>
           ))}
         </div>
       </div>
 
-      <footer className="site-footer">
-        Készült nektek tőlem · therikiki.hu
-      </footer>
+      <footer className="site-footer">{t("home.footer")}</footer>
     </div>
   );
 }

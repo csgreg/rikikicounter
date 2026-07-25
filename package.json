@@ -4,9 +4,11 @@
   "private": true,
   "description": "Room-based score counter for the Rikiki card game (React + socket.io).",
   "dependencies": {
+    "i18next": "^23.16.8",
     "react": "^17.0.2",
     "react-copy-to-clipboard": "^5.0.4",
     "react-dom": "^17.0.2",
+    "react-i18next": "^13.5.0",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
     "socket.io-client": "^4.1.3"

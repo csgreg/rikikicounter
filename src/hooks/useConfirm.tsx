@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import "./useConfirm.css";
 
 interface ConfirmOptions {
@@ -24,6 +25,7 @@ interface UseConfirmResult {
 //   if (!(await confirm({ message, confirmText, danger }))) return;
 //   ...render {modal} somewhere in your JSX.
 export function useConfirm(): UseConfirmResult {
+  const { t } = useTranslation();
   const [state, setState] = useState<ConfirmState | null>(null);
 
   const confirm = useCallback((opts: ConfirmOptions | string) => {
@@ -61,14 +63,14 @@ export function useConfirm(): UseConfirmResult {
         <p className="modal-msg">{state.message}</p>
         <div className="modal-actions">
           <button className="btn btn-ghost" onClick={() => close(false)}>
-            {state.cancelText || "Mégse"}
+            {state.cancelText || t("common.cancel")}
           </button>
           <button
             className={`btn ${state.danger ? "btn-danger" : ""}`}
             onClick={() => close(true)}
             autoFocus
           >
-            {state.confirmText || "Igen"}
+            {state.confirmText || t("common.confirmYes")}
           </button>
         </div>
       </div>

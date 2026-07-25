@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router";
+import { useTranslation } from "react-i18next";
 import { useConfirm } from "../../hooks/useConfirm";
 import { useEditPlayer } from "../../hooks/useEditPlayer";
 import { useHostAlert } from "../../hooks/useHostAlert";
+import { useSupportPromo } from "../../hooks/useSupportPromo";
 import { socket } from "../../api/socket";
 import { burstConfetti } from "../../utils/confetti";
 import { useSet } from "../SetContext";
@@ -12,6 +14,7 @@ import { SetCard, SetPatternDefs } from "../components/SetCard";
 import type { SetPlayer } from "../types";
 
 export function SetBoard() {
+  const { t } = useTranslation();
   const {
     roomId,
     game,
@@ -37,6 +40,7 @@ export function SetBoard() {
     isHost,
     senderName: me?.name || "Host",
   });
+  const { triggerSupportPromo, modal: supportModal } = useSupportPromo();
   const lastClaimRef = useRef<string | null>(null);
 
   const gameOver = !!game.finished;
@@ -57,16 +61,20 @@ export function SetBoard() {
     const key = JSON.stringify(claim);
     if (lastClaimRef.current === key) return;
     lastClaimRef.current = key;
-    const name = players.find((p) => p.pid === claim.pid)?.name || "Valaki";
+    const name = players.find((p) => p.pid === claim.pid)?.name || t("common.someone");
     setToast({ text: claim.ok ? `${name} +1` : `${name} −1`, ok: claim.ok, id: Date.now() });
     if (claim.ok) burstConfetti();
-    const t = setTimeout(() => setToast(null), 1500);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setToast(null), 1500);
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game.lastClaim]);
 
   useEffect(() => {
-    if (gameOver) burstConfetti();
+    if (gameOver) {
+      burstConfetti();
+      triggerSupportPromo();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameOver]);
 
   if (!roomId) {
@@ -87,9 +95,9 @@ export function SetBoard() {
 
   async function exit() {
     const ok = await confirm({
-      title: "Kilépés",
-      message: "Biztosan kilépsz a játékból?",
-      confirmText: "Kilépés",
+      title: t("common.confirmExitTitle"),
+      message: t("common.confirmExitMessage"),
+      confirmText: t("common.exit"),
       danger: true,
     });
     if (!ok) return;
@@ -99,9 +107,9 @@ export function SetBoard() {
 
   async function kickPlayer(pid: string, name: string) {
     const ok = await confirm({
-      title: "Kirúgás",
-      message: `Kirúgod a játékból: ${name}?`,
-      confirmText: "Kirúgás",
+      title: t("common.confirmKickTitle"),
+      message: t("common.confirmKickMessage", { name }),
+      confirmText: t("common.kick"),
       danger: true,
     });
     if (!ok) return;
@@ -127,34 +135,36 @@ export function SetBoard() {
         <div className="page">
           <header>
             <h1 className="brand" {...secretTapProps}>
-              <span>Várakozó</span>
+              <span>{t("common.waitingRoomTitle")}</span>
             </h1>
-            <p className="tagline">Várakozás a többi játékosra…</p>
+            <p className="tagline">{t("common.waitingRoomSubtitle")}</p>
           </header>
           <div className="card">
-            <p className="label">Szoba kódja</p>
+            <p className="label">{t("common.roomCode")}</p>
             <div className="room-code">
               <span className="code">{roomId}</span>
               <CopyToClipboard text={roomId} onCopy={onCopyText}>
-                <button className="copy-btn">{isCopied ? "Másolva!" : "Másolás"}</button>
+                <button className="copy-btn">{isCopied ? t("common.copied") : t("common.copy")}</button>
               </CopyToClipboard>
             </div>
 
-            <p className="label">Játékosok ({players.length})</p>
+            <p className="label">
+              {t("common.players")} ({players.length})
+            </p>
             <div className="scoreboard">
               {players.map((p) => (
                 <div className="score-row" key={p.pid}>
                   <span className="name">
                     <span className={`dot ${p.online ? "on" : "off"}`} />
                     {p.name}
-                    {p.boss ? <span className="tag">host</span> : null}
+                    {p.boss ? <span className="tag">{t("common.host")}</span> : null}
                     {isHost ? (
-                      <button className="edit-btn" title="Szerkesztés" onClick={() => editPlayerRow(p)}>
+                      <button className="edit-btn" title={t("common.edit")} onClick={() => editPlayerRow(p)}>
                         ✎
                       </button>
                     ) : null}
                     {isHost && me && p.pid !== me.pid ? (
-                      <button className="kick-btn" title="Kirúgás" onClick={() => kickPlayer(p.pid, p.name)}>
+                      <button className="kick-btn" title={t("common.kick")} onClick={() => kickPlayer(p.pid, p.name)}>
                         ✕
                       </button>
                     ) : null}
@@ -165,13 +175,13 @@ export function SetBoard() {
           </div>
           {isHost ? (
             <button className="btn" onClick={hostStart}>
-              Indítás
+              {t("common.start")}
             </button>
           ) : (
-            <p className="hint">A host mindjárt indít…</p>
+            <p className="hint">{t("common.waitingForHost")}</p>
           )}
           <button className="btn btn-ghost" onClick={exit}>
-            Kilépés
+            {t("common.exit")}
           </button>
         </div>
         {modal}
@@ -188,7 +198,7 @@ export function SetBoard() {
         <div className="page">
           <header>
             <h1 className="brand" {...secretTapProps}>
-              Vége! 🏆
+              {t("set.final")}
             </h1>
           </header>
           <div className="card">
@@ -209,19 +219,20 @@ export function SetBoard() {
             </div>
             {isHost ? (
               <button className="btn" style={{ marginTop: "16px" }} onClick={hostRestart}>
-                Új játék
+                {t("common.newGame")}
               </button>
             ) : (
-              <p className="hint">A host indíthat új játékot.</p>
+              <p className="hint">{t("common.hostWillRestart")}</p>
             )}
           </div>
           <button className="btn btn-ghost" onClick={exit}>
-            Kilépés
+            {t("common.exit")}
           </button>
         </div>
         {modal}
         {editModal}
         {alertUi}
+        {supportModal}
       </>
     );
   }
@@ -239,7 +250,7 @@ export function SetBoard() {
         <header className="game-header" {...secretTapProps}>
           <p className="game-line">
             <span className="game-meta">
-              {game.board.length} lap az asztalon · {game.deck.length} a pakliban
+              {t("set.boardMeta", { board: game.board.length, deck: game.deck.length })}
             </span>
           </p>
         </header>
@@ -256,16 +267,16 @@ export function SetBoard() {
         </div>
 
         <div className="card">
-          <p className="label">Állás</p>
+          <p className="label">{t("set.standings")}</p>
           <div className="scoreboard">
             {leaderboard.map((p, i) => (
               <div className={`score-row ${i === 0 ? "winner" : ""}`} key={p.pid}>
                 <span className="name">
                   <span className={`dot ${p.online ? "on" : "off"}`} />
                   {i + 1}. {p.name}
-                  {p.boss ? <span className="tag">host</span> : null}
+                  {p.boss ? <span className="tag">{t("common.host")}</span> : null}
                   {isHost ? (
-                    <button className="edit-btn" title="Szerkesztés" onClick={() => editPlayerRow(p)}>
+                    <button className="edit-btn" title={t("common.edit")} onClick={() => editPlayerRow(p)}>
                       ✎
                     </button>
                   ) : null}
@@ -277,7 +288,7 @@ export function SetBoard() {
         </div>
 
         <button className="btn btn-ghost" onClick={exit}>
-          Kilépés
+          {t("common.exit")}
         </button>
       </div>
       {modal}

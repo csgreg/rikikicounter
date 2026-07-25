@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useHistory } from "react-router";
+import { useTranslation } from "react-i18next";
 import { getPid, saveSession } from "../api/session";
 import { parseFetchedState, syncState } from "../api/state";
 import { resolveSeat } from "../shared/seat";
@@ -7,6 +8,7 @@ import { useGame } from "../context/GameContext";
 import "./Join.css";
 
 export function Join() {
+  const { t } = useTranslation();
   const { socket, setRoomId, setPlayers, setGame } = useGame();
   const [joinName, setJoinName] = useState("");
   const [joinCode, setJoinCode] = useState("");
@@ -17,7 +19,7 @@ export function Join() {
 
     socket.emit("join-room", joinCode, (response) => {
       if (response.status !== "ok") {
-        alert("Helytelen kód!");
+        alert(t("rikiki.join.wrongCode"));
         return;
       }
 
@@ -70,12 +72,12 @@ export function Join() {
 
   return (
     <div className="card game-card game-card--yellow suit-mark join-card">
-      <h2>Csatlakozás szobához</h2>
+      <h2>{t("rikiki.join.title")}</h2>
       <div className="field">
         <input
           className="input"
           type="text"
-          placeholder="Szoba kódja"
+          placeholder={t("rikiki.join.codePlaceholder")}
           value={joinCode}
           onChange={(event) => setJoinCode(event.target.value)}
         />
@@ -84,13 +86,13 @@ export function Join() {
         <input
           className="input"
           type="text"
-          placeholder="Játékos név"
+          placeholder={t("rikiki.join.namePlaceholder")}
           value={joinName}
           onChange={(event) => setJoinName(event.target.value)}
         />
       </div>
       <button className="btn btn-light" onClick={handleJoin}>
-        Csatlakozás
+        {t("rikiki.join.submit")}
       </button>
     </div>
   );

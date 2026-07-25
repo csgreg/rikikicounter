@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { getPid } from "../api/session";
 import type { TypedSocket } from "../api/socket";
 import "./useConfirm.css";
@@ -45,6 +46,7 @@ export function useHostAlert({
   isHost,
   senderName,
 }: HostAlertOptions): UseHostAlertResult {
+  const { t: tr } = useTranslation();
   const [composerOpen, setComposerOpen] = useState(false);
   const [text, setText] = useState("");
   const [incoming, setIncoming] = useState<Incoming | null>(null);
@@ -116,12 +118,12 @@ export function useHostAlert({
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="modal-title">Üzenet mindenkinek</h3>
+            <h3 className="modal-title">{tr("common.hostAlertComposerTitle")}</h3>
             <div className="field">
               <textarea
                 className="input announce-input"
                 rows={3}
-                placeholder="Írd ide az üzenetet…"
+                placeholder={tr("common.hostAlertPlaceholder")}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 autoFocus
@@ -132,10 +134,10 @@ export function useHostAlert({
                 className="btn btn-ghost"
                 onClick={() => setComposerOpen(false)}
               >
-                Mégse
+                {tr("common.cancel")}
               </button>
               <button className="btn" disabled={!text.trim()} onClick={send}>
-                Küldés
+                {tr("common.hostAlertSend")}
               </button>
             </div>
           </div>
@@ -149,14 +151,14 @@ export function useHostAlert({
             aria-live="assertive"
             key={incoming.id}
           >
-            <p className="announce-from">{incoming.name} üzeni</p>
+            <p className="announce-from">{tr("common.hostAlertFrom", { name: incoming.name })}</p>
             <p className="announce-text">{incoming.text}</p>
             <button
               className="btn btn-light"
               onClick={() => setIncoming(null)}
               autoFocus
             >
-              Értem
+              {tr("common.hostAlertOk")}
             </button>
           </div>
         </div>

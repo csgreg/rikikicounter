@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router";
+import { Trans, useTranslation } from "react-i18next";
 import { useConfirm } from "../../hooks/useConfirm";
 import { useEditPlayer } from "../../hooks/useEditPlayer";
 import { useHostAlert } from "../../hooks/useHostAlert";
+import { useSupportPromo } from "../../hooks/useSupportPromo";
 import { socket } from "../../api/socket";
 import { burstConfetti } from "../../utils/confetti";
 import { useWave } from "../WaveContext";
@@ -99,6 +101,7 @@ function SpectrumBar({
 }
 
 export function WaveRoom() {
+  const { t } = useTranslation();
   const {
     roomId,
     game,
@@ -127,6 +130,7 @@ export function WaveRoom() {
     isHost,
     senderName: me?.name || "Host",
   });
+  const { triggerSupportPromo, modal: supportModal } = useSupportPromo();
 
   const gameOver = !!game.finished;
 
@@ -145,7 +149,11 @@ export function WaveRoom() {
   }, [game.phase, game.round]);
 
   useEffect(() => {
-    if (gameOver) burstConfetti();
+    if (gameOver) {
+      burstConfetti();
+      triggerSupportPromo();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameOver]);
 
   if (!roomId) {
@@ -154,9 +162,9 @@ export function WaveRoom() {
 
   async function exit() {
     const ok = await confirm({
-      title: "Kilépés",
-      message: "Biztosan kilépsz a játékból?",
-      confirmText: "Kilépés",
+      title: t("common.confirmExitTitle"),
+      message: t("common.confirmExitMessage"),
+      confirmText: t("common.exit"),
       danger: true,
     });
     if (!ok) return;
@@ -166,9 +174,9 @@ export function WaveRoom() {
 
   async function kickPlayer(pid: string, name: string) {
     const ok = await confirm({
-      title: "Kirúgás",
-      message: `Kirúgod a játékból: ${name}?`,
-      confirmText: "Kirúgás",
+      title: t("common.confirmKickTitle"),
+      message: t("common.confirmKickMessage", { name }),
+      confirmText: t("common.kick"),
       danger: true,
     });
     if (!ok) return;
@@ -185,9 +193,9 @@ export function WaveRoom() {
 
   async function endGame() {
     const ok = await confirm({
-      title: "Játék befejezése",
-      message: "Biztosan befejezed a játékot mindenkinek?",
-      confirmText: "Befejezés",
+      title: t("wave.confirmFinishTitle"),
+      message: t("wave.confirmFinishMessage"),
+      confirmText: t("wave.confirmFinishButton"),
       danger: true,
     });
     if (!ok) return;
@@ -209,12 +217,12 @@ export function WaveRoom() {
         <div className="page">
           <header>
             <h1 className="brand" {...secretTapProps}>
-              <span>Várakozó</span>
+              <span>{t("common.waitingRoomTitle")}</span>
             </h1>
-            <p className="tagline">Várakozás a többi játékosra…</p>
+            <p className="tagline">{t("common.waitingRoomSubtitle")}</p>
           </header>
           <div className="card">
-            <p className="label">Szoba kódja</p>
+            <p className="label">{t("common.roomCode")}</p>
             <div className="room-code">
               <span className="code">{roomId}</span>
               <CopyToClipboard
@@ -225,23 +233,25 @@ export function WaveRoom() {
                 }}
               >
                 <button className="copy-btn">
-                  {isCopied ? "Másolva!" : "Másolás"}
+                  {isCopied ? t("common.copied") : t("common.copy")}
                 </button>
               </CopyToClipboard>
             </div>
 
-            <p className="label">Játékosok ({players.length})</p>
+            <p className="label">
+              {t("common.players")} ({players.length})
+            </p>
             <div className="scoreboard">
               {players.map((p) => (
                 <div className="score-row" key={p.pid}>
                   <span className="name">
                     <span className={`dot ${p.online ? "on" : "off"}`} />
                     {p.name}
-                    {p.boss ? <span className="tag">host</span> : null}
+                    {p.boss ? <span className="tag">{t("common.host")}</span> : null}
                     {isHost ? (
                       <button
                         className="edit-btn"
-                        title="Szerkesztés"
+                        title={t("common.edit")}
                         onClick={() => editPlayerRow(p)}
                       >
                         ✎
@@ -250,7 +260,7 @@ export function WaveRoom() {
                     {isHost && me && p.pid !== me.pid ? (
                       <button
                         className="kick-btn"
-                        title="Kirúgás"
+                        title={t("common.kick")}
                         onClick={() => kickPlayer(p.pid, p.name)}
                       >
                         ✕
@@ -267,16 +277,16 @@ export function WaveRoom() {
               disabled={players.length < 2}
               onClick={hostStart}
             >
-              Indítás
+              {t("common.start")}
             </button>
           ) : (
-            <p className="hint">A host mindjárt indít…</p>
+            <p className="hint">{t("common.waitingForHost")}</p>
           )}
           {isHost && players.length < 2 ? (
-            <p className="hint">Legalább 2 játékos kell.</p>
+            <p className="hint">{t("wave.minPlayersHint")}</p>
           ) : null}
           <button className="btn btn-ghost" onClick={exit}>
-            Kilépés
+            {t("common.exit")}
           </button>
         </div>
         {modal}
@@ -293,7 +303,7 @@ export function WaveRoom() {
         <div className="page">
           <header>
             <h1 className="brand" {...secretTapProps}>
-              Vége! 🏆
+              {t("wave.final")}
             </h1>
           </header>
           <div className="card">
@@ -322,19 +332,20 @@ export function WaveRoom() {
                 style={{ marginTop: "16px" }}
                 onClick={hostRestart}
               >
-                Új játék
+                {t("common.newGame")}
               </button>
             ) : (
-              <p className="hint">A host indíthat új játékot.</p>
+              <p className="hint">{t("common.hostWillRestart")}</p>
             )}
           </div>
           <button className="btn btn-ghost" onClick={exit}>
-            Kilépés
+            {t("common.exit")}
           </button>
         </div>
         {modal}
         {editModal}
         {alertUi}
+        {supportModal}
       </>
     );
   }
@@ -345,7 +356,11 @@ export function WaveRoom() {
       <header className="game-header" {...secretTapProps}>
         <p className="game-line">
           <span className="game-meta">
-            {game.round}. kör · kulcsszót ad: <b>{clueGiver?.name}</b>
+            <Trans
+              i18nKey="wave.roundLine"
+              values={{ round: game.round, name: clueGiver?.name }}
+              components={{ b: <b /> }}
+            />
           </span>
         </p>
       </header>
@@ -354,11 +369,8 @@ export function WaveRoom() {
       {game.phase === "clue" &&
         (amClueGiver ? (
           <div className="card">
-            <h2>Te adod a kulcsszót 🤫</h2>
-            <p className="hint">
-              A nyíl a titkos cél — adj EGY szót/kifejezést, ami ide illik a
-              skálán. (A többiek nem látják a nyilat.)
-            </p>
+            <h2>{t("wave.clueGiverTitle")}</h2>
+            <p className="hint">{t("wave.clueGiverHint")}</p>
             <SpectrumBar
               left={game.left}
               right={game.right}
@@ -368,7 +380,7 @@ export function WaveRoom() {
             <div className="field">
               <input
                 className="input"
-                placeholder="A kulcsszavad…"
+                placeholder={t("wave.cluePlaceholder")}
                 value={clue}
                 onChange={(e) => setClue(e.target.value)}
               />
@@ -378,26 +390,26 @@ export function WaveRoom() {
               disabled={!clue.trim()}
               onClick={() => submitClue(clue.trim())}
             >
-              Kulcsszó elküldése
+              {t("wave.clueSubmit")}
             </button>
           </div>
         ) : (
           <div className="card">
-            <h2>{clueGiver?.name} gondolkodik… 🤔</h2>
+            <h2>{t("wave.waitingClueTitle", { name: clueGiver?.name })}</h2>
             <SpectrumBar
               left={game.left}
               right={game.right}
               target={0}
               showTarget={false}
             />
-            <p className="hint">Mindjárt jön a kulcsszó.</p>
+            <p className="hint">{t("wave.waitingClueHint")}</p>
           </div>
         ))}
 
       {/* GUESS PHASE */}
       {game.phase === "guess" && (
         <div className="card">
-          <p className="label">A kulcsszó</p>
+          <p className="label">{t("wave.guessLabel")}</p>
           <p className="wave-clue">„{game.clue}"</p>
           <SpectrumBar
             left={game.left}
@@ -410,17 +422,17 @@ export function WaveRoom() {
           />
           {amClueGiver ? (
             <p className="hint">
-              Várakozás a tippekre… ({guessedCount}/{guessers.length})
+              {t("wave.waitingGuesses", { done: guessedCount, total: guessers.length })}
             </p>
           ) : me?.guessed ? (
             <p className="hint">
-              Tipp leadva ✓ ({guessedCount}/{guessers.length})
+              {t("wave.guessSubmitted", { done: guessedCount, total: guessers.length })}
             </p>
           ) : (
             <>
-              <p className="wave-help">Húzd a fogantyút a skálán a tippedhez.</p>
+              <p className="wave-help">{t("wave.guessHelp")}</p>
               <button className="btn" onClick={() => submitGuess(guessVal)}>
-                Tipp rögzítése
+                {t("wave.guessSubmit")}
               </button>
             </>
           )}
@@ -430,7 +442,7 @@ export function WaveRoom() {
       {/* REVEAL PHASE */}
       {game.phase === "reveal" && (
         <div className="card">
-          <p className="label">A kulcsszó: „{game.clue}"</p>
+          <p className="label">{t("wave.revealLabel", { clue: game.clue })}</p>
           <SpectrumBar
             left={game.left}
             right={game.right}
@@ -449,7 +461,9 @@ export function WaveRoom() {
               ))}
             {clueGiver ? (
               <div className="score-row winner">
-                <span className="name">🎙️ {clueGiver.name} (kulcsszó)</span>
+                <span className="name">
+                  🎙️ {clueGiver.name} ({t("wave.clueGiverTag")})
+                </span>
                 <span className="points">+{clueGiver.gained ?? 0}</span>
               </div>
             ) : null}
@@ -460,29 +474,29 @@ export function WaveRoom() {
               style={{ marginTop: "14px" }}
               onClick={hostNextRound}
             >
-              Következő kör
+              {t("wave.nextRound")}
             </button>
           ) : (
-            <p className="hint">A host indítja a következő kört.</p>
+            <p className="hint">{t("common.hostWillContinue")}</p>
           )}
         </div>
       )}
 
       {/* LEADERBOARD */}
       <div className="card">
-        <p className="label">Állás</p>
+        <p className="label">{t("wave.standings")}</p>
         <div className="scoreboard">
           {leaderboard.map((p, i) => (
             <div className={`score-row ${i === 0 ? "winner" : ""}`} key={p.pid}>
               <span className="name">
                 {i + 1}. {p.name}
                 {p.pid === game.clueGiverPid ? (
-                  <span className="tag">kulcsszó</span>
+                  <span className="tag">{t("wave.clueGiverTag")}</span>
                 ) : null}
                 {isHost ? (
                   <button
                     className="edit-btn"
-                    title="Szerkesztés"
+                    title={t("common.edit")}
                     onClick={() => editPlayerRow(p)}
                   >
                     ✎
@@ -497,12 +511,12 @@ export function WaveRoom() {
 
       {isHost ? (
         <button className="btn btn-ghost" onClick={endGame}>
-          Játék befejezése
+          {t("wave.finishGame")}
         </button>
       ) : null}
 
       <button className="btn btn-ghost" onClick={exit}>
-        Kilépés
+        {t("common.exit")}
       </button>
     </div>
     {modal}

@@ -2,6 +2,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { Redirect } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { syncState } from "../api/state";
 import { useConfirm } from "../hooks/useConfirm";
 import { useEditPlayer } from "../hooks/useEditPlayer";
@@ -11,6 +12,7 @@ import type { Player } from "../types";
 import "./Wait.css";
 
 export function Wait() {
+  const { t } = useTranslation();
   const { socket, roomId, players, game, me, isBoss, leave: leaveRoom } =
     useGame();
   const history = useHistory();
@@ -44,9 +46,9 @@ export function Wait() {
 
   async function leave() {
     const ok = await confirm({
-      title: "Kilépés",
-      message: "Biztosan kilépsz a szobából?",
-      confirmText: "Kilépés",
+      title: t("common.confirmExitTitle"),
+      message: t("rikiki.wait.confirmExitMessage"),
+      confirmText: t("common.exit"),
       danger: true,
     });
     if (!ok) return;
@@ -56,9 +58,9 @@ export function Wait() {
 
   async function kick(targetPid: string, name: string) {
     const ok = await confirm({
-      title: "Kirúgás",
-      message: `Kirúgod a szobából: ${name}?`,
-      confirmText: "Kirúgás",
+      title: t("common.confirmKickTitle"),
+      message: t("rikiki.wait.confirmKickMessage", { name }),
+      confirmText: t("common.kick"),
       danger: true,
     });
     if (!ok) return;
@@ -90,23 +92,25 @@ export function Wait() {
       <div className="page">
         <header>
           <h1 className="brand" {...secretTapProps}>
-            <span>Várakozó</span>
+            <span>{t("common.waitingRoomTitle")}</span>
           </h1>
-          <p className="tagline">Várakozás a többi játékosra…</p>
+          <p className="tagline">{t("common.waitingRoomSubtitle")}</p>
         </header>
 
         <div className="card">
-          <p className="label">Szoba kódja</p>
+          <p className="label">{t("common.roomCode")}</p>
           <div className="room-code">
             <span className="code">{roomId}</span>
             <CopyToClipboard text={roomId} onCopy={onCopyText}>
               <button className="copy-btn">
-                {isCopied ? "Másolva!" : "Másolás"}
+                {isCopied ? t("common.copied") : t("common.copy")}
               </button>
             </CopyToClipboard>
           </div>
 
-          <p className="label">Játékosok ({players.length})</p>
+          <p className="label">
+            {t("common.players")} ({players.length})
+          </p>
           <ul className="player-list">
             {players.map((p) => (
               <li
@@ -118,14 +122,14 @@ export function Wait() {
                   {p.name}
                 </span>
                 <span className="row-tags">
-                  {p.boss ? <span className="tag tag-host">host</span> : null}
+                  {p.boss ? <span className="tag tag-host">{t("common.host")}</span> : null}
                   {p.online === false ? (
-                    <span className="tag tag-offline">offline</span>
+                    <span className="tag tag-offline">{t("common.offline")}</span>
                   ) : null}
                   {isBoss ? (
                     <button
                       className="edit-btn"
-                      title="Szerkesztés"
+                      title={t("common.edit")}
                       onClick={() => edit(p)}
                     >
                       ✎
@@ -134,7 +138,7 @@ export function Wait() {
                   {isBoss && me && p.pid !== me.pid ? (
                     <button
                       className="kick-btn"
-                      title="Kirúgás"
+                      title={t("common.kick")}
                       onClick={() => kick(p.pid, p.name)}
                     >
                       ✕
@@ -148,14 +152,14 @@ export function Wait() {
 
         {isBoss ? (
           <button className="btn btn-mega" onClick={handleBossStarts}>
-            Indítás
+            {t("common.start")}
           </button>
         ) : (
-          <p className="hint">A host indítja el a játékot.</p>
+          <p className="hint">{t("common.hostWillStart")}</p>
         )}
 
         <button className="btn btn-ghost" onClick={leave}>
-          Kilépés
+          {t("common.exit")}
         </button>
       </div>
       {modal}

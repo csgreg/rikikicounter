@@ -113,20 +113,36 @@
   box-shadow: 7px 7px 0 var(--teal-dk);
 }
 
+.game-card--falka {
+  background: var(--crimson);
+  color: #fff;
+  box-shadow: 7px 7px 0 var(--crimson-dk);
+}
+
+.game-card--falka::after {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.14) 1.5px,
+    transparent 1.5px
+  );
+}
+
 /* heading colour per card background */
 .game-card h2 {
   color: var(--ink-fixed);
 }
 
-.game-card--violet h2 {
+.game-card--violet h2,
+.game-card--falka h2 {
   color: #fff;
 }
 
-.game-card--violet .label {
+.game-card--violet .label,
+.game-card--falka .label {
   color: rgba(255, 255, 255, 0.78);
 }
 
-.game-card--violet .hint {
+.game-card--violet .hint,
+.game-card--falka .hint {
   color: #fff;
 }
 

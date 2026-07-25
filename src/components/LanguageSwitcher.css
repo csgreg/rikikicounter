@@ -1,0 +1,100 @@
+/* ------------------------------------------------------------------
+   Language dropdown (LanguageSwitcher) — chunky pill + popover menu,
+   same neobrutalist language as the rest of the app.
+   ------------------------------------------------------------------ */
+
+.lang-switcher {
+  position: relative;
+  display: inline-block;
+}
+
+.lang-switcher-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: var(--bw) solid var(--ink);
+  border-radius: 12px;
+  background: var(--paper-fixed);
+  color: var(--ink-fixed);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(29, 24, 50, 0.35);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.lang-switcher-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 rgba(29, 24, 50, 0.4);
+}
+
+.lang-switcher-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(29, 24, 50, 0.4);
+}
+
+.lang-switcher-caret {
+  font-size: 0.6rem;
+  margin-left: 2px;
+  opacity: 0.6;
+}
+
+.lang-switcher-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 50;
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  min-width: 150px;
+  background: var(--panel);
+  border: var(--bw) solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 5px 5px 0 rgba(29, 24, 50, 0.4);
+  animation: lang-menu-in 0.16s var(--pop) both;
+}
+
+@keyframes lang-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.95);
+  }
+}
+
+.lang-switcher-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lang-switcher-option:hover {
+  background: var(--panel-2);
+}
+
+.lang-switcher-option.active {
+  background: var(--yellow);
+  color: var(--ink-fixed);
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lang-switcher-menu {
+    animation: none;
+  }
+}

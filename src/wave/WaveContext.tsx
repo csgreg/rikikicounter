@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useRef, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { socket } from "../api/socket";
 import { getPid } from "../api/session";
 import { useRoomConnection } from "../shared/useRoomConnection";
@@ -62,6 +63,7 @@ export function useWave(): WaveContextValue {
 }
 
 export function WaveProvider({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
   const {
     roomId,
     setRoomId,
@@ -117,7 +119,8 @@ export function WaveProvider({ children }: { children: ReactNode }) {
   }
 
   function buildRound(prevLeft: string | undefined, giverPid: string | null, round: number) {
-    const [left, right] = pickSpectrum(prevLeft);
+    const pairs = t("wave.spectra", { returnObjects: true }) as Array<[string, string]>;
+    const [left, right] = pickSpectrum(pairs, prevLeft);
     const reset = rosterRef.current.map((p) => ({
       ...p,
       guess: null,

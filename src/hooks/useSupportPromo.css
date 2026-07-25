@@ -1,0 +1,129 @@
+/* ------------------------------------------------------------------
+   Support promo modal (useSupportPromo hook) — louder than the plain
+   confirm dialog: accent-colored card, bouncing emoji, a pulsing CTA,
+   and a single red corner-badge close button instead of a button row.
+   ------------------------------------------------------------------ */
+
+.support-promo-modal {
+  position: relative;
+  max-width: 380px;
+  padding: 30px 24px 24px;
+  background: var(--yellow);
+  color: var(--ink-fixed);
+  box-shadow: 10px 10px 0 var(--yellow-dk);
+  transform: rotate(-2deg);
+  animation: support-modal-pop 0.4s var(--pop) both;
+}
+
+/* the wave (violet) and falka (crimson) identity colors are dark enough to
+   need light text — same contrast call as .game-card--violet/--falka. */
+.wave-app .support-promo-modal,
+.falka-app .support-promo-modal {
+  color: #fff;
+}
+
+.support-promo-modal .modal-title,
+.support-promo-modal .modal-msg {
+  color: inherit;
+}
+
+.support-promo-modal .modal-msg {
+  opacity: 0.9;
+}
+
+@keyframes support-modal-pop {
+  from {
+    opacity: 0;
+    transform: rotate(6deg) scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-2deg) scale(1);
+  }
+}
+
+.support-promo-close {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--bw) solid var(--ink);
+  border-radius: 50%;
+  background: #e6483f;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
+  transition: transform 0.12s ease;
+}
+
+.support-promo-close:hover {
+  transform: scale(1.12) rotate(-8deg);
+}
+
+.support-promo-close:active {
+  transform: scale(0.94);
+}
+
+.support-promo-close.locked {
+  background: var(--muted);
+  font-size: 0.9rem;
+  cursor: not-allowed;
+}
+
+.support-promo-close.locked:hover {
+  transform: none;
+}
+
+.support-promo-emoji {
+  display: inline-block;
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 4px;
+  animation: support-emoji-bounce 1.6s ease-in-out infinite;
+}
+
+@keyframes support-emoji-bounce {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-6deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(6deg);
+  }
+}
+
+.support-promo-title {
+  font-size: 1.5rem;
+}
+
+.support-promo-cta {
+  margin-top: 4px;
+  animation: support-cta-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes support-cta-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 5px 5px 0 rgba(29, 24, 50, 0.4);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 7px 7px 0 rgba(29, 24, 50, 0.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .support-promo-modal,
+  .support-promo-emoji,
+  .support-promo-cta {
+    animation: none;
+  }
+}
