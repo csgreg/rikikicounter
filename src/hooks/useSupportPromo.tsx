@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import "./useConfirm.css";
 import "./useSupportPromo.css";
 
-const COFFEE_URL = "https://buymeacoffee.com/gery";
+const COFFEE_URL = "https://buymeacoffee.com/gergo.csizmadia";
 const LOCK_SECONDS = 5;
 
 interface UseSupportPromoResult {
