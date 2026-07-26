@@ -38,9 +38,17 @@
 }
 
 .lang-switcher-caret {
-  font-size: 0.6rem;
+  width: 11px;
+  height: 8px;
   margin-left: 2px;
-  opacity: 0.6;
+  flex: 0 0 auto;
+  color: var(--ink-fixed);
+  opacity: 0.7;
+  transition: transform 0.16s var(--pop);
+}
+
+.lang-switcher-caret.open {
+  transform: rotate(180deg);
 }
 
 .flag-icon {

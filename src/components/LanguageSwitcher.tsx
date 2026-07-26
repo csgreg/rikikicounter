@@ -65,9 +65,20 @@ export function LanguageSwitcher() {
       >
         <current.Flag />
         {current.code.toUpperCase()}
-        <span className="lang-switcher-caret" aria-hidden="true">
-          ▾
-        </span>
+        <svg
+          className={`lang-switcher-caret ${open ? "open" : ""}`}
+          viewBox="0 0 12 8"
+          aria-hidden="true"
+        >
+          <path
+            d="M1.5 1.8 L6 6.2 L10.5 1.8"
+            stroke="currentColor"
+            strokeWidth="2.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+          />
+        </svg>
       </button>
       {open ? (
         <ul className="lang-switcher-menu" role="listbox">
