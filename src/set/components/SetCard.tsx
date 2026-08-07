@@ -72,20 +72,24 @@ export function SetCard({
   card,
   selected,
   disabled,
+  mini,
   onClick,
 }: {
   card: SCard;
   selected?: boolean;
   disabled?: boolean;
+  mini?: boolean;
   onClick?: () => void;
 }) {
+  const classes = [
+    "set-card",
+    selected ? "set-card--selected" : "",
+    mini ? "set-card--mini" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
   return (
-    <button
-      type="button"
-      className={`set-card${selected ? " set-card--selected" : ""}`}
-      onClick={onClick}
-      disabled={disabled}
-    >
+    <button type="button" className={classes} onClick={onClick} disabled={disabled}>
       {Array.from({ length: card.count }).map((_, i) => (
         <Shape key={i} shape={card.shape} color={card.color} shading={card.shading} />
       ))}

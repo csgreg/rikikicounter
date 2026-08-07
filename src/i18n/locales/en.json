@@ -235,7 +235,9 @@
     },
     "boardMeta": "{{board}} cards on the table · {{deck}} in the deck",
     "standings": "Standings",
-    "final": "Done!"
+    "final": "Done!",
+    "history": "Found sets",
+    "historyEmpty": "No sets found yet."
   },
   "falka": {
     "documentTitle": "Falka – party game | therikiki.hu",

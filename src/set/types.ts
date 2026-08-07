@@ -24,6 +24,16 @@ export interface SetPlayer {
   score: number;
 }
 
+export interface SetHistoryEntry {
+  pid: string;
+  cards: [SCard, SCard, SCard];
+}
+
+export interface SetClaimResult {
+  pid: string;
+  ok: boolean;
+}
+
 export interface SetGame {
   started: boolean;
   finished: boolean;
@@ -31,7 +41,15 @@ export interface SetGame {
   // Remaining draw pile, in draw order. Rides along in synced state (like
   // Wave's `target`) so a promoted host after a boss handoff can keep dealing.
   deck: SCard[];
-  lastClaim: { pid: string; ok: boolean; cardIds: string[] } | null;
+  // Every claim outcome this game, oldest first, capped to the most recent
+  // CLAIM_LOG_LIMIT entries (see SetContext.tsx). This is a queue rather than
+  // a single "lastClaim" slot because two claims can resolve within the same
+  // React render tick (e.g. two players claiming moments apart) — a single
+  // slot would have the second overwrite the first before the UI ever
+  // rendered it, silently dropping that player's +1/-1 marker.
+  claimLog: SetClaimResult[];
+  // Every successfully found set this game, newest first.
+  history: SetHistoryEntry[];
 }
 
 export interface SetRoom {

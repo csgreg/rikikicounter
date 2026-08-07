@@ -235,7 +235,9 @@
     },
     "boardMeta": "{{board}} lap az asztalon · {{deck}} a pakliban",
     "standings": "Állás",
-    "final": "Vége!"
+    "final": "Vége!",
+    "history": "Megtalált setek",
+    "historyEmpty": "Még nincs megtalált set."
   },
   "falka": {
     "documentTitle": "Falka – parti játék | therikiki.hu",

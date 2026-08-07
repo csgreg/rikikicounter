@@ -5,17 +5,22 @@ import { useRoomConnection } from "../shared/useRoomConnection";
 import type { RoomSnapshot } from "../shared/session";
 import { buildStatePayload } from "../shared/state";
 import { dealInitial, hasAnySet, isSet, topUpBoard } from "./deck";
-import type { SCard, SetAction, SetGame, SetPlayer, SetRoom } from "./types";
+import type { SCard, SetAction, SetGame, SetHistoryEntry, SetPlayer, SetRoom } from "./types";
 
 const SET_SESSION_KEY = "rikiki_set_room";
 const SET_SNAPSHOT_KEY = "rikiki_set_snapshot";
+
+// Cap on SetGame.claimLog so a long session's wrong guesses can't grow the
+// synced state without bound.
+const CLAIM_LOG_LIMIT = 20;
 
 const EMPTY_GAME: SetGame = {
   started: false,
   finished: false,
   board: [],
   deck: [],
-  lastClaim: null,
+  claimLog: [],
+  history: [],
 };
 
 type SetSnapshot = RoomSnapshot<SetGame, SetPlayer>;
@@ -58,7 +63,7 @@ export function SetProvider({ children }: { children: ReactNode }) {
   const {
     roomId,
     setRoomId,
-    game,
+    game: rawGame,
     setGame,
     players,
     setPlayers,
@@ -75,6 +80,12 @@ export function SetProvider({ children }: { children: ReactNode }) {
     snapshotKey: SET_SNAPSHOT_KEY,
     emptyGame: EMPTY_GAME,
   });
+
+  // Backfills fields added after a session/snapshot was last written (e.g. a
+  // game resumed from a pre-`claimLog`/`history` localStorage snapshot) so
+  // the rest of this file and its consumers never see a partially-shaped
+  // SetGame.
+  const game: SetGame = { ...EMPTY_GAME, ...rawGame };
 
   const roomIdRef = useRef(roomId);
   const gameRef = useRef(game);
@@ -106,7 +117,7 @@ export function SetProvider({ children }: { children: ReactNode }) {
     const { board, deck } = dealInitial();
     const ps = rosterRef.current.map((p) => ({ ...p, score: 0 }));
     applyAndSync(
-      { started: true, finished: false, board, deck, lastClaim: null },
+      { started: true, finished: false, board, deck, claimLog: [], history: [] },
       ps
     );
   }
@@ -148,7 +159,8 @@ export function SetProvider({ children }: { children: ReactNode }) {
       ps = ps.map((p) =>
         p.pid === pid ? { ...p, score: Math.max(0, p.score - 1) } : p
       );
-      applyAndSync({ ...g, lastClaim: { pid, ok: false, cardIds } }, ps);
+      const claimLog = [...g.claimLog, { pid, ok: false }].slice(-CLAIM_LOG_LIMIT);
+      applyAndSync({ ...g, claimLog }, ps);
       return;
     }
 
@@ -156,8 +168,17 @@ export function SetProvider({ children }: { children: ReactNode }) {
     const { board, deck } = topUpBoard(remaining, g.deck);
     ps = ps.map((p) => (p.pid === pid ? { ...p, score: p.score + 1 } : p));
     const finished = deck.length === 0 && !hasAnySet(board);
+    const entry: SetHistoryEntry = { pid, cards: [a, b, c] };
+    const claimLog = [...g.claimLog, { pid, ok: true }].slice(-CLAIM_LOG_LIMIT);
     applyAndSync(
-      { ...g, board, deck, finished, lastClaim: { pid, ok: true, cardIds } },
+      {
+        ...g,
+        board,
+        deck,
+        finished,
+        claimLog,
+        history: [entry, ...g.history],
+      },
       ps
     );
   }
@@ -223,7 +244,7 @@ export function SetProvider({ children }: { children: ReactNode }) {
         online: p.pid === pid,
         socketid: p.pid === pid ? socket.id : "",
       }));
-      const game = { ...snapshot.game };
+      const game: SetGame = { ...EMPTY_GAME, ...snapshot.game };
       sessionStore.saveSession(newRoomId);
       sessionStore.saveSnapshot({ roomId: newRoomId, game, players });
       socket.emit("sync-state", newRoomId, buildStatePayload(game, players), false, () =>
