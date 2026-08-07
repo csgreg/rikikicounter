@@ -113,7 +113,9 @@ export function DiceRoom() {
     <>
       <div className="page">
         <header>
-          <h1 className="brand">{t("dice.heroTitle")}</h1>
+          <h1 className="brand">
+            <span>{t("dice.heroTitle")}</span>
+          </h1>
         </header>
 
         <div className="card">

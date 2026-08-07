@@ -105,9 +105,9 @@
 }
 
 .gh-chip--dice {
-  background: var(--magenta);
+  background: var(--navy);
   color: #fff;
-  box-shadow: 5px 5px 0 var(--magenta-dk);
+  box-shadow: 5px 5px 0 var(--navy-dk);
 }
 
 @media (prefers-reduced-motion: reduce) {

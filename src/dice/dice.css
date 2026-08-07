@@ -1,31 +1,30 @@
-/* A deliberately loud, funky palette for /dice — a slow-shifting rainbow
-   backdrop behind crisp white panels, plus a gradient-animated roll button.
-   Unlike the other games this doesn't repoint --yellow/--coral to a single
-   new hue: the whole point here is "no single hue," so most of the color
-   lives in dedicated dice-* rules below rather than the shared tokens. */
+/* A calm single-hue palette for /dice — light sky-blue backdrop with a
+   navy accent (--yellow/--yellow-dk repointed), the same re-theming
+   mechanism /wave, /set, /falka and /president use. */
 .dice-app {
-  --ink: #1a1030;
-  --muted: #6b6280;
+  --bg: #cfe6ff;
   --panel: #ffffff;
-  --panel-2: #f4f1fb;
+  --panel-2: #e7f2ff;
+  --ink: #12233f;
+  --muted: #56708f;
+
+  --yellow: var(--navy);
+  --yellow-dk: var(--navy-dk);
+  --coral: #4da6ff;
+  --coral-dk: #1f66c4;
+
+  --dot: rgba(18, 35, 63, 0.07);
 
   color: var(--ink);
 
-  background: linear-gradient(120deg, #ff2fb0, #7c3aff 35%, #00c2ff 68%, #ffd400);
-  background-size: 320% 320%;
-  animation: dice-bg-shift 16s ease-in-out infinite;
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--dot) 1.4px, transparent 1.4px);
+  background-size: 18px 18px;
 }
 
-@keyframes dice-bg-shift {
-  0% {
-    background-position: 0% 30%;
-  }
-  50% {
-    background-position: 100% 70%;
-  }
-  100% {
-    background-position: 0% 30%;
-  }
+/* navy primary needs light text; keep ghost + cream buttons dark */
+.dice-app .btn:not(.btn-light):not(.btn-ghost) {
+  color: #fff;
 }
 
 .dice-app .card {
@@ -92,7 +91,7 @@
 }
 
 .dice-count-chip--active {
-  background: linear-gradient(135deg, #ff2fb0, #7c3aff);
+  background: var(--navy);
   color: #fff;
   box-shadow: 3px 3px 0 var(--ink);
   transform: translate(-1px, -2px) scale(1.06);
@@ -119,10 +118,7 @@
   font-weight: 400;
   font-size: 3.4rem;
   line-height: 1;
-  background: linear-gradient(90deg, #ff2fb0, #7c3aff, #00c2ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--navy);
   animation: dice-total-in 0.4s var(--pop) both;
 }
 
@@ -135,34 +131,22 @@
 
 /* ---------- Roll button ---------- */
 .dice-roll-btn {
-  background: linear-gradient(90deg, #ff2fb0, #7c3aff, #00c2ff, #ffd400, #ff2fb0);
-  background-size: 400% 100%;
-  color: #fff;
   font-size: 1.15rem;
   padding: 18px;
-  border-color: var(--ink);
-  box-shadow: 6px 6px 0 var(--ink);
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
-  animation: dice-btn-gradient 5s linear infinite;
+  box-shadow: 6px 6px 0 var(--navy-dk);
 }
 
 .dice-roll-btn:hover {
-  box-shadow: 9px 9px 0 var(--ink);
+  box-shadow: 9px 9px 0 var(--navy-dk);
 }
 
 .dice-roll-btn:active {
-  box-shadow: 1px 1px 0 var(--ink);
+  box-shadow: 1px 1px 0 var(--navy-dk);
 }
 
 .dice-roll-btn:disabled {
   opacity: 0.75;
   cursor: default;
-}
-
-@keyframes dice-btn-gradient {
-  to {
-    background-position: 400% 0;
-  }
 }
 
 .dice-rolled-by {
@@ -171,12 +155,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dice-app {
-    animation: none;
-  }
-  .dice-roll-btn {
-    animation: none;
-  }
   .dice-total {
     animation: none;
   }

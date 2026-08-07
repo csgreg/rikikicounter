@@ -126,9 +126,9 @@
 }
 
 .game-card--dice {
-  background: var(--magenta);
+  background: var(--navy);
   color: #fff;
-  box-shadow: 7px 7px 0 var(--magenta-dk);
+  box-shadow: 7px 7px 0 var(--navy-dk);
 }
 
 .game-card--dice::after {
