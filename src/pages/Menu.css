@@ -200,9 +200,9 @@
 }
 
 .menu-card--dice {
-  background: var(--magenta);
+  background: var(--navy);
   color: #fff;
-  box-shadow: 8px 8px 0 var(--magenta-dk);
+  box-shadow: 8px 8px 0 var(--navy-dk);
   transform: rotate(1.3deg);
   animation: pop-dice 0.55s var(--pop) backwards;
   animation-delay: 0.78s;
@@ -240,7 +240,7 @@
 }
 
 .menu-card--dice:hover {
-  box-shadow: 12px 14px 0 var(--magenta-dk);
+  box-shadow: 12px 14px 0 var(--navy-dk);
 }
 
 .menu-card:active {
@@ -268,7 +268,7 @@
 }
 
 .menu-card--dice:active {
-  box-shadow: 3px 3px 0 var(--magenta-dk);
+  box-shadow: 3px 3px 0 var(--navy-dk);
 }
 
 /* spinning dashed badge in the corner */
