@@ -11,6 +11,8 @@ import { Menu } from "./pages/Menu";
 import { WaveApp } from "./wave/WaveApp";
 import { SetApp } from "./set/SetApp";
 import { FalkaApp } from "./falka/FalkaApp";
+import { PresidentApp } from "./president/PresidentApp";
+import { DiceApp } from "./dice/DiceApp";
 import { getPid } from "./api/session";
 import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
@@ -178,6 +180,12 @@ export default function App() {
         </Route>
         <Route path="/falka">
           <FalkaApp />
+        </Route>
+        <Route path="/president">
+          <PresidentApp />
+        </Route>
+        <Route path="/dice">
+          <DiceApp />
         </Route>
         <Route exact path="/">
           <Menu />

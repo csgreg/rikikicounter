@@ -98,6 +98,18 @@
   box-shadow: 5px 5px 0 var(--crimson-dk);
 }
 
+.gh-chip--president {
+  background: var(--gold);
+  color: var(--ink-fixed);
+  box-shadow: 5px 5px 0 var(--gold-dk);
+}
+
+.gh-chip--dice {
+  background: var(--magenta);
+  color: #fff;
+  box-shadow: 5px 5px 0 var(--magenta-dk);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .game-hero,
   .gh-chip {

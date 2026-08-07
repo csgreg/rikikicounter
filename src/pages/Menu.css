@@ -190,6 +190,42 @@
   );
 }
 
+.menu-card--president {
+  background: var(--gold);
+  color: var(--ink-fixed);
+  box-shadow: 8px 8px 0 var(--gold-dk);
+  transform: rotate(-1.1deg);
+  animation: pop-president 0.55s var(--pop) backwards;
+  animation-delay: 0.66s;
+}
+
+.menu-card--dice {
+  background: linear-gradient(120deg, #ff2fb0, #7c3aff 50%, #00c2ff);
+  background-size: 220% 220%;
+  color: #fff;
+  box-shadow: 8px 8px 0 var(--magenta-dk);
+  transform: rotate(1.3deg);
+  animation: pop-dice 0.55s var(--pop) backwards, menu-dice-bg 9s ease-in-out infinite;
+  animation-delay: 0.78s, 0.78s;
+}
+
+.menu-card--dice::after {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.16) 1.5px,
+    transparent 1.5px
+  );
+}
+
+@keyframes menu-dice-bg {
+  0%,
+  100% {
+    background-position: 0% 30%;
+  }
+  50% {
+    background-position: 100% 70%;
+  }
+}
+
 .menu-card:hover {
   transform: rotate(0deg) translate(-3px, -5px);
 }
@@ -210,6 +246,14 @@
   box-shadow: 12px 14px 0 var(--crimson-dk);
 }
 
+.menu-card--president:hover {
+  box-shadow: 12px 14px 0 var(--gold-dk);
+}
+
+.menu-card--dice:hover {
+  box-shadow: 12px 14px 0 var(--magenta-dk);
+}
+
 .menu-card:active {
   transform: rotate(0deg) translate(3px, 3px);
 }
@@ -228,6 +272,14 @@
 
 .menu-card--falka:active {
   box-shadow: 3px 3px 0 var(--crimson-dk);
+}
+
+.menu-card--president:active {
+  box-shadow: 3px 3px 0 var(--gold-dk);
+}
+
+.menu-card--dice:active {
+  box-shadow: 3px 3px 0 var(--magenta-dk);
 }
 
 /* spinning dashed badge in the corner */
@@ -541,6 +593,89 @@
   background: #ffe08a;
 }
 
+.menu-deco--president {
+  line-height: 1;
+}
+
+.mpres-crown {
+  display: block;
+  width: 72px;
+  height: auto;
+  filter: drop-shadow(3px 4px 0 rgba(29, 24, 50, 0.35));
+  transform-origin: 50% 100%;
+  animation: mpres-tilt 3.2s ease-in-out infinite;
+}
+
+@keyframes mpres-tilt {
+  0%,
+  100% {
+    transform: rotate(-6deg) translateY(0);
+  }
+  50% {
+    transform: rotate(6deg) translateY(-7px);
+  }
+}
+
+.menu-card--president:hover .mpres-crown {
+  animation: none;
+  transform: rotate(0deg) translateY(-6px) scale(1.12);
+}
+
+.menu-deco--dice {
+  line-height: 1;
+}
+
+.mdice-cube {
+  display: inline-grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 48px;
+  height: 48px;
+  padding: 15%;
+  box-sizing: border-box;
+  background: var(--paper-fixed);
+  border: var(--bw) solid var(--ink-fixed);
+  border-radius: 13px;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
+  animation: mdice-spin 2.6s ease-in-out infinite;
+}
+
+.mdice-pip {
+  border-radius: 50%;
+}
+
+.mdice-pip:nth-child(1) {
+  grid-row: 1;
+  grid-column: 1;
+  background: #ff2fb0;
+}
+
+.mdice-pip:nth-child(2) {
+  grid-row: 2;
+  grid-column: 2;
+  background: #7c3aff;
+}
+
+.mdice-pip:nth-child(3) {
+  grid-row: 3;
+  grid-column: 3;
+  background: #00c2ff;
+}
+
+@keyframes mdice-spin {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(360deg);
+  }
+}
+
+.menu-card--dice:hover .mdice-cube {
+  animation-duration: 0.6s;
+}
+
 /* ---------- Card text ---------- */
 .menu-title {
   position: relative;
@@ -645,6 +780,28 @@
   }
 }
 
+@keyframes pop-president {
+  from {
+    opacity: 0;
+    transform: rotate(-1.1deg) translateY(24px) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-1.1deg);
+  }
+}
+
+@keyframes pop-dice {
+  from {
+    opacity: 0;
+    transform: rotate(1.3deg) translateY(24px) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(1.3deg);
+  }
+}
+
 .menu-page .ticker {
   margin-top: 14px;
   animation: menu-hero-in 0.5s var(--pop) backwards;
@@ -658,12 +815,16 @@
   .menu-card--wave,
   .menu-card--set,
   .menu-card--falka,
+  .menu-card--president,
+  .menu-card--dice,
   .menu-needle,
   .menu-ring,
   .menu-ring span,
   .mset,
   .mfalka-moon,
   .mfalka-eye,
+  .mpres-crown,
+  .mdice-cube,
   .menu-page .ticker {
     animation: none;
   }

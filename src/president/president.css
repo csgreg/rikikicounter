@@ -1,0 +1,156 @@
+/* A black & white palette for /president — no hues at all, just ink, paper,
+   and grays. --yellow/--coral/--teal repoint to grayscale the same way
+   /falka repoints its accents to crimson. */
+.president-app {
+  --bg: #eeeeee;
+  --panel: #ffffff;
+  --panel-2: #e2e2e2;
+  --ink: #141414;
+  --muted: #6e6e6e;
+
+  --yellow: var(--gold);
+  --yellow-dk: var(--gold-dk);
+  --coral: #2b2b2b;
+  --coral-dk: #000000;
+  --teal: #cfcfcf;
+  --teal-dk: #1a1a1a;
+
+  --dot: rgba(20, 20, 20, 0.08);
+
+  color: var(--ink);
+
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--dot) 1.4px, transparent 1.4px);
+  background-size: 18px 18px;
+}
+
+/* light-gray primary reads fine with dark text; keep ghost + cream buttons dark */
+.president-app .btn:not(.btn-light):not(.btn-ghost) {
+  color: var(--ink-fixed);
+}
+
+/* ---------- Finishing-order list ---------- */
+.president-order {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.president-order li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--panel-2);
+  border: 2px solid var(--ink);
+  border-radius: 9px;
+  padding: 6px 10px;
+  font-weight: 600;
+}
+
+.president-order-rank {
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.president-role-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--panel-2);
+  border: 2px solid var(--ink);
+  color: var(--ink);
+}
+
+/* ---------- Round-complete banner ---------- */
+.president-banner {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1100;
+  max-width: min(92vw, 420px);
+  padding: 12px 18px;
+  border: var(--bw) solid var(--ink);
+  border-radius: 14px;
+  background: var(--yellow);
+  color: var(--ink-fixed);
+  box-shadow: 5px 5px 0 var(--yellow-dk);
+  text-align: center;
+  animation: president-banner-in 0.32s var(--pop) both;
+}
+
+.president-banner-title {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.president-banner-roles,
+.president-history-roles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.president-banner-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+@keyframes president-banner-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -14px) scale(0.9);
+  }
+}
+
+/* ---------- Past-rounds history ---------- */
+.president-history {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.president-history-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--dot);
+}
+
+.president-history-row:last-child {
+  border-bottom: none;
+}
+
+.president-history-roles {
+  justify-content: flex-start;
+}
+
+.president-history-round {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .president-banner {
+    animation: none;
+  }
+}

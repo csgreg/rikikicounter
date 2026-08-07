@@ -80,7 +80,15 @@
       "title": "Falka",
       "desc": "Wolves are hiding in the village — will you expose them, or are you one?"
     },
-    "ticker": ["Rikiki", "♠", "Wavelength", "♥", "Set", "♣", "Falka", "♦", "games", "♠", "Have fun!"],
+    "president": {
+      "title": "President",
+      "desc": "Play President with a real deck — the app tracks roles and score for you."
+    },
+    "dice": {
+      "title": "Dice",
+      "desc": "Set how many dice to roll, hit the big button — everyone sees the same result."
+    },
+    "ticker": ["Rikiki", "♠", "Wavelength", "♥", "Set", "♣", "Falka", "♦", "President", "♠", "Dice", "♥", "games", "♠", "Have fun!"],
     "footer": "Made for you by me · therikiki.hu",
     "languageLabel": "Language"
   },
@@ -340,5 +348,80 @@
       "Someone says {{name}} seemed unusually nervous this morning.",
       "{{name}} was reportedly seen wandering alone shortly before the disappearance."
     ]
+  },
+  "president": {
+    "documentTitle": "President – party game | therikiki.hu",
+    "heroTitle": "President",
+    "tagline": "Play President with a real deck — the app tracks roles and score for you.",
+    "backTo": "Back to President",
+    "rulesLink": "How to play?",
+    "lobby": {
+      "createTitle": "New game",
+      "createSubmit": "Open room",
+      "joinTitle": "Join",
+      "joinSubmit": "Join"
+    },
+    "minPlayersHint": "At least 3 players needed.",
+    "roundLabel": "Round {{round}}",
+    "roundShort": "Round {{round}}",
+    "orderTitle": "Finishing order this round",
+    "orderEmptyHint": "Nobody's out yet — tap in as you empty your hand.",
+    "finishedCount": "{{done}}/{{total}} finished",
+    "imOut": "I'm out!",
+    "resetRound": "Reset round",
+    "confirmResetRoundTitle": "Reset round",
+    "confirmResetRoundMessage": "Clear everyone's \"out\" mark for this round? Scores from past rounds are untouched.",
+    "standings": "Standings",
+    "historyTitle": "Past rounds",
+    "roundDone": "Round {{round}} done!",
+    "final": "Done!",
+    "finishGame": "End game",
+    "confirmFinishTitle": "End game",
+    "confirmFinishMessage": "Are you sure you want to end the game for everyone?",
+    "confirmFinishButton": "End",
+    "roles": {
+      "president": "President",
+      "vice_president": "Vice-President",
+      "neutral": "Citizen",
+      "vice_trou": "Vice-Servant",
+      "trou": "Servant"
+    },
+    "rules": {
+      "documentTitle": "How to play President? – rules | Rikiki Counter",
+      "heroTitle1": "How to play",
+      "heroTitle2": "President?",
+      "tagline": "Be first to empty your hand — the app just tracks who ends up where.",
+      "howItWorksTitle": "How the game works",
+      "steps": [
+        { "title": "The goal", "text": "Get rid of all your cards before everyone else. Play with any standard French deck." },
+        { "title": "Card ranking", "text": "2 is the highest card, then Ace down to 3 (the lowest). Suits don't matter." },
+        { "title": "Leading a pile", "text": "The first player to act may lead with any single card, or a group of same-rank cards (e.g. two 7s)." },
+        { "title": "Following", "text": "Each player in turn plays an equal-or-higher card (or same-size group), or passes. You can always pass, even if you could play." },
+        { "title": "Clearing the pile", "text": "Once everyone else has passed, the last player to play a card leads the next pile with anything they like." },
+        { "title": "Going out", "text": "The moment you play your last card, you're out for the round, in that finishing order — first out is heading for President, last one holding cards is the Servant." },
+        { "title": "Roles for next round", "text": "1st = President, last = Servant. With 5+ players, 2nd = Vice-President and second-to-last = Vice-Servant; everyone else is a Citizen." },
+        { "title": "The card exchange", "text": "Before the next round, the Servant hands their 2 best cards to the President, who returns any 2 cards in exchange (1 card each way between Vice-President and Vice-Servant). Do this with your physical cards — the app doesn't touch them." }
+      ],
+      "scoringTitle": "Scoring",
+      "scoringIntro": "The app tallies points by role at the end of every round, so you always have a running score.",
+      "scoringNote": "These are the standard roles and a simple points scale — feel free to play with your own house rules (revolutions, resetting the pile on an 8, etc.). The app only tracks who's who and the score, never the cards themselves.",
+      "cta": "Got it, let's play!"
+    }
+  },
+  "dice": {
+    "documentTitle": "Dice – shared dice roller | therikiki.hu",
+    "heroTitle": "Dice",
+    "tagline": "Set how many dice to roll, hit the button — everyone sees the same result.",
+    "backTo": "Back to Dice",
+    "lobby": {
+      "createTitle": "New room",
+      "createSubmit": "Open room",
+      "joinTitle": "Join",
+      "joinSubmit": "Join"
+    },
+    "countLabel": "How many dice?",
+    "rollButton": "ROLL!",
+    "rolling": "Rolling…",
+    "rolledBy": "Rolled by {{name}}"
   }
 }

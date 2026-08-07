@@ -81,6 +81,43 @@ export function Menu() {
             {t("home.play")} <span className="menu-arrow">→</span>
           </span>
         </Link>
+
+        <Link to="/president" className="menu-card menu-card--president">
+          <div className="menu-deco menu-deco--president">
+            <svg className="mpres-crown" viewBox="0 0 100 80" aria-hidden="true">
+              <path
+                d="M10 70 L10 58 L25 22 L37 40 L50 10 L63 40 L75 22 L90 58 L90 70 Z"
+                fill="var(--paper-fixed)"
+                stroke="var(--ink-fixed)"
+                strokeWidth="6"
+                strokeLinejoin="round"
+              />
+              <circle cx="25" cy="22" r="7" fill="var(--ink-fixed)" />
+              <circle cx="50" cy="10" r="8" fill="var(--ink-fixed)" />
+              <circle cx="75" cy="22" r="7" fill="var(--ink-fixed)" />
+            </svg>
+          </div>
+          <span className="menu-title">{t("home.president.title")}</span>
+          <span className="menu-desc">{t("home.president.desc")}</span>
+          <span className="menu-cta">
+            {t("home.play")} <span className="menu-arrow">→</span>
+          </span>
+        </Link>
+
+        <Link to="/dice" className="menu-card menu-card--dice">
+          <div className="menu-deco menu-deco--dice">
+            <span className="mdice-cube" aria-hidden="true">
+              <span className="mdice-pip" />
+              <span className="mdice-pip" />
+              <span className="mdice-pip" />
+            </span>
+          </div>
+          <span className="menu-title">{t("home.dice.title")}</span>
+          <span className="menu-desc">{t("home.dice.desc")}</span>
+          <span className="menu-cta">
+            {t("home.play")} <span className="menu-arrow">→</span>
+          </span>
+        </Link>
       </div>
 
       <div className="ticker" aria-hidden="true">

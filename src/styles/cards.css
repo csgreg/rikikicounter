@@ -119,6 +119,25 @@
   box-shadow: 7px 7px 0 var(--crimson-dk);
 }
 
+.game-card--president {
+  background: var(--gold);
+  color: var(--ink-fixed);
+  box-shadow: 7px 7px 0 var(--gold-dk);
+}
+
+.game-card--dice {
+  background: var(--magenta);
+  color: #fff;
+  box-shadow: 7px 7px 0 var(--magenta-dk);
+}
+
+.game-card--dice::after {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.14) 1.5px,
+    transparent 1.5px
+  );
+}
+
 .game-card--falka::after {
   background-image: radial-gradient(
     rgba(255, 255, 255, 0.14) 1.5px,
@@ -132,17 +151,20 @@
 }
 
 .game-card--violet h2,
-.game-card--falka h2 {
+.game-card--falka h2,
+.game-card--dice h2 {
   color: #fff;
 }
 
 .game-card--violet .label,
-.game-card--falka .label {
+.game-card--falka .label,
+.game-card--dice .label {
   color: rgba(255, 255, 255, 0.78);
 }
 
 .game-card--violet .hint,
-.game-card--falka .hint {
+.game-card--falka .hint,
+.game-card--dice .hint {
   color: #fff;
 }
 

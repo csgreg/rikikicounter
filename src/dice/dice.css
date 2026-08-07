@@ -1,0 +1,183 @@
+/* A deliberately loud, funky palette for /dice — a slow-shifting rainbow
+   backdrop behind crisp white panels, plus a gradient-animated roll button.
+   Unlike the other games this doesn't repoint --yellow/--coral to a single
+   new hue: the whole point here is "no single hue," so most of the color
+   lives in dedicated dice-* rules below rather than the shared tokens. */
+.dice-app {
+  --ink: #1a1030;
+  --muted: #6b6280;
+  --panel: #ffffff;
+  --panel-2: #f4f1fb;
+
+  color: var(--ink);
+
+  background: linear-gradient(120deg, #ff2fb0, #7c3aff 35%, #00c2ff 68%, #ffd400);
+  background-size: 320% 320%;
+  animation: dice-bg-shift 16s ease-in-out infinite;
+}
+
+@keyframes dice-bg-shift {
+  0% {
+    background-position: 0% 30%;
+  }
+  50% {
+    background-position: 100% 70%;
+  }
+  100% {
+    background-position: 0% 30%;
+  }
+}
+
+.dice-app .card {
+  color: var(--ink);
+}
+
+/* ---------- Player chips ---------- */
+.player-row-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dice-player-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--panel-2);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 5px 10px 5px 8px;
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.dice-player-chip--offline {
+  opacity: 0.55;
+}
+
+/* ---------- Dice count picker ---------- */
+.dice-count-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.dice-count-chip {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.05rem;
+  background: var(--panel-2);
+  border: var(--bw) solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+  transition: transform 0.12s var(--pop), box-shadow 0.12s var(--pop), background 0.12s ease;
+}
+
+.dice-count-chip:hover:not(:disabled):not(.dice-count-chip--active) {
+  transform: translate(-1px, -2px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+
+.dice-count-chip:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+.dice-count-chip--active {
+  background: linear-gradient(135deg, #ff2fb0, #7c3aff);
+  color: #fff;
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: translate(-1px, -2px) scale(1.06);
+}
+
+.dice-count-chip:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* ---------- Dice tray ---------- */
+.dice-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  padding: 10px 0 6px;
+}
+
+.dice-total {
+  margin: 4px 0 18px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 3.4rem;
+  line-height: 1;
+  background: linear-gradient(90deg, #ff2fb0, #7c3aff, #00c2ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: dice-total-in 0.4s var(--pop) both;
+}
+
+@keyframes dice-total-in {
+  from {
+    opacity: 0;
+    transform: scale(0.7) translateY(6px);
+  }
+}
+
+/* ---------- Roll button ---------- */
+.dice-roll-btn {
+  background: linear-gradient(90deg, #ff2fb0, #7c3aff, #00c2ff, #ffd400, #ff2fb0);
+  background-size: 400% 100%;
+  color: #fff;
+  font-size: 1.15rem;
+  padding: 18px;
+  border-color: var(--ink);
+  box-shadow: 6px 6px 0 var(--ink);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+  animation: dice-btn-gradient 5s linear infinite;
+}
+
+.dice-roll-btn:hover {
+  box-shadow: 9px 9px 0 var(--ink);
+}
+
+.dice-roll-btn:active {
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+.dice-roll-btn:disabled {
+  opacity: 0.75;
+  cursor: default;
+}
+
+@keyframes dice-btn-gradient {
+  to {
+    background-position: 400% 0;
+  }
+}
+
+.dice-rolled-by {
+  text-align: center;
+  margin-top: 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dice-app {
+    animation: none;
+  }
+  .dice-roll-btn {
+    animation: none;
+  }
+  .dice-total {
+    animation: none;
+  }
+}

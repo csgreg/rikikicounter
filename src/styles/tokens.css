@@ -31,6 +31,15 @@
   --crimson: #fb6c00;
   --crimson-dk: #e73f1e;
 
+  /* the president app's brand colour (menu card, shared president variants) —
+     grayscale on purpose, the game itself runs a black & white theme */
+  --gold: #dcdcdc;
+  --gold-dk: #4a4a4a;
+
+  /* the dice app's brand colour (menu card, shared dice variants) */
+  --magenta: #ff2fb0;
+  --magenta-dk: #b0007a;
+
   /* text/graphics that always sit on a permanently-light accent */
   --ink-fixed: #1d1832;
   --paper-fixed: #fffdf5;

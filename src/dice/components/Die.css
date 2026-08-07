@@ -1,0 +1,83 @@
+.dice-die {
+  width: 76px;
+  height: 76px;
+  flex: 0 0 auto;
+  background: var(--paper-fixed);
+  border: var(--bw) solid var(--ink-fixed);
+  border-radius: 16px;
+  box-shadow: 4px 4px 0 rgba(20, 10, 40, 0.4);
+  animation: dice-pop-in 0.42s var(--pop) both;
+}
+
+@media (min-width: 460px) {
+  .dice-die {
+    width: 92px;
+    height: 92px;
+  }
+}
+
+.dice-die--rolling {
+  animation: dice-tumble 0.32s linear infinite;
+}
+
+.dice-face {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 100%;
+  height: 100%;
+  padding: 15%;
+  box-sizing: border-box;
+}
+
+.dice-pip {
+  align-self: center;
+  justify-self: center;
+  width: 62%;
+  height: 62%;
+  border-radius: 50%;
+  background: var(--die-accent, var(--ink-fixed));
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.25);
+}
+
+@keyframes dice-pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(-24deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.15) rotate(6deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes dice-tumble {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  20% {
+    transform: rotate(-20deg) scale(0.92);
+  }
+  40% {
+    transform: rotate(16deg) scale(1.06);
+  }
+  60% {
+    transform: rotate(-12deg) scale(0.95);
+  }
+  80% {
+    transform: rotate(18deg) scale(1.04);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dice-die,
+  .dice-die--rolling {
+    animation: none;
+  }
+}

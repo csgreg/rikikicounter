@@ -80,7 +80,15 @@
       "title": "Falka",
       "desc": "Farkasok bújnak a faluban — leleplezed őket, vagy te vagy az egyik?"
     },
-    "ticker": ["Rikiki", "♠", "Wavelength", "♥", "Set", "♣", "Falka", "♦", "játékok", "♠", "Jó szórakozást!"],
+    "president": {
+      "title": "Elnök",
+      "desc": "Játssz Elnököt valódi kártyapaklival — az app követi a szerepeket és a pontokat."
+    },
+    "dice": {
+      "title": "Kockadobó",
+      "desc": "Állítsátok be, hány kockával dobtok, nyomjátok meg a gombot — mindenki ugyanazt az eredményt látja."
+    },
+    "ticker": ["Rikiki", "♠", "Wavelength", "♥", "Set", "♣", "Falka", "♦", "Elnök", "♠", "Kockadobó", "♥", "játékok", "♠", "Jó szórakozást!"],
     "footer": "Készült nektek tőlem · therikiki.hu",
     "languageLabel": "Nyelv"
   },
@@ -340,5 +348,80 @@
       "Valaki azt mondja, {{name}} szokatlanul ideges volt ma reggel.",
       "Állítólag {{name}} egyedül kóborolt röviddel az eltűnés előtt."
     ]
+  },
+  "president": {
+    "documentTitle": "Elnök – parti játék | therikiki.hu",
+    "heroTitle": "Elnök",
+    "tagline": "Játssz Elnököt valódi kártyapaklival — az app követi a szerepeket és a pontokat.",
+    "backTo": "Vissza az Elnökhöz",
+    "rulesLink": "Hogyan kell játszani?",
+    "lobby": {
+      "createTitle": "Új játék",
+      "createSubmit": "Szoba nyitása",
+      "joinTitle": "Csatlakozás",
+      "joinSubmit": "Belépek"
+    },
+    "minPlayersHint": "Legalább 3 játékos szükséges.",
+    "roundLabel": "{{round}}. kör",
+    "roundShort": "{{round}}. kör",
+    "orderTitle": "Kiszállási sorrend ebben a körben",
+    "orderEmptyHint": "Még senki sem szállt ki — koppints, ha kifogytál a lapokból.",
+    "finishedCount": "{{done}}/{{total}} kiszállt",
+    "imOut": "Kiszálltam!",
+    "resetRound": "Kör visszaállítása",
+    "confirmResetRoundTitle": "Kör visszaállítása",
+    "confirmResetRoundMessage": "Törlöd mindenki „kiszállt” jelölését ebben a körben? A korábbi körök pontjai nem változnak.",
+    "standings": "Állás",
+    "historyTitle": "Korábbi körök",
+    "roundDone": "{{round}}. kör kész!",
+    "final": "Vége!",
+    "finishGame": "Játék befejezése",
+    "confirmFinishTitle": "Játék befejezése",
+    "confirmFinishMessage": "Biztosan befejezed a játékot mindenki számára?",
+    "confirmFinishButton": "Befejezés",
+    "roles": {
+      "president": "Elnök",
+      "vice_president": "Alelnök",
+      "neutral": "Polgár",
+      "vice_trou": "Alszolga",
+      "trou": "Szolga"
+    },
+    "rules": {
+      "documentTitle": "Hogyan kell Elnököt játszani? – szabályok | Rikiki Counter",
+      "heroTitle1": "Hogyan kell",
+      "heroTitle2": "Elnököt játszani?",
+      "tagline": "Legyél te az első, aki elfogy a lapjaiból — az app csak azt követi, ki hova kerül.",
+      "howItWorksTitle": "Hogyan működik a játék",
+      "steps": [
+        { "title": "A cél", "text": "Fogyj ki elsőként a lapjaidból. Bármilyen szabvány francia kártyapakli jó hozzá." },
+        { "title": "Lapok sorrendje", "text": "A 2-es a legerősebb lap, utána az ász egészen a 3-asig (a leggyengébb). A szín nem számít." },
+        { "title": "Kör indítása", "text": "Aki soron van, bármilyen egy lapot, vagy azonos értékű lapokból álló csoportot (pl. két 7-est) rakhat le." },
+        { "title": "Rálicitálás", "text": "Mindenki egyenlő vagy magasabb lapot (illetve ugyanakkora csoportot) tesz le, vagy passzol. Passzolni akkor is lehet, ha tudnál lapot tenni." },
+        { "title": "A kupac lezárása", "text": "Ha mindenki más passzolt, az utoljára lapot tevő játékos szabadon indíthatja a következő kupacot." },
+        { "title": "Kiszállás", "text": "Amint elfogy a kezedből a lap, kiszállsz a körből, ebben a sorrendben — az első kiszálló lesz az elnök esélyese, az utolsó bennragadó pedig a szolga." },
+        { "title": "Szerepek a következő körre", "text": "1. = Elnök, utolsó = Szolga. 5+ játékosnál a 2. = Alelnök, az utolsó előtti = Alszolga; a többiek Polgárok." },
+        { "title": "Lapcsere", "text": "A következő kör előtt a Szolga átadja a 2 legjobb lapját az Elnöknek, aki cserébe bármilyen 2 lapot visszaad (Alelnök és Alszolga 1-1 lapot cserél egymással). Ezt a fizikai lapokkal csináljátok — az app nem nyúl hozzájuk." }
+      ],
+      "scoringTitle": "Pontozás",
+      "scoringIntro": "Az app minden kör végén szerepek szerint ad pontokat, így mindig látod az állást.",
+      "scoringNote": "Ez a szokásos szereposztás és egy egyszerű pontskála — nyugodtan játsszatok saját házi szabályokkal (forradalom, 8-as nullázza a kupacot, stb.). Az app csak azt követi, ki kicsoda és mennyi a pontja, magukat a lapokat sosem.",
+      "cta": "Világos, játsszunk!"
+    }
+  },
+  "dice": {
+    "documentTitle": "Kockadobó – közös kockadobás | therikiki.hu",
+    "heroTitle": "Kockadobó",
+    "tagline": "Állítsátok be, hány kockával dobtok, nyomjátok meg a gombot — mindenki ugyanazt az eredményt látja.",
+    "backTo": "Vissza a Kockadobóhoz",
+    "lobby": {
+      "createTitle": "Új szoba",
+      "createSubmit": "Szoba nyitása",
+      "joinTitle": "Csatlakozás",
+      "joinSubmit": "Belépek"
+    },
+    "countLabel": "Hány kockával?",
+    "rollButton": "DOBÁS!",
+    "rolling": "Dobás…",
+    "rolledBy": "{{name}} dobott"
   }
 }
