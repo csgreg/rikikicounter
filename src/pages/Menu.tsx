@@ -84,18 +84,20 @@ export function Menu() {
 
         <Link to="/president" className="menu-card menu-card--president">
           <div className="menu-deco menu-deco--president">
-            <svg className="mpres-crown" viewBox="0 0 100 80" aria-hidden="true">
-              <path
-                d="M10 70 L10 58 L25 22 L37 40 L50 10 L63 40 L75 22 L90 58 L90 70 Z"
-                fill="var(--paper-fixed)"
-                stroke="var(--ink-fixed)"
-                strokeWidth="6"
-                strokeLinejoin="round"
-              />
-              <circle cx="25" cy="22" r="7" fill="var(--ink-fixed)" />
-              <circle cx="50" cy="10" r="8" fill="var(--ink-fixed)" />
-              <circle cx="75" cy="22" r="7" fill="var(--ink-fixed)" />
-            </svg>
+            <span className="mpres-badge" aria-hidden="true">
+              <svg className="mpres-crown" viewBox="0 0 100 80">
+                <path
+                  d="M10 70 L10 58 L25 22 L37 40 L50 10 L63 40 L75 22 L90 58 L90 70 Z"
+                  fill="var(--gold)"
+                  stroke="var(--ink-fixed)"
+                  strokeWidth="6"
+                  strokeLinejoin="round"
+                />
+                <circle cx="25" cy="22" r="7" fill="var(--ink-fixed)" />
+                <circle cx="50" cy="10" r="8" fill="var(--ink-fixed)" />
+                <circle cx="75" cy="22" r="7" fill="var(--ink-fixed)" />
+              </svg>
+            </span>
           </div>
           <span className="menu-title">{t("home.president.title")}</span>
           <span className="menu-desc">{t("home.president.desc")}</span>
