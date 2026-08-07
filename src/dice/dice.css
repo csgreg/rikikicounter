@@ -10,6 +10,8 @@
 
   --yellow: var(--navy);
   --yellow-dk: var(--navy-dk);
+  --coral: #4da6ff;
+  --coral-dk: #1f66c4;
 
   --dot: rgba(18, 35, 63, 0.07);
 
