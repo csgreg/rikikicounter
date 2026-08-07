@@ -200,13 +200,12 @@
 }
 
 .menu-card--dice {
-  background: linear-gradient(120deg, #ff2fb0, #7c3aff 50%, #00c2ff);
-  background-size: 220% 220%;
+  background: var(--magenta);
   color: #fff;
   box-shadow: 8px 8px 0 var(--magenta-dk);
   transform: rotate(1.3deg);
-  animation: pop-dice 0.55s var(--pop) backwards, menu-dice-bg 9s ease-in-out infinite;
-  animation-delay: 0.78s, 0.78s;
+  animation: pop-dice 0.55s var(--pop) backwards;
+  animation-delay: 0.78s;
 }
 
 .menu-card--dice::after {
@@ -214,16 +213,6 @@
     rgba(255, 255, 255, 0.16) 1.5px,
     transparent 1.5px
   );
-}
-
-@keyframes menu-dice-bg {
-  0%,
-  100% {
-    background-position: 0% 30%;
-  }
-  50% {
-    background-position: 100% 70%;
-  }
 }
 
 .menu-card:hover {
@@ -597,13 +586,24 @@
   line-height: 1;
 }
 
-.mpres-crown {
-  display: block;
-  width: 72px;
-  height: auto;
-  filter: drop-shadow(3px 4px 0 rgba(29, 24, 50, 0.35));
+.mpres-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: var(--paper-fixed);
+  border: var(--bw) solid var(--ink-fixed);
+  border-radius: 13px;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.35);
   transform-origin: 50% 100%;
   animation: mpres-tilt 3.2s ease-in-out infinite;
+}
+
+.mpres-crown {
+  display: block;
+  width: 26px;
+  height: auto;
 }
 
 @keyframes mpres-tilt {
@@ -616,7 +616,7 @@
   }
 }
 
-.menu-card--president:hover .mpres-crown {
+.menu-card--president:hover .mpres-badge {
   animation: none;
   transform: rotate(0deg) translateY(-6px) scale(1.12);
 }
@@ -629,9 +629,10 @@
   display: inline-grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  width: 48px;
-  height: 48px;
-  padding: 15%;
+  gap: 3px;
+  width: 42px;
+  height: 42px;
+  padding: 7px;
   box-sizing: border-box;
   background: var(--paper-fixed);
   border: var(--bw) solid var(--ink-fixed);
@@ -642,24 +643,22 @@
 
 .mdice-pip {
   border-radius: 50%;
+  background: var(--ink-fixed);
 }
 
 .mdice-pip:nth-child(1) {
   grid-row: 1;
   grid-column: 1;
-  background: #ff2fb0;
 }
 
 .mdice-pip:nth-child(2) {
   grid-row: 2;
   grid-column: 2;
-  background: #7c3aff;
 }
 
 .mdice-pip:nth-child(3) {
   grid-row: 3;
   grid-column: 3;
-  background: #00c2ff;
 }
 
 @keyframes mdice-spin {
@@ -823,7 +822,7 @@
   .mset,
   .mfalka-moon,
   .mfalka-eye,
-  .mpres-crown,
+  .mpres-badge,
   .mdice-cube,
   .menu-page .ticker {
     animation: none;
